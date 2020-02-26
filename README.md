@@ -27,12 +27,12 @@ This script has several options and inputs to be aware of that will be explained
 ### Save Location
   For this script you can either have the MorphoMetriX output csvs saved in **One Folder** or in **Individual Folders**
   If you choose OneFolder, the Animal ID will be the Animal ID provided through MorphoMetrix, if you choose Individual Folders the Animal ID will be the name of the folder it was saved in.
-  
+
   An example of **One Folder** is  
-    Folder  
-      whale1.csv  
-      whale2.csv  
-      whale3.csv  
+      Folder  
+        whale1.csv  
+        whale2.csv  
+        whale3.csv  
 
   An example of **Individual Folders** is
     Whale1
