@@ -28,19 +28,22 @@ This script has several options and inputs to be aware of that will be explained
   For this script you can either have the MorphoMetriX output csvs saved in **One Folder** or in **Individual Folders**
   If you choose OneFolder, the Animal ID will be the Animal ID provided through MorphoMetrix, if you choose Individual Folders the Animal ID will be the name of the folder it was saved in.
 
-  An example of **One Folder** is  
-      Folder  
-        whale1.csv  
-        whale2.csv  
-        whale3.csv  
-
-  An example of **Individual Folders** is
-    Whale1
-      whale1.jpg
-      whale1.csv
-    Whale2
-      whale2.jpg
-      whale2.csv
+  An example of **One Folder** is
+		
+		Folder 
+		
+			whale1.csv
+			whale2.csv
+			whale3.csv
+  
+  
+  An example of **Individual Folders** is    
+      Whale1
+        whale1.jpg
+        whale1.csv
+      Whale2
+        whale2.jpg
+        whale2.csv
 
 ### Safety
   Because it's easy to accidentally enter the wrong altitude, focal length, or pixel dimension in MorphoMetriX, this tool can recalculate the measurements using the correct values. Selecting "yes" for this input will have the tool recalculate, using values that you will need to provide through an extra sheet. Instructions for formatting this sheet will be provided later on.
