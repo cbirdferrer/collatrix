@@ -31,7 +31,7 @@ This script has several options and inputs to be aware of that will be explained
     Folder
       whale1.csv
       whale2.csv
-      whale3.csv
+      whale3.csv 
 
   An example of **Individual Folders** is
     Whale1
