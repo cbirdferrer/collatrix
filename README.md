@@ -45,8 +45,8 @@ This script has several options and inputs to be aware of that will be explained
   Because it's easy to accidentally enter the wrong altitude, focal length, or pixel dimension in MorphoMetriX, this tool can recalculate the measurements using the correct values. Selecting "yes" for this input will have the tool recalculate, using values that you will need to provide through an extra sheet. Instructions for formatting this sheet will be provided later on.
 
 ### Body Volume (for whales)
-  Using the methods from Maternal body size and condition determine calf growth rates in southern right whales
-Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522
+  Using the methods from *Maternal body size and condition determine calf growth rates in southern right whales
+Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 
   the tool will calculate body volume if widths are measured. If you say 'yes' to having body volume calculated, you will enter some more information
     1. the name of your total length measurement (so if you named it TL enter TL)
@@ -58,4 +58,4 @@ Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., 
   If you want an extra output csv containing only a subset of animals, select 'yes' for this input. If you want this you will need to provide a csv containing the ids you want.
 
 
-## 
+##
