@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 #from distutils import setup, find_packages
 
 setup(
-    name = "morphometrix-collating",
+    name = "morphometrix_collating",
     version = "1.0.0",
     description="A GUI for collating MorphoMetriX outputs",
     author = "Clara Bird",
@@ -11,7 +11,7 @@ setup(
     url = "https://github.com/cbirdferrer/morphometrix-collating",
     entry_points={
         'gui_scripts': [
-            'morphometrix-collating = morphometrix-collating.__main__:main'
+            'morphometrix-collating = morphometrix_collating.__main__:main'
         ]
     },
 #    scripts=['morphometrix/morphometrix.py'],

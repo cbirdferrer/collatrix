@@ -1,5 +1,5 @@
 package:
-  name: collating_tool
+  name: morphometrix-collating
   version: '1.0.0'
 
 source:
