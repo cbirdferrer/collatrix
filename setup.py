@@ -8,7 +8,7 @@ setup(
     author = "Clara Bird",
     author_email = "clara.birdferrer@gmail.com",
     license='MIT',
-    url = "https://github.com/cbirdferrer/morphometrix-collating",
+    url = "https://github.com/cbirdferrer/MorphometrixCollating",
     entry_points={
         'gui_scripts': [
             'MorphometrixCollating = morphometrix_collating.__main__:main'
