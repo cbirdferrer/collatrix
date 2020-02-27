@@ -11,7 +11,7 @@ setup(
     url = "https://github.com/cbirdferrer/morphometrix-collating",
     entry_points={
         'gui_scripts': [
-            'collating_tool = collating_tool.__main__:main'
+            'morphometrix-collating = morphometrix-collating.__main__:main'
         ]
     },
 #    scripts=['morphometrix/morphometrix.py'],
