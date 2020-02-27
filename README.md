@@ -3,6 +3,8 @@
  This script combines all the output csvs and makes one large data frame that contains the image, animal ID, and all measurements. If you used different names for measurements these will just appear as extra columns with empty cell values for places where you didn’t use that measurement name.
 
 ## Installation
+[![Anaconda-Server Badge](https://anaconda.org/cbird/collating/badges/version.svg)](https://anaconda.org/cbird/collating)
+    
   The easiest way to install is through the Anaconda python distribution. In anaconda create/use your preferred environment, open command line and enter
   ```
   conda install -c cbird collating
