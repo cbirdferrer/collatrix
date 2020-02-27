@@ -1,0 +1,33 @@
+package:
+  name: collating_tool
+  version: '1.0.0'
+
+source:
+  #path: morphometrix/
+  git_url: https://github.com/cbirdferrer/morphometrix-collating
+
+build:
+  noarch: python
+  number: '0'
+  script: python setup.py install #python -m pip install #--no-deps --ignore-installed  #
+
+requirements:
+  build:
+    - python #setup.py install
+ #   - setuptools
+  run:
+    - python
+    - numpy
+    - pandas
+    - pyqt
+    - os
+    - math
+
+# tests:
+#    imports:
+#     - morphometrix
+
+about:
+  home: https://github.com/cbirdferrer/morphometrix-collating
+  license: MIT
+  summary: A GUI to collate output of MorphoMetriX
