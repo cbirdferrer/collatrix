@@ -10,8 +10,6 @@
 #created by: Clara Bird (clara.birdferrer#gmail.com), August 2019
 #----------------------------------------------------------------
 
-print('blahblahblah')
-
 #import modules
 import pandas as pd
 import numpy as np
@@ -41,6 +39,7 @@ class App(QWidget):
         option, okPressed = QInputDialog.getItem(self, "Option","Saved Where", items, 0, False)
         if okPressed and option:
             print(option)
+            print('blaaaah')
 
         #ask if they want safey net
         items = ('yes', 'no')
