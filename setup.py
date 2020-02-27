@@ -15,6 +15,6 @@ setup(
         ]
     },
 #    scripts=['morphometrix/morphometrix.py'],
-    packages = ['collating_tool']
+    packages = ['morphometrix-collating']
 #    packages= find_packages()
 )
