@@ -1,10 +1,10 @@
 package:
-  name: morphcollates
+  name: collating
   version: '1.0.0'
 
 source:
-  path: /Users/clarabird/github/MorphometrixCollating/morphometrix_collating/__main__.py
-  git_url: https://github.com/cbirdferrer/MorphometrixCollating
+  #path: /Users/clarabird/github/collating/collating/__main__.py
+  git_url: https://github.com/cbirdferrer/collating/
 
 build:
   noarch: python
@@ -27,6 +27,6 @@ requirements:
 #     - morphometrix
 
 about:
-  home: https://github.com/cbirdferrer/MorphometrixCollating
+  home: https://github.com/cbirdferrer/collating
   license: MIT
   summary: A GUI to collate output of MorphoMetriX

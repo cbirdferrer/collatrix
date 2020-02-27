@@ -2,19 +2,19 @@ from setuptools import setup, find_packages
 #from distutils import setup, find_packages
 
 setup(
-    name = "morphcollates",
+    name = "collating",
     version = "1.0.0",
     description="A GUI for collating MorphoMetriX outputs",
     author = "Clara Bird",
     author_email = "clara.birdferrer@gmail.com",
     license='MIT',
-    url = "https://github.com/cbirdferrer/MorphometrixCollating",
+    url = "https://github.com/cbirdferrer/collating",
     entry_points={
         'gui_scripts': [
-            'MorphometrixCollating = morphometrix_collating.__main__:main'
+            'collating = collating.__main__:main'
         ]
     },
 #    scripts=['morphometrix/morphometrix.py'],
-    packages = ['morphcollates']
+    packages = ['collating']
 #    packages= find_packages()
 )
