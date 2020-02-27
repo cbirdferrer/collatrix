@@ -739,6 +739,15 @@ class App(QWidget):
                 outcsv = os.path.join(saveFold,"{0}_allIDs.csv".format(outname))
                 df_all1.to_csv(outcsv,sep = ',')
 
+                if idchoice == 'yes':
+                    df_ids = pd.read_csv(idsCSV,sep = ',')
+                    idList = df_ids['Animal_ID'].tolist()
+                    df_allx = df_all1[df_all1['Animal_ID'].isin(idList)]
+
+                    outidcsv = os.path.join(saveFold,"{0}_IDS.csv".format(outname))
+                    df_allx.to_csv(outidcsv,sep = ',')
+                elif idchoice == 'no':
+                    pass
 
                 print("done, close GUI window to end script")
             elif option == 'One Folder':
@@ -914,6 +923,15 @@ class App(QWidget):
                 outcsv = os.path.join(saveFold,"{0}_allIDs.csv".format(outname))
                 df_all1.to_csv(outcsv,sep = ',')
 
+                if idchoice == 'yes':
+                    df_ids = pd.read_csv(idsCSV,sep = ',')
+                    idList = df_ids['Animal_ID'].tolist()
+                    df_allx = df_all1[df_all1['Animal_ID'].isin(idList)]
+
+                    outidcsv = os.path.join(saveFold,"{0}_IDS.csv".format(outname))
+                    df_allx.to_csv(outidcsv,sep = ',')
+                elif idchoice == 'no':
+                    pass
 
                 print("done, close GUI window to end script")
 if __name__ == '__main__':
