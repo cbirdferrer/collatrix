@@ -11,10 +11,10 @@ setup(
     url = "https://github.com/cbirdferrer/morphometrix-collating",
     entry_points={
         'gui_scripts': [
-            'morphometrix-collating = morphometrix_collating.__main__:main'
+            'MorphometrixCollating = morphometrix_collating.__main__:main'
         ]
     },
 #    scripts=['morphometrix/morphometrix.py'],
-    packages = ['morphometrix-collating']
+    packages = ['morphometrix_collating']
 #    packages= find_packages()
 )
