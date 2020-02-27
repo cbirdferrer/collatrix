@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 #from distutils import setup, find_packages
 
 setup(
-    name = "MorphometrixCollating",
+    name = "morphcollates",
     version = "1.0.0",
     description="A GUI for collating MorphoMetriX outputs",
     author = "Clara Bird",
@@ -15,6 +15,6 @@ setup(
         ]
     },
 #    scripts=['morphometrix/morphometrix.py'],
-    packages = ['MorphometrixCollating']
+    packages = ['morphcollates']
 #    packages= find_packages()
 )
