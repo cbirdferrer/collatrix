@@ -22,6 +22,7 @@ requirements:
     - pyqt
     - os
     - math
+    - setuptools
 
 # tests:
 #    imports:
