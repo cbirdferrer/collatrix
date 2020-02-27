@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 #from distutils import setup, find_packages
 
 setup(
-    name = "collating_tool",
+    name = "morphometrix-collating",
     version = "1.0.0",
     description="A GUI for collating MorphoMetriX outputs",
     author = "Clara Bird",
