@@ -21,6 +21,8 @@ After the package has been installed in your preferred environment enter this co
 
 2. If you used different names for measurements these will just appear as extra columns with empty cell values for places where you didn’t use that measurement name.
 
+3. Naming recommendations: If you want body volume to be calculated the name of the length measurement **cannot** contain a dash (-).
+
 ## Inputs
 This script has several options and inputs to be aware of that will be explained here. Note, these are listed in the order that the tool will ask you to enter them.
 
