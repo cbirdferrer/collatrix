@@ -58,22 +58,23 @@ the tool will calculate body volume if widths are measured. If you say 'yes' to 
 ### 3. List of Specific Individuals 
   If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want.
 
-### 4. Output name 
+### 4. Select the individual list csv (only if you said 'yes' to a individual list)
+Select the csv file containing the list of Animal_IDs that you want included in the subset list
+
+### 5. Output name 
 The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv. 
 
-### 5. Location of MorphoMetriX files
+### 6. Location of MorphoMetriX files
 A window will open asking you to select the folder where the MorphoMetriX csvs are saved. 
 * If you have them in one folder, select that folder
 * If you have them in individual folders, select the folder containing all the individual folders
 
-### 6. Location where output should be saved
+### 7. Location where output should be saved
 Select the folder where you want the output of this tool to be saved
 
-### 7. Select the safety csv (only if you said 'yes' to safety)
+### 8. Select the safety csv (only if you said 'yes' to safety)
 Select the csv file containing the correct Altitude, Focal Length, and Pixel Dimension data per image
 
-### 8. Select the individual list csv (only if you said 'yes' to a individual list)
-Select the csv file containing the list of Animal_IDs that you want included in the subset list
 
 ## Input File Format
 * If you use the safety or the list of specific individuals, the input sheets have to be specifically formated
