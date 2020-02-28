@@ -28,7 +28,7 @@ This script has several options and inputs to be aware of that will be explained
 
 ### 1. Save Location
   For this script you can either have the MorphoMetriX output csvs saved in **One Folder** or in **Individual Folders**
-  If you choose OneFolder, the Animal ID will be the Animal ID provided through MorphoMetrix, if you choose Individual Folders the Animal ID will be the name of the folder it was saved in.
+  If you choose OneFolder, the Animal ID will be the Animal ID provided through MorphoMetriX, if you choose Individual Folders the Animal ID will be the name of the folder it was saved in.
 
   An example of **One Folder** is       
   * Folder      
