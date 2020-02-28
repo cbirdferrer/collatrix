@@ -82,7 +82,7 @@ Select the csv file containing the correct Altitude, Focal Length, and Pixel Dim
 
 ### Safety List
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension
-* Make sure that the image anmes are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
+* Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
 
 Example table
 
