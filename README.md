@@ -48,7 +48,7 @@ This script has several options and inputs to be aware of that will be explained
  Using the methods from *Maternal body size and condition determine calf growth rates in southern right whales
 Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 the tool will calculate body volume if widths are measured. If you say 'yes' to having body volume calculated, you will enter some more information.
-1. the name of your total length measurement (so if you named it TL enter TL) 
+1. the name of your length measurement (so if you named it TL enter TL) 
 2. The lower bound percentage (so if you want to use widths from 20% of total length to 80%, 20 would be the lower bound) 
 3. The upper bound (using the above example, 80 would be the upperbound) 
 4. The interval (if you want it calculated using 10% increments, enter 10. **Note** this value cannot be less than the increments of width that you measured) 
