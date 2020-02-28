@@ -1,7 +1,7 @@
 # morphometrix-collating
  This tool collates the outputs of the MorphoMetriX photogrammetry tool (https://github.com/wingtorres/morphometrix)    
- This script combines all the output csvs and makes one large data frame that contains the image, animal ID, and all measurements. If you used different names for measurements these will just appear as extra columns with empty cell values for places where you didn’t use that measurement name.
-
+ This script combines all the output csvs and makes one large data frame that contains the image, animal ID, and all measurements. 
+ 
 ## Installation
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collating/badges/version.svg)](https://anaconda.org/cbird/collating)
     
