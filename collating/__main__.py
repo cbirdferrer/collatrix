@@ -90,7 +90,7 @@ class App(QWidget):
         #ask for name of output
         outname, okPressed = QInputDialog.getText(self, "output name",'name',QLineEdit.Normal,"")
 
-        constants = ['Image ID', 'Image Path', 'Focal Length', 'Altitude', 'Pixel Dimension', 'Notes']
+        constants = ['Image ID', 'Image Path', 'Focal Length', 'Altitude', 'Pixel Dimension']
 
         if safety == 'yes':
             if option == 'Individual Folders':
@@ -260,6 +260,8 @@ class App(QWidget):
                 #no we group by ID and image just incase multiple images were measured for the same animal
                 #this would combine those measurements
                 df_all = df_allx.groupby(['Animal_ID','Image'])[togroup].apply(lambda x: x.astype(float).sum()).reset_index()
+                df_notes = df_allx.groupby(['Animal_ID','Image'])['Notes'].first().reset_index()
+                df_all =df_all.merge(df_notes,on=['Animal_ID','Image'])
 
                 #calculate body volume
                 df_all.columns = df_all.columns.str.replace(".00%", ".0%")
@@ -480,6 +482,9 @@ class App(QWidget):
                 #no we group by ID and image just incase multiple images were measured for the same animal
                 #this would combine those measurements
                 df_all = df_allx.groupby(['Animal_ID','Image'])[togroup].apply(lambda x: x.astype(float).sum()).reset_index()
+                df_notes = df_allx.groupby(['Animal_ID','Image'])['Notes'].first().reset_index()
+                df_all =df_all.merge(df_notes,on=['Animal_ID','Image'])
+
 
                 #calculate body volume
                 df_all.columns = df_all.columns.str.replace(".00%", ".0%")
@@ -629,8 +634,8 @@ class App(QWidget):
                 #now we're going to set up a dictionary to fill in with all the measurements
                 #that we will eventually turn into a dataframe where the keys are the columns
                 rawM = measurements #making a copy of the measurement list
-                measurements += ['Image','Animal_ID'] #add key elements to measurement list (all for dict)
-                names = ['Image','Animal_ID'] #make list of the non measurement elements that will go in final table
+                measurements += ['Image','Animal_ID','Notes'] #add key elements to measurement list (all for dict)
+                names = ['Image','Animal_ID','Notes'] #make list of the non measurement elements that will go in final table
                 mDict = dict.fromkeys(measurements) #make empty dictionary with measurement names as keys
                 keys = list(mDict.keys()) #make list of keys from the dictionary we just made
 
@@ -685,6 +690,8 @@ class App(QWidget):
                 #no we group by ID and image just incase multiple images were measured for the same animal
                 #this would combine those measurements
                 df_all = df_allx.groupby(['Animal_ID','Image'])[togroup].apply(lambda x: x.astype(float).sum()).reset_index()
+                df_notes = df_allx.groupby(['Animal_ID','Image'])['Notes'].first().reset_index()
+                df_all =df_all.merge(df_notes,on=['Animal_ID','Image'])
 
                 #calculate body volume
                 df_all.columns = df_all.columns.str.replace(".00%", ".0%")
@@ -813,8 +820,8 @@ class App(QWidget):
                 #now we're going to set up a dictionary to fill in with all the measurements
                 #that we will eventually turn into a dataframe where the keys are the columns
                 rawM = measurements #making a copy of the measurement list
-                measurements += ['Image','Animal_ID'] #add key elements to measurement list (all for dict)
-                names = ['Image','Animal_ID'] #make list of the non measurement elements that will go in final table
+                measurements += ['Image','Animal_ID','Notes'] #add key elements to measurement list (all for dict)
+                names = ['Image','Animal_ID','Notes'] #make list of the non measurement elements that will go in final table
                 mDict = dict.fromkeys(measurements) #make empty dictionary with measurement names as keys
                 keys = list(mDict.keys()) #make list of keys from the dictionary we just made
 
@@ -836,6 +843,8 @@ class App(QWidget):
                     mDict['Image'] = image #add image name to dictionary
                     aID = df[df[0] == 'Image ID'].loc[:,[1]].values[0] #pull animal id
                     mDict['Animal_ID'] = aID[0] #fill dictionary
+                    notes = df[df[0] == 'Notes'].loc[:,[1]].values[0]
+                    mDict['Notes'] = notes[0]
 
                     #go into the cvs to look for the measurement values
                     dfGUI = df0.iloc[idx[0]:] #now subset the df so we're just looking at the measurements
@@ -864,11 +873,13 @@ class App(QWidget):
 
                 df_allx = df_all.replace(np.nan,0) #replace all nans with 0s
                 df_all_cols = df_allx.columns.tolist() #make list of column names
-                gby = ['Animal_ID','Image']
+                gby = ['Animal_ID','Image','Notes']
                 togroup = [x for x in df_all_cols if x not in gby] #setting up list of columns to be grouped
                 #now we group by ID and image just incase multiple images were measured for the same animal
                 #this would combine those measurements
                 df_all = df_allx.groupby(['Animal_ID','Image'])[togroup].apply(lambda x: x.astype(float).sum()).reset_index()
+                df_notes = df_allx.groupby(['Animal_ID','Image'])['Notes'].first().reset_index()
+                df_all =df_all.merge(df_notes,on=['Animal_ID','Image'])
 
                 #calculate body volume
                 df_all.columns = df_all.columns.str.replace(".00%", ".0%")
