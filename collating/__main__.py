@@ -176,8 +176,8 @@ class App(QWidget):
                 #now we're going to set up a dictionary to fill in with all the measurements
                 #that we will eventually turn into a dataframe where the keys are the columns
                 rawM = measurements
-                measurements += ['Image','Animal_ID','Altitude','Focal Length','PixD']
-                names = ['Image','Animal_ID','Altitude','Focal Length','PixD']
+                measurements += ['Image','Animal_ID','Altitude','Focal Length','PixD','Notes']
+                names = ['Image','Animal_ID','Altitude','Focal Length','PixD','Notes']
                 mDict = dict.fromkeys(measurements)
                 keys = list(mDict.keys())
 
@@ -210,6 +210,10 @@ class App(QWidget):
 
                     pixd = float((df[df[0] == 'Pixel Dimension'].loc[:,[1]].values[0])[0]) #extract entered pixel dimension
                     mDict['PixD'] = pixd
+
+                    notes = df[df[0] == 'Notes'].loc[:,[1]].values[0]
+                    mDict['Notes'] = notes[0]
+
 
                     #get the true values of focal length and altitude to use when recalculating
                     df_L = dfList.groupby('Image').first().reset_index()
@@ -399,8 +403,8 @@ class App(QWidget):
                 #now we're going to set up a dictionary to fill in with all the measurements
                 #that we will eventually turn into a dataframe where the keys are the columns
                 rawM = measurements
-                measurements += ['Image','Animal_ID','Altitude','Focal Length','PixD']
-                names = ['Image','Animal_ID','Altitude','Focal Length','PixD']
+                measurements += ['Image','Animal_ID','Altitude','Focal Length','PixD','Notes']
+                names = ['Image','Animal_ID','Altitude','Focal Length','PixD','Notes']
                 mDict = dict.fromkeys(measurements)
                 keys = list(mDict.keys())
 
@@ -434,6 +438,9 @@ class App(QWidget):
 
                     pixd =  float((df[df[0] == 'Pixel Dimension'].loc[:,[1]].values[0])[0]) #extract entered pixel dimension
                     mDict['PixD'] = pixd
+
+                    notes = df[df[0] == 'Notes'].loc[:,[1]].values[0]
+                    mDict['Notes'] = notes[0]
 
                     #get the true values of focal length and altitude to use when recalculating
                     df_L = dfList.groupby('Image').first().reset_index()
@@ -657,6 +664,8 @@ class App(QWidget):
                     mDict['Image'] = image #add image name to dictionary
                     aID = os.path.split(os.path.split(f)[0])[1] #pull animal id
                     mDict['Animal_ID'] = aID[0] #fill dictionary
+                    notes = df[df[0] == 'Notes'].loc[:,[1]].values[0]
+                    mDict['Notes'] = notes[0]
 
                     #go into the cvs to look for the measurement values
                     dfGUI = df0.iloc[idx[0]:] #now subset the df so we're just looking at the measurements
