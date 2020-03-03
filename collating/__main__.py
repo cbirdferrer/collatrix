@@ -222,10 +222,13 @@ class App(QWidget):
                     pixd_act = float(df_L[df_L.Image == image].loc[:,'Pixel_Dimension'].values[0])
 
                     #go into the cvs to look for the measurement values
-                    dfGUI = df0.iloc[idx[0]:] #now subset the df so we're just looking at the measurements
+                    dfGUI = df0.iloc[idx[0]:].reset_index(drop=True) #now subset the df so we're just looking at the measurements
                     head = dfGUI.iloc[0]
-                    dfGUI = dfGUI[2:] #take the data less the header row
-                    dfGUI.columns = new_header
+                    dfGUI = dfGUI[1:]
+                    dfGUI.columns = head
+                    new_headerG = dfGUI.columns[0:2].values.tolist() + dfGUI.iloc[0,2:].values.tolist() #merge header with width names
+                    dfGUI = dfGUI[1:] #take the data less the header row
+                    dfGUI.columns = new_headerG
                     dfGUI = dfGUI.set_index('Object')
 
                     for key in keys: #loop through the keys aka future column headers
@@ -449,11 +452,13 @@ class App(QWidget):
                     pixd_act = float(df_L[df_L.Image == image].loc[:,'Pixel_Dimension'].values[0])
 
                     #go into the cvs to look for the values
-
-                    dfGUI = df0.iloc[idx[0]:] #now subset the df so we're just looking at the measurements
+                    dfGUI = df0.iloc[idx[0]:].reset_index(drop=True) #now subset the df so we're just looking at the measurements
                     head = dfGUI.iloc[0]
-                    dfGUI = dfGUI[2:] #take the data less the header row
-                    dfGUI.columns = new_header
+                    dfGUI = dfGUI[1:]
+                    dfGUI.columns = head
+                    new_headerG = dfGUI.columns[0:2].values.tolist() + dfGUI.iloc[0,2:].values.tolist() #merge header with width names
+                    dfGUI = dfGUI[1:] #take the data less the header row
+                    dfGUI.columns = new_headerG
                     dfGUI = dfGUI.set_index('Object')
                     df = df.replace(r'^\s*$', np.nan, regex=True)
 
@@ -668,10 +673,13 @@ class App(QWidget):
                     mDict['Notes'] = notes[0]
 
                     #go into the cvs to look for the measurement values
-                    dfGUI = df0.iloc[idx[0]:] #now subset the df so we're just looking at the measurements
+                    dfGUI = df0.iloc[idx[0]:].reset_index(drop=True) #now subset the df so we're just looking at the measurements
                     head = dfGUI.iloc[0]
-                    dfGUI = dfGUI[2:] #take the data less the header row
-                    dfGUI.columns = new_header
+                    dfGUI = dfGUI[1:]
+                    dfGUI.columns = head
+                    new_headerG = dfGUI.columns[0:2].values.tolist() + dfGUI.iloc[0,2:].values.tolist() #merge header with width names
+                    dfGUI = dfGUI[1:] #take the data less the header row
+                    dfGUI.columns = new_headerG
                     dfGUI = dfGUI.set_index('Object')
 
                     for key in keys: #loop through the keys aka future column headers
@@ -856,10 +864,13 @@ class App(QWidget):
                     mDict['Notes'] = notes[0]
 
                     #go into the cvs to look for the measurement values
-                    dfGUI = df0.iloc[idx[0]:] #now subset the df so we're just looking at the measurements
+                    dfGUI = df0.iloc[idx[0]:].reset_index(drop=True) #now subset the df so we're just looking at the measurements
                     head = dfGUI.iloc[0]
-                    dfGUI = dfGUI[2:] #take the data less the header row
-                    dfGUI.columns = new_header
+                    dfGUI = dfGUI[1:]
+                    dfGUI.columns = head
+                    new_headerG = dfGUI.columns[0:2].values.tolist() + dfGUI.iloc[0,2:].values.tolist() #merge header with width names
+                    dfGUI = dfGUI[1:] #take the data less the header row
+                    dfGUI.columns = new_headerG
                     dfGUI = dfGUI.set_index('Object')
 
                     for key in keys: #loop through the keys aka future column headers
