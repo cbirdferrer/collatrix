@@ -23,6 +23,8 @@ After the package has been installed in your preferred environment enter this co
 
 3. Naming recommendations: If you want body volume to be calculated the name of the length measurement **cannot** contain a dash (-).
 
+4. If you measure the same whale in the same image twice (separate csvs), make sure that you do not repeat a measurement name.
+
 ## Inputs
 This script has several options and inputs to be aware of that will be explained here. Note, these are listed in the order that the tool will ask you to enter them.
 
