@@ -259,7 +259,7 @@ class App(QWidget):
 
                 df_allx = df_all.drop(columns = ['Altitude','Focal Length','PixD']).replace(np.nan,0)
                 df_all_cols = df_allx.columns.tolist() #make list of column names
-                gby = ['Animal_ID','Image']
+                gby = ['Animal_ID','Image','Notes']
                 togroup = [x for x in df_all_cols if x not in gby] #setting up list of columns to be grouped
                 #no we group by ID and image just incase multiple images were measured for the same animal
                 #this would combine those measurements
@@ -484,7 +484,7 @@ class App(QWidget):
 
                 df_allx = df_all.drop(columns = ['Altitude','Focal Length','PixD']).replace(np.nan,0)
                 df_all_cols = df_allx.columns.tolist() #make list of column names
-                gby = ['Animal_ID','Image']
+                gby = ['Animal_ID','Image','Notes']
                 togroup = [x for x in df_all_cols if x not in gby] #setting up list of columns to be grouped
                 #no we group by ID and image just incase multiple images were measured for the same animal
                 #this would combine those measurements
@@ -694,7 +694,7 @@ class App(QWidget):
 
                 df_allx = df_all.replace(np.nan,0) #replace all nans with 0s
                 df_all_cols = df_allx.columns.tolist() #make list of column names
-                gby = ['Animal_ID','Image']
+                gby = ['Animal_ID','Image','Notes']
                 togroup = [x for x in df_all_cols if x not in gby] #setting up list of columns to be grouped
                 #no we group by ID and image just incase multiple images were measured for the same animal
                 #this would combine those measurements
