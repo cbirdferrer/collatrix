@@ -3,18 +3,18 @@
  This script combines all the output csvs and makes one large data frame that contains the image, animal ID, and all measurements. 
  
 ## Installation
-[![Anaconda-Server Badge](https://anaconda.org/cbird/collating/badges/version.svg)](https://anaconda.org/cbird/collating)
+[![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/version.svg)](https://anaconda.org/cbird/collatrix)
     
   The easiest way to install is through the Anaconda python distribution. In anaconda create/use your preferred environment, open command line and enter
   ```
-  conda install -c cbird collating
+  conda install -c cbird collatrix
   ```
 
 ## Running
 After the package has been installed in your preferred environment enter this command
 
   ```
-  python -m collating
+  python -m collatrix
   ```
 ## Things to know
 1. if there’s a repeated Object Name in a GUI output csv (like two rows of Total Length) the script will end and give you a message telling you to get rid of the duplicate. If you want both instances of the measurement included, then just alter the name slightly (for example: Total Length_1).
