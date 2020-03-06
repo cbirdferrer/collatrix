@@ -11,7 +11,7 @@ setup(
     url = "https://github.com/cbirdferrer/collatrix",
     entry_points={
         'gui_scripts': [
-            'collating = collating.__main__:main'
+            'collatrix = collatrix.__main__:main'
         ]
     },
 
