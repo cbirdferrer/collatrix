@@ -1,4 +1,4 @@
-# morphometrix-collating
+# CollatriX
  This tool collates the outputs of the MorphoMetriX photogrammetry tool (https://github.com/wingtorres/morphometrix)    
  This script combines all the output csvs and makes one large data frame that contains the image, animal ID, and all measurements. 
  
