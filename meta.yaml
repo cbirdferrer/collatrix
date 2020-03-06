@@ -1,10 +1,10 @@
 package:
-  name: collating
-  version: '1.0.1'
+  name: collatrix
+  version: '1.0.0'
 
 source:
-  #path: /Users/clarabird/github/collating/collating/__main__.py
-  git_url: https://github.com/cbirdferrer/collating/
+  #path: /Users/clarabird/github/collating/collatrix/__main__.py
+  git_url: https://github.com/cbirdferrer/collatrix/
 
 build:
   noarch: python
@@ -27,6 +27,6 @@ requirements:
 #     - morphometrix
 
 about:
-  home: https://github.com/cbirdferrer/collating
+  home: https://github.com/cbirdferrer/collatrix
   license: MIT
   summary: A GUI to collate output of MorphoMetriX
