@@ -19,7 +19,7 @@ requirements:
     - python
     - numpy
     - pandas
-    - pyqt
+    - pyqt=5
     - setuptools
 
 # tests:
