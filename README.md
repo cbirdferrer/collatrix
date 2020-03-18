@@ -52,7 +52,7 @@ This script has several options and inputs to be aware of that will be explained
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
 
-Example table
+Example 
 
 Image | Altitude | Focal_Length | Pixel_Dimension
 ----- | -------- | ------------ | ---------------
@@ -70,14 +70,14 @@ CollatriX also provides the option to calculate body volume from perpendicular w
 *Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. Maternal body size and condition determine calf growth rates in southern right whales (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 
 ### 4. List of Specific Individuals
-  If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want. Intructions for formatting are provided later in this document.
+  If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want.
   If you select 'yes', a window will open asking you to select this csv file containing the list of Animal_IDs that you want included in the subset list.  
 #### How to format this csv (note: header spelling and capitalization matters most)
 * If you want a second output csv containing only a specific subset of individuals you'll need to specify a csv containing that list.
 * Required column: Animal_ID
 * Make sure that the ID's listed are spelled exactly as those in the MorphoMetriX outputs
 
-Example table
+Example 
 
 Animal_ID |
 --------- |
