@@ -1,9 +1,9 @@
 # CollatriX
  This tool collates the csv outputs from the MorphoMetriX photogrammetry tool (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.
- 
+
 ## Installation
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/version.svg)](https://anaconda.org/cbird/collatrix)
-    
+
   The easiest way to install is through the Anaconda python distribution. In anaconda create/use your preferred environment, open command line and enter
   ```
   conda install -c cbird collatrix
@@ -22,7 +22,7 @@ After the package has been installed in your preferred environment enter this co
 
 3. Naming recommendations: Create simple labels for measurements to reduce chances of mistyping a label while measuring (i.e. consider using "TL" for total length). If you want body volume to be calculated the name of the length measurement **cannot** contain a dash (-) (i.e.use "total length" or "TL" instead of "total-length").
 
-4. The output file from CollatriX is linked by the "Image ID" input in MorphoMetriX, so it is ok to use the same image to generate multiple csv outputs as long as the image ID is unique or the output csv file is unique. 
+4. The output file from CollatriX is linked by the "Image ID" input in MorphoMetriX, so it is ok to use the same image to generate multiple csv outputs as long as the image ID is unique or the output csv file is unique.
 
 5. If you measure the same whale in the same image twice (separate csvs), make sure that you do not repeat a measurement name as this will overwrite the previous measurement. For instance, if you are measuring the total length of a whale twice and want to create two separate csvs for each one, use "TL1" and "TL2" for each measurement.
 
@@ -37,7 +37,7 @@ This script has several options and inputs to be aware of that will be explained
   * Folder      
         > whale1.csv    
         > whale2.csv
-  
+
   An example of **Individual Folders** is         
   * Whale1      
         > whale1.jpg    
@@ -47,7 +47,7 @@ This script has several options and inputs to be aware of that will be explained
         > whale2.csv
 
 ### 2. Safety
-  Because it's easy to accidentally enter the wrong altitude, focal length, or pixel dimension in MorphoMetriX, this tool can recalculate the measurements using the correct values. Selecting "yes" for this input will have the tool recalculate, using values that you will need to provide through an additional csv.  
+  Because it's easy to accidentally enter the wrong altitude, focal length, or pixel dimension in MorphoMetriX, this tool can recalculate the measurements using the correct values. Selecting "yes" for this input will have the tool recalculate, using values that you will need to provide through an additional csv. If you select 'yes',a box will pop up asking you to select this file from where it is saved.
 #### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
@@ -62,15 +62,15 @@ whale2.JPG | 40.0 | 35 | 0.0039
 ### 3. Body Volume (for whales)
 CollatriX also provides the option to calculate body volume from perpendicular width intervals along a total length measurement following Christiansen et al. 2018. If you say "yes" to have body volume calculated, the following information will need to be provided:
 
-1. The name of your length measurement (i.e. if you named total length "TL" enter "TL") 
-2. The lower bound percentage (i.e. if you want to use widths between 20-80% of total length to calculate body volume, then 20 would be the lower bound) 
-3. The upper bound (using the above example, 80 would be the upper bound) 
-4. The interval that the widths per measured in (i.e 5 if you measured in 5% increments. **Note** this value cannot be less than the increments of width that you measured). 
+1. The name of your length measurement (i.e. if you named total length "TL" enter "TL")
+2. The lower bound percentage (i.e. if you want to use widths between 20-80% of total length to calculate body volume, then 20 would be the lower bound)
+3. The upper bound (using the above example, 80 would be the upper bound)
+4. The interval that the widths per measured in (i.e 5 if you measured in 5% increments. **Note** this value cannot be less than the increments of width that you measured).
 
 *Maternal body size and condition determine calf growth rates in southern right whales
 Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 
-### 3. List of Specific Individuals 
+### 3. List of Specific Individuals
   If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want. Intructions for formatting are provided later in this document.
   If you select 'yes', a window will open asking you to select this csv file containing the list of Animal_IDs that you want included in the subset list.  
 #### How to format this csv (note: header spelling and capitalization matters most)
@@ -84,16 +84,13 @@ Animal_ID |
 --------- |
 Whale1
 
-### 4. Output name 
-The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv. 
+### 4. Output name
+The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
 
 ### 5. Location of MorphoMetriX files
-A window will open asking you to select the folder where the MorphoMetriX csvs are saved. 
+A window will open asking you to select the folder where the MorphoMetriX csvs are saved.
 * If you have them in one folder, select that folder
 * If you have them in individual folders, select the folder containing all the individual folders
 
 ### 6. Location where output should be saved
 Select the folder where you want the output of this tool to be saved
-
-### 7. Select the safety csv (only if you said 'yes' to safety)
-Select the csv file containing the correct Altitude, Focal Length, and Pixel Dimension data per image
