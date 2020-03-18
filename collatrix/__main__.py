@@ -38,18 +38,19 @@ class App(QWidget):
         items = ('Individual Folders', 'One Folder')
         option, okPressed = QInputDialog.getItem(self, "Option","Saved Where", items, 0, False)
         if okPressed and option:
-            print(option)
+            print("option selected: {0}".format(option))
 
         #ask if they want safey net
         items = ('yes', 'no')
         safety, okPressed = QInputDialog.getItem(self,"Safety?", "On or Off?",items,0,False)
         if okPressed and safety:
-            print(safety)
+            print("{0} safety".format(safety))
 
         if safety == 'yes':
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
             safe_csv, _ = QFileDialog.getOpenFileName(self,"img list w/ altitudes and focal lengths", "","All Files (*);;csv files (*.csv)", options=options)
+            print("safety csv = {0}".format(safe_csv))
         elif safety == 'no':
             pass
 
@@ -57,25 +58,22 @@ class App(QWidget):
         items = ('yes','no')
         volchoice, okPressed = QInputDialog.getItem(self, 'Do you want body volume to be calculated? (you have to have measured Total_Length widths)','',items,0,False)
         if okPressed and volchoice:
-            print(volchoice)
+            print("{0} body volume calculated".format(volchoice))
 
         if volchoice == 'yes':
             n, okPressed = QInputDialog.getText(self, "What did you name the total length measurement?","Total Length Name:", QLineEdit.Normal, "")
             if okPressed and n != '':
                 tl_name= str(n)
-                print(tl_name)
             l, okPressed = QInputDialog.getText(self, "Lower Bound","Lower Bound:", QLineEdit.Normal, "")
             if okPressed and l != '':
                 lower= int(l)
-                print(lower)
             u, okPressed = QInputDialog.getText(self, "Upper Bound","Upper Bound:", QLineEdit.Normal, "")
             if okPressed and u != '':
                upper = int(u)
-               print(upper)
             i, okPressed = QInputDialog.getText(self, "Interval","Interval:", QLineEdit.Normal, "")
             if okPressed and i != '':
                 interval = int(i)
-                print(interval)
+            print("length name = {0}, lower bound = {1}, upper bound = {2}, interval = {3}".format(tl_name,lower,upper,interval))
         elif volchoice == 'no':
             pass
 
@@ -83,13 +81,13 @@ class App(QWidget):
         items = ('no','yes')
         idchoice, okPressed = QInputDialog.getItem(self, "do you want output to only contain certain individuals?",'use animal id list?',items,0,False)
         if idchoice and okPressed:
-            print(idchoice)
+            print("{0} subset list".format(idchoice))
         if idchoice == 'yes':
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
             idsCSV, _ = QFileDialog.getOpenFileName(self,"file containing ID list", "","All Files (*);;csv files (*.csv)", options=options)
             if idsCSV:
-                print(idsCSV)
+                print("ID list file = {0}".format(idsCSV))
         elif idchoice == 'no':
             pass
 
@@ -125,7 +123,6 @@ class App(QWidget):
                 head = df.iloc[0] #make list out of names in first row
                 df = df[1:] #take the data less the header row
                 df.columns = head #set the header row as the df header
-                #display(df)
 
                 wlist = df.iloc[0] #make list of all the width types
                 widths = []
@@ -140,7 +137,6 @@ class App(QWidget):
 
                 measurements = measurements + l #add the measurement names to the master list
                 nonPercMeas = nonPercMeas + l #copy of the master list that does not include widths
-
 
                 new_header = df.columns[0:2].values.tolist() + df.iloc[0,2:].values.tolist() #merge header with width names
                 df = df[1:] #cut header row off
@@ -187,14 +183,12 @@ class App(QWidget):
                 elif option == 'One Folder':
                     aID = df[df[0] == 'Image ID'].loc[:,[1]].values[0] #pull animal id
                     aID = aID[0]
-
                 mDict['Animal_ID'] = aID
-                #df = df.set_index([0])
+
                 image = os.path.split(df[df[0] == 'Image Path'].loc[:,1].values[0])[1] #extract image
                 print(image)
-                #print(image)
                 mDict['Image'] = image
-                #print(df)
+
                 alt = float((df[df[0] == 'Altitude'].loc[:,[1]].values[0])[0]) #extract entered altitude
                 mDict['Altitude'] = alt
 
@@ -218,7 +212,6 @@ class App(QWidget):
                 dfGUI = dfGUI.set_index('Object')
 
                 if safety == 'yes':
-                    print(df_L[df_L.Image == image])
                     alt_act = float(df_L[df_L.Image == image].loc[:,'Altitude'].values[0])
                     foc_act = float(df_L[df_L.Image == image].loc[:,'Focal_Length'].values[0])
                     pixd_act = float(df_L[df_L.Image == image].loc[:,'Pixel_Dimension'].values[0])
@@ -232,11 +225,9 @@ class App(QWidget):
                             if safety == 'yes':
                                 # now is the time to do the back calculations
                                 pixc = (x/pixd)*(focl/alt) #back calculate the pixel count
-                                #print(pixc)
                                 xx = ((alt_act/foc_act)*pixd_act)*pixc #recalculate using the accurate focal length and altitude
                             elif safety == 'no':
                                 xx = x
-                            #print(xx)
                         else: #if this key is not in the csv
                             xx = np.nan
                         mDict[key] = xx #add the value to the respective key
@@ -256,7 +247,6 @@ class App(QWidget):
 
 
                 df_op = pd.DataFrame(data = mDict,index=[1]) #make dictionary into dataframe
-                #df_all = pd.merge(df_all,df_op,on=['Image'])
                 df_all = pd.concat([df_all,df_op],sort = True)
 
             df_allx = df_all.drop(columns = ['Altitude','Focal Length','PixD']).replace(np.nan,0)
@@ -271,7 +261,6 @@ class App(QWidget):
             options |= QFileDialog.DontUseNativeDialog
 
             dfList = pd.read_csv(safe_csv,sep = ",")
-            #print(dfList)
 
             #make lists
             measurements = []
@@ -357,6 +346,7 @@ class App(QWidget):
         a = "AaIiTtEeJjRrBbFfWwCcDdGgHhKkLlMmNnOoPpQqSsUuVvXxYyZz" #make your own ordered alphabet
         col = sorted(cols, key=lambda word:[a.index(c) for c in word[0]]) #sort headers based on this alphabet
         df_all1 = df_all1.ix[:,col] #sort columns based on sorted list of column header
+        df_all1 = df_all1.replace(np.nan,0)
 
         outcsv = os.path.join(saveFold,"{0}_allIDs.csv".format(outname))
         df_all1.to_csv(outcsv,sep = ',')
