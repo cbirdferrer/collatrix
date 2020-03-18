@@ -80,7 +80,7 @@ class App(QWidget):
             pass
 
         #animal id list?
-        items = ('yes','no')
+        items = ('no','yes')
         idchoice, okPressed = QInputDialog.getItem(self, "do you want output to only contain certain individuals?",'use animal id list?',items,0,False)
         if idchoice and okPressed:
             print(idchoice)
