@@ -284,7 +284,7 @@ class App(QWidget):
         elif option == 'One Folder':
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
-            GUIfold = QFileDialog.getExistingDirectory(None, str("folder containing GUI outputs"),options=options)
+            GUIfold = QFileDialog.getExistingDirectory(None, str("folder containing MorphoMetriX outputs"),options=options)
             saveFold = QFileDialog.getExistingDirectory(None,str("folder where output should be saved"),options=options)
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
