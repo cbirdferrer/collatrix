@@ -17,8 +17,8 @@ requirements:
  #   - setuptools
   run:
     - python
-    - numpy=1.17.2
-    - pandas=0.25.1
+    - numpy
+    - pandas
     - pyqt=5
     - setuptools
 
