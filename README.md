@@ -35,16 +35,16 @@ This script has several options and inputs to be aware of that will be explained
 
   An example of **One Folder** is       
   * Folder      
-        > whale1.csv    
-        > whale2.csv
+        > image_name1.csv    
+        > image_name2.csv
 
   An example of **Individual Folders** is         
   * Whale1      
-        > whale1.jpg    
-        > whale1.csv
+        > image_name1.jpg    
+        > image_name1.csv
   * Whale2      
-        > whale2.jpg    
-        > whale2.csv
+        > image_name2.jpg    
+        > image_name2.csv
 
 ### 2. Safety
   Because it's easy to accidentally enter the wrong altitude, focal length, or pixel dimension in MorphoMetriX, this tool can recalculate the measurements using the correct values. Selecting "yes" for this input will have the tool recalculate, using values that you will need to provide through an additional csv. If you select 'yes',a box will pop up asking you to select this file from where it is saved.
@@ -65,12 +65,11 @@ CollatriX also provides the option to calculate body volume from perpendicular w
 1. The name of your length measurement (i.e. if you named total length "TL" enter "TL")
 2. The lower bound percentage (i.e. if you want to use widths between 20-80% of total length to calculate body volume, then 20 would be the lower bound)
 3. The upper bound (using the above example, 80 would be the upper bound)
-4. The interval that the widths per measured in (i.e 5 if you measured in 5% increments. **Note** this value cannot be less than the increments of width that you measured).
+4. The interval that the widths were measured in (i.e 5 if you measured in 5% increments. **Note** this value cannot be less than the increments of width that you measured).
 
-*Maternal body size and condition determine calf growth rates in southern right whales
-Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
+*Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. Maternal body size and condition determine calf growth rates in southern right whales (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 
-### 3. List of Specific Individuals
+### 4. List of Specific Individuals
   If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want. Intructions for formatting are provided later in this document.
   If you select 'yes', a window will open asking you to select this csv file containing the list of Animal_IDs that you want included in the subset list.  
 #### How to format this csv (note: header spelling and capitalization matters most)
@@ -84,13 +83,13 @@ Animal_ID |
 --------- |
 Whale1
 
-### 4. Output name
+### 5. Output name
 The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
 
-### 5. Location of MorphoMetriX files
+### 6. Location of MorphoMetriX files
 A window will open asking you to select the folder where the MorphoMetriX csvs are saved.
 * If you have them in one folder, select that folder
 * If you have them in individual folders, select the folder containing all the individual folders
 
-### 6. Location where output should be saved
+### 7. Location where output should be saved
 Select the folder where you want the output of this tool to be saved
