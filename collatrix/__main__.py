@@ -150,7 +150,6 @@ class App(QWidget):
                     print("please check file {0} for duplicate Objects and remove duplicates".format(f))
                     sys.exit("remove duplicate and run script again")
                 elif anydup(l) == False:
-                    #print(f)
                     for i in l: #loop through list of measurement types
                         for w in (w for w in widths if w[0].isdigit()): #loop through the widths
                             x = df.loc[i,w] #extract cell value of width of measurement type
@@ -260,8 +259,6 @@ class App(QWidget):
             saveFold = QFileDialog.getExistingDirectory(None,"folder where output should be saved",options = options)
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
-
-            dfList = pd.read_csv(safe_csv,sep = ",")
 
             #make lists
             measurements = []
