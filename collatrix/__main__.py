@@ -115,6 +115,7 @@ class App(QWidget):
 
         def bigfunc(csvs,measurements,nonPercMeas,df_L,safety):
             for f in csvs:
+                print(f)
                 temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #read in csv as one column
                 df0=temp.X0.str.split(',',expand=True) #split rows into columns by delimeter
                 df0 = df0.fillna('') #replace nans by blank space
