@@ -150,7 +150,7 @@ class App(QWidget):
                     print("please check file {0} for duplicate Objects and remove duplicates".format(f))
                     sys.exit("remove duplicate and run script again")
                 elif anydup(l) == False:
-                    print(f)
+                    #print(f)
                     for i in l: #loop through list of measurement types
                         for w in (w for w in widths if w[0].isdigit()): #loop through the widths
                             x = df.loc[i,w] #extract cell value of width of measurement type
