@@ -101,6 +101,7 @@ class App(QWidget):
         if safety == 'yes':
             dfList = pd.read_csv(safe_csv, sep = ",")
             df_L = dfList.groupby('Image').first().reset_index()
+            df_L['Image'] = [x.strip() for x in df_L['Image']]
         elif safety == 'no':
             df_L = "no safety"
 
