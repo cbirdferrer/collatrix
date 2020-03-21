@@ -45,7 +45,7 @@ class App(QWidget):
         safety, okPressed = QInputDialog.getItem(self,"Safety?", "On or Off?",items,0,False)
         if okPressed and safety:
             print("{0} safety".format(safety))
-
+        #if safety yes, ask for file
         if safety == 'yes':
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
@@ -113,9 +113,9 @@ class App(QWidget):
                 if x in seen: return True
                 seen.add(x)
             return False
-
-        def bigfunc(csvs,measurements,nonPercMeas,df_L,safety):
-            for f in csvs:
+        #this is the function that does the collating
+        def collate(csvs,measurements,nonPercMeas,df_L,safety):
+            for f in csvs: #first loop through all the csvs pulls the measurement names
                 print(f)
                 temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #read in csv as one column
                 df0=temp.X0.str.split(',',expand=True) #split rows into columns by delimeter
@@ -145,7 +145,7 @@ class App(QWidget):
                 df.columns = new_header #make the updated list the new header
 
                 df = df.set_index('Object') #set Object column as the index
-                df = df.replace(r'^\s*$', np.nan, regex=True)
+                df = df.replace(r'^\s*$', np.nan, regex=True) #replace blank space with nan
 
                 if anydup(l) == True: #check for any duplicate measurement names, if exists, exit code, print error msg
                     print("please check file {0} for duplicate Objects and remove duplicates".format(f))
@@ -166,11 +166,11 @@ class App(QWidget):
             mDict = dict.fromkeys(measurements)
             keys = list(mDict.keys())
 
-            df_all = pd.DataFrame(columns = keys)
+            df_all = pd.DataFrame(columns = keys) #make an empty dataframe with the headers being the measurement types/info to pull
 
-            rawMM = set(rawM)
+            rawMM = set(rawM) #get unique list of measurements
 
-            for f in csvs:
+            for f in csvs: #this second loop now goes back through the csvs and pulls the measurement values
                 print(f)
                 #pull the initial values i.e image, ID, alt, focal length
                 temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #import as one column
@@ -199,21 +199,21 @@ class App(QWidget):
                 pixd = float((df[df[0] == 'Pixel Dimension'].loc[:,[1]].values[0])[0]) #extract entered pixel dimension
                 mDict['PixD'] = pixd
 
-                notes = df[df[0] == 'Notes'].loc[:,[1]].values[0]
+                notes = df[df[0] == 'Notes'].loc[:,[1]].values[0] #extract entered notes
                 mDict['Notes'] = notes[0]
 
                 #go into the cvs to look for the measurement values
                 dfGUI = df0.iloc[idx[0]:].reset_index(drop=True) #now subset the df so we're just looking at the measurements
-                head = dfGUI.iloc[0]
-                dfGUI = dfGUI[1:]
-                dfGUI.columns = head
+                head = dfGUI.iloc[0] #isolate the current header row
+                dfGUI = dfGUI[1:] #chop off the top 2 rows
+                dfGUI.columns = head #make the header the original header
                 new_headerG = dfGUI.columns[0:2].values.tolist() + dfGUI.iloc[0,2:].values.tolist() #merge header with width names
-                dfGUI = dfGUI[1:] #take the data less the header row
-                dfGUI.columns = new_headerG
-                dfGUI = dfGUI.set_index('Object')
+                dfGUI = dfGUI[1:] #take the data minus the header row
+                dfGUI.columns = new_headerG #reset the headers to this created version
+                dfGUI = dfGUI.set_index('Object') #make index column the one named Object
 
-                if safety == 'yes':
-                    alt_act = float(df_L[df_L.Image == image].loc[:,'Altitude'].values[0])
+                if safety == 'yes': #pull the altitude, focal length, and pix d from the safety csv by image name
+                    alt_act = float(df_L[df_L.Image == image].loc[:,'Altitude'].values[0]) #this says: find row where image = image and pull altitude
                     foc_act = float(df_L[df_L.Image == image].loc[:,'Focal_Length'].values[0])
                     pixd_act = float(df_L[df_L.Image == image].loc[:,'Pixel_Dimension'].values[0])
                 else:
@@ -223,8 +223,7 @@ class App(QWidget):
                     if key in nonPercMeas: #if that key is in the list of measurement types (not widths)
                         if key in dfGUI.index: #if that key (measurement) is in this csv
                             x = float(dfGUI.loc[key,'Length (m)']) #extract the measurement value using location
-                            if safety == 'yes':
-                                # now is the time to do the back calculations
+                            if safety == 'yes': # now is the time to do the back calculations
                                 pixc = (x/pixd)*(focl/alt) #back calculate the pixel count
                                 xx = ((alt_act/foc_act)*pixd_act)*pixc #recalculate using the accurate focal length and altitude
                             elif safety == 'no':
@@ -236,21 +235,20 @@ class App(QWidget):
                         row = key.split("-")[0] #split the name of the measurement
                         col = key.split("-")[1] #to get the row and column indices
                         y = float(dfGUI.loc[row,col]) #to extract the measurement value
-                        if safety == 'yes':
-                            #recalculate using accurate focal length and altitude
+                        if safety == 'yes': #back calculate and recalculate
                             pixc = (y/pixd)*(focl/alt) #back calculate the pixel count
                             yy = ((alt_act/foc_act)*pixd_act)*pixc #recalculate using the accurate focal length and altitude
                         elif safety == 'no':
                             yy = y
                         mDict[key] = yy
-                    elif key not in dfGUI.index and key not in names:
+                    elif key not in dfGUI.index and key not in names: #if measurement not in this csv
                         mDict[key] = np.nan
 
 
-                df_op = pd.DataFrame(data = mDict,index=[1]) #make dictionary into dataframe
-                df_all = pd.concat([df_all,df_op],sort = True)
+                df_op = pd.DataFrame(data = mDict,index=[1]) #make dictionary (now filled with the measurements from this one csv) into dataframe
+                df_all = pd.concat([df_all,df_op],sort = True) # add this dataframe to the empty one with all the measurements as headers
 
-            df_allx = df_all.drop(columns = ['Altitude','Focal Length','PixD']).replace(np.nan,0)
+            df_allx = df_all.drop(columns = ['Altitude','Focal Length','PixD']).replace(np.nan,0) #drop non-measurement cols
             return df_allx
 
         if option == 'Individual Folders':
@@ -267,18 +265,18 @@ class App(QWidget):
             csvs = []
 
             #loop through individual folders and make list of GUI output csvs
-            files = os.listdir(INDfold)
+            files = os.listdir(INDfold) #list all folders
             for i in files:
-                fii = os.path.join(INDfold,i)
-                f = os.path.isdir(fii)
-                if f == True:
-                    clist = os.listdir(fii)
+                fii = os.path.join(INDfold,i) #set up full path of folder
+                f = os.path.isdir(fii) #check if it's a folder
+                if f == True: #if it is a folder
+                    clist = os.listdir(fii) #list the contents of the folder (this is the individual folder)
                     for ii in clist:
-                        if ii.endswith('.csv'):
-                            iii = os.path.join(fii,ii)
-                            csvs += [iii]
+                        if ii.endswith('.csv'): #if its a csv
+                            iii = os.path.join(fii,ii) #set up full file path
+                            csvs += [iii] #add to list of csvs
 
-            df_allx = bigfunc(csvs,measurements,nonPercMeas,df_L,safety)
+            df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety) #run collating function
 
         elif option == 'One Folder':
             options = QFileDialog.Options()
@@ -288,24 +286,26 @@ class App(QWidget):
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
 
-            files = os.listdir(GUIfold)
+            #make empty lists
             measurements= []
             nonPercMeas = []
 
-            csvs = [os.path.join(GUIfold,x) for x in files if x.endswith('.csv')]
+            #set up list of csvs to loop through
+            files = os.listdir(GUIfold) #get list of files in the folder
+            csvs = [os.path.join(GUIfold,x) for x in files if x.endswith('.csv')] #if it's a csv, make full file path
 
-            df_allx = bigfunc(csvs,measurements,nonPercMeas,df_L,safety)
+            df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety) #run collating function
 
 
         df_all_cols = df_allx.columns.tolist() #make list of column names
-        gby = ['Animal_ID','Image','Notes']
+        gby = ['Animal_ID','Image','Notes'] #list of non-numeric columns
         togroup = [x for x in df_all_cols if x not in gby] #setting up list of columns to be grouped
-        #no we group by ID and image just incase multiple images were measured for the same animal
-        #this would combine those measurements
+
+        #now we group by ID and image just incase multiple images were measured for the same animal
+        #this would combine those measurements (it's why I replaced nans with 0)
         df_all = df_allx.groupby(['Animal_ID','Image'])[togroup].apply(lambda x: x.astype(float).sum()).reset_index()
         df_notes = df_allx.groupby(['Animal_ID','Image'])['Notes'].first().reset_index()
         df_all =df_all.merge(df_notes,on=['Animal_ID','Image'])
-
 
         #calculate body volume
         df_all.columns = df_all.columns.str.replace(".00%", ".0%")
@@ -314,29 +314,29 @@ class App(QWidget):
             body_name = "Body_Vol_{0}%".format(interval) #name of body volume column will use interval amount
             volm = [] #make empty list of widths
             for x in range(lower,(upper + interval), interval): #loop through range of widths
-                xx = "{0}-{1}.0%".format(tl_name,str(x))
-                volm += [xx]
+                xx = "{0}-{1}.0%".format(tl_name,str(x)) #create the name of the headers to pull measurements from
+                volm += [xx] #add to list
             vlist = []
-            for i in volm:
+            for i in volm: #loop through column headers
                 for ii in df_all.columns:
                     if i in ii:
                         vlist += [ii]
             ids = []; vs = []; imgs = []
             for i,j in enumerate(vlist[:-1]):
                 jj = vlist[i+1]
-                #calculate volume
+                #calculate volume by looping through two columns at a time
                 for rr, RR, hh,anid,img in zip(df_all[j],df_all[jj], df_all[tl_name],df_all['Animal_ID'],df_all['Image']):
                     ph = float(interval)/float(100); h = float(hh)*ph
                     r = float(rr)/float(2); R = float(RR)/float(2)
                     v1 = (float(1)/float(3))*(math.pi)*h*((r**2)+(r*R)+(R**2))
                     ids += [anid]; vs += [v1]; imgs += [img]
             d = {'Animal_ID':ids, body_name:vs, 'Image':imgs} #make dataframe of id and body volume
-            df = pd.DataFrame(data = d)
-            cls = df.columns.tolist()
-            grBy = ['Animal_ID','Image']
-            groups = [x for x in cls if x not in grBy]
-            df1 = df.groupby(['Animal_ID','Image'])[groups].apply(lambda x: x.astype(float).sum()).reset_index()
-            df_all1 = pd.merge(df_all,df1,on = ['Animal_ID','Image'])
+            df = pd.DataFrame(data = d) #make dataframe
+            cls = df.columns.tolist() #get list of column headers
+            grBy = ['Animal_ID','Image'] #list of columns to group by
+            groups = [x for x in cls if x not in grBy] #get list of columns to be grouped
+            df1 = df.groupby(['Animal_ID','Image'])[groups].apply(lambda x: x.astype(float).sum()).reset_index() #group to make sure no duplicates
+            df_all1 = pd.merge(df_all,df1,on = ['Animal_ID','Image']) #merge volume df with big df
         elif volchoice == 'no':
             df_all1 = df_all
         print(df_all1)
@@ -345,14 +345,15 @@ class App(QWidget):
         a = "AaIiTtEeJjRrBbFfWwCcDdGgHhKkLlMmNnOoPpQqSsUuVvXxYyZz" #make your own ordered alphabet
         col = sorted(cols, key=lambda word:[a.index(c) for c in word[0]]) #sort headers based on this alphabet
         df_all1 = df_all1.loc[:,col] #sort columns based on sorted list of column header
+        df_all1 = df_all1.replace(0,np.nan) #replace the 0s with nans
 
         outcsv = os.path.join(saveFold,"{0}_allIDs.csv".format(outname))
         df_all1.to_csv(outcsv,sep = ',')
 
         if idchoice == 'yes':
-            df_ids = pd.read_csv(idsCSV,sep = ',')
-            idList = df_ids['Animal_ID'].tolist()
-            df_allx = df_all1[df_all1['Animal_ID'].isin(idList)]
+            df_ids = pd.read_csv(idsCSV,sep = ',') #read in id csv
+            idList = df_ids['Animal_ID'].tolist() #make list of IDs
+            df_allx = df_all1[df_all1['Animal_ID'].isin(idList)] #subset full dataframe to just those IDs
 
             outidcsv = os.path.join(saveFold,"{0}_IDS.csv".format(outname))
             df_allx.to_csv(outidcsv,sep = ',')
