@@ -100,7 +100,7 @@ Select the folder where you want the output of this tool to be saved
 # License
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
   
-Copyright (c) 2020 Clara Bird
+Copyright (c) 2020 Clara Bird, KC Bierlich
 
 `Collatrix` is free software made available under the MIT License. For details see the the [LICENSE](https://github.com/cbirdferrer/collatrix/blob/master/LICENSE) file.
 
