@@ -93,3 +93,16 @@ A window will open asking you to select the folder where the MorphoMetriX csvs a
 
 ### 7. Location where output should be saved
 Select the folder where you want the output of this tool to be saved
+
+## Demo 
+
+
+# License
+[![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
+  
+Copyright (c) 2020 Clara Bird
+
+`Collatrix` is free software made available under the MIT License. For details see the the [LICENSE](https://github.com/cbirdferrer/collatrix/blob/master/LICENSE) file.
+
+# Contributors
+Clara N. Bird and KC Bierlich are the developers of this software.
