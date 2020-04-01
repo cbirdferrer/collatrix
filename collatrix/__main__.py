@@ -118,10 +118,12 @@ class App(QWidget):
             for f in csvs: #first loop through all the csvs pulls the measurement names
                 print(f)
                 temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #read in csv as one column
-                df0=temp.X0.str.split(',',expand=True) #split rows into columns by delimeter
+                df00=temp.X0.str.split(',',expand=True) #split rows into columns by delimeter
+                df00 = df00.replace("",np.nan)
+                df0 = df00.dropna(how='all',axis = 'rows')
                 df0 = df0.fillna('') #replace nans by blank space
                 idx = df0.loc[df0[0] == 'Object'].index #find index (row) values of 'Object'
-                df = df0.iloc[idx[0]:].reset_index(drop=True)  #take subset of df starting at first row containing Object
+                df = df0.truncate(before=idx[0]) #take subset of df starting at first row containing Object
                 head = df.iloc[0] #make list out of names in first row
                 df = df[1:] #take the data less the header row
                 df.columns = head #set the header row as the df header
@@ -175,9 +177,11 @@ class App(QWidget):
                 #pull the initial values i.e image, ID, alt, focal length
                 temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #import as one column
                 df1=temp.X0.str.split(',',expand=True) #split on comma delimeter
-                df0 = df1.fillna('') #replace nans by blank space
+                df00 = df1.replace("",np.nan)
+                df0 = df00.dropna(how='all',axis = 'rows')
+                df0 = df0.fillna('') #replace nans by blank space
                 idx = df0.loc[df0[0]=='Object'].index #set object column to index
-                df = df0.iloc[:idx[0]].reset_index(drop=True) #subset df to be only top info section
+                df = df0.truncate(after=idx[0]) #subset df to be only top info section
 
                 if option == 'Individual Folders':
                     aID = os.path.split(os.path.split(f)[0])[1] #extract animal ID
@@ -203,7 +207,7 @@ class App(QWidget):
                 mDict['Notes'] = notes[0]
 
                 #go into the cvs to look for the measurement values
-                dfGUI = df0.iloc[idx[0]:].reset_index(drop=True) #now subset the df so we're just looking at the measurements
+                dfGUI = df0.truncate(before=idx[0]) #now subset the df so we're just looking at the measurements
                 head = dfGUI.iloc[0] #isolate the current header row
                 dfGUI = dfGUI[1:] #chop off the top 2 rows
                 dfGUI.columns = head #make the header the original header
