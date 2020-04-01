@@ -95,7 +95,7 @@ A window will open asking you to select the folder where the MorphoMetriX csvs a
 Select the folder where you want the output of this tool to be saved
 
 ## Demo 
-
+A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
 
 # License
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
