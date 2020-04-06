@@ -33,7 +33,7 @@ CollatriX works with MorphoMetriX outputs saved in two different file structures
 
 A safety option was also built in CollatriX to increase user efficiency in working through large image datasets while avoiding user input errors. MorphoMetrix automatically scales length measurements in pixels to real world values (i.e. meters) from manually entered altitude, focal length, and pixel dimension values. While this setup allows for each separate image to be scaled accordingly, there is potential for input errors when entering these values, especially when working through large datasets. CollatriX provides a safety option for users where the number of pixels in a length is back calculated, and the measurement is recalculated using the correct values per image from a user provided csv.
 
-Finally, CollatriX has an option to select a subset of output csvs associated with a specified list of individuals. CollatriX has been used on MorphoMetriX outputs from several projects on a variety of cetacean species including bottlenose dolphins, Antarctic minke, dwarf minke, fin, blue, humpback, and pilot whales.
+Finally, CollatriX has an option to select a subset of output csvs associated with a specified list of individuals. CollatriX has been used on MorphoMetriX outputs from several projects on a variety of cetacean species including bottlenose dolphins, Antarctic minke, dwarf minke, fin, blue, and humpback whales.
 
 # Acknowledgements
 
