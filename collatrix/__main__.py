@@ -15,6 +15,7 @@ import pandas as pd
 import numpy as np
 import os, sys
 import math
+from scipy.integrate import quad
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox
 from PyQt5.QtGui import QIcon
 
