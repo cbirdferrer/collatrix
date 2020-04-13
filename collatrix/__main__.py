@@ -43,7 +43,7 @@ class App(QWidget):
 
         #ask if they want safey net
         items = ('yes', 'no')
-        safety, okPressed = QInputDialog.getItem(self,"Safety?", "On or Off?",items,0,False)
+        safety, okPressed = QInputDialog.getItem(self,"Safety?", "Yes or No?",items,0,False)
         if okPressed and safety:
             print("{0} safety".format(safety))
         #if safety yes, ask for file
