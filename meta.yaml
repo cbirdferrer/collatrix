@@ -4,7 +4,7 @@ package:
 
 source:
   #path: /Users/clarabird/github/collating/collatrix/__main__.py
-  git_url: https://github.com/cbirdferrer/collatrix/
+  git_url: https://github.com/cbirdferrer/collatrix/tree/test_edits
 
 build:
   noarch: python
