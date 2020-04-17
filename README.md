@@ -69,6 +69,8 @@ CollatriX also provides the option to calculate body volume from perpendicular w
 
 *Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. Maternal body size and condition determine calf growth rates in southern right whales (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 
+If you calculate body volume, please cite Christiansen et al. 2018 in addition to this software.
+
 ### 4. Body Area Index (BAI) (for whales)
 CollatriX also provides the option to calculate BAI from perpendicular width intervals along a total length measurement following Burnett et al. 2019. If you say "yes" to have BAI calculated, the following information will need to be provided:
 
@@ -81,6 +83,8 @@ CollatriX also provides the option to calculate BAI from perpendicular width int
 5. The interval that the widths were measured in (i.e 5 if you measured in 5% increments. **Note** this value cannot be less than the increments of width that you measured).
 
 *Burnett, Jonathan D., Leila Lemos, Dawn Barlow, Michael G. Wing, Todd Chandler, and Leigh G. Torres. 2019. “Estimating Morphometric Attributes of Baleen Whales with Photogrammetry from Small UASs: A Case Study with Blue and Gray Whales.” Marine Mammal Science 35 (1): 108–39. https://doi.org/10.1111/mms.12527.*
+
+If you calculate BAI please cite Burnett et al. 2019 in addition to this software.
 
 ### 5. List of Specific Individuals
   If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want.
@@ -109,6 +113,14 @@ Select the folder where you want the output of this tool to be saved
 
 ## Demo 
 A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
+
+# Collatrix - Board Calibration Function
+Barometers are known to provide inaccurate measures of altitude. Burnett et al. (2019) developed a method to calibrate the altitude of the drone using images of an object of known length. We have written a function to replicate this calibration.
+
+  ```
+  python -m collatrix.board_calib
+  ```
+
 
 # License
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
