@@ -34,6 +34,10 @@ class App(QWidget):
         if okPressed and n != '':
             bl_name= str(n)
 
+        n, okPressed = QInputDialog.getText(self, "What is the true length of the calibration object?","Calibration Object Length", QLineEdit.Normal, "")
+        if okPressed and n != '':
+            ob_l= float(n)
+
         #get folder
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
@@ -138,7 +142,7 @@ class App(QWidget):
             df_board = df_all.loc[df_all['DateFlight']==datefl]
             df_image = dfImg.loc[dfImg['DateFlight']==datefl]
 
-            Board = (df_board['Focal Length']*(1/df_board['OLp']))/df_board['PixD'].tolist()
+            Board = (df_board['Focal Length']*(ob_l/df_board['OLp']))/df_board['PixD'].tolist()
 
             Alts = df_board['Altitude'].tolist()
 
