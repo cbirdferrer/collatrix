@@ -34,7 +34,7 @@ class App(QWidget):
         if okPressed and n != '':
             bl_name= str(n)
 
-        n, okPressed = QInputDialog.getText(self, "What is the true length of the calibration object?","Calibration Object Length", QLineEdit.Normal, "")
+        n, okPressed = QInputDialog.getText(self, "What is the true length of the calibration object (in meters)?","Calibration Object Length", QLineEdit.Normal, "")
         if okPressed and n != '':
             ob_l= float(n)
 
