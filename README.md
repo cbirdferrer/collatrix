@@ -69,7 +69,20 @@ CollatriX also provides the option to calculate body volume from perpendicular w
 
 *Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. Maternal body size and condition determine calf growth rates in southern right whales (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 
-### 4. List of Specific Individuals
+### 4. Body Area Index (BAI) (for whales)
+CollatriX also provides the option to calculate BAI from perpendicular width intervals along a total length measurement following Burnett et al. 2019. If you say "yes" to have BAI calculated, the following information will need to be provided:
+
+1. The method used to calculate BAI. Options: parabola, trapezoid, or both. 
+* The parabola method will calculate a parabola for the sides of the whale using the width measurements and surface is calculated as the area under this curve. The trapezoid method calculates the surface area by summing the surface areas of the trapezoids created between each segment. You can also select both to have both methods used.
+
+2. The name of your length measurement (i.e. if you named total length "TL" enter "TL")
+3. The lower bound percentage (i.e. if you want to use widths between 20-80% of total length to calculate body volume, then 20 would be the lower bound)
+4. The upper bound (using the above example, 80 would be the upper bound)
+5. The interval that the widths were measured in (i.e 5 if you measured in 5% increments. **Note** this value cannot be less than the increments of width that you measured).
+
+*Burnett, Jonathan D., Leila Lemos, Dawn Barlow, Michael G. Wing, Todd Chandler, and Leigh G. Torres. 2019. “Estimating Morphometric Attributes of Baleen Whales with Photogrammetry from Small UASs: A Case Study with Blue and Gray Whales.” Marine Mammal Science 35 (1): 108–39. https://doi.org/10.1111/mms.12527.*
+
+### 5. List of Specific Individuals
   If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want.
   If you select 'yes', a window will open asking you to select this csv file containing the list of Animal_IDs that you want included in the subset list.  
 #### How to format this csv (note: header spelling and capitalization matters most)
@@ -83,15 +96,15 @@ Animal_ID |
 --------- |
 Whale1
 
-### 5. Output name
+### 6. Output name
 The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
 
-### 6. Location of MorphoMetriX files
+### 7. Location of MorphoMetriX files
 A window will open asking you to select the folder where the MorphoMetriX csvs are saved.
 * If you have them in one folder, select that folder
 * If you have them in individual folders, select the folder containing all the individual folders
 
-### 7. Location where output should be saved
+### 8. Location where output should be saved
 Select the folder where you want the output of this tool to be saved
 
 ## Demo 

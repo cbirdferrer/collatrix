@@ -1,6 +1,6 @@
 package:
   name: collatrix
-  version: '1.0.1'
+  version: '1.0.2'
 
 source:
   #path: /Users/clarabird/github/collating/collatrix/__main__.py
@@ -21,10 +21,7 @@ requirements:
     - pandas
     - pyqt=5
     - setuptools
-
-# tests:
-#    imports:
-#     - morphometrix
+    - scipy
 
 about:
   home: https://github.com/cbirdferrer/collatrix
