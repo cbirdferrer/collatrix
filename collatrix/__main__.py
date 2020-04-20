@@ -36,7 +36,7 @@ class App(QWidget):
         self.show()
 
         #ask how csvs are saved
-        items = ('Individual Folders', 'One Folder')
+        items = ('Individual Folders', 'One Folder', 'DateFlightInd')
         option, okPressed = QInputDialog.getItem(self, "Option","Saved Where", items, 0, False)
         if okPressed and option:
             print("option selected: {0}".format(option))
@@ -218,6 +218,8 @@ class App(QWidget):
                 elif option == 'One Folder':
                     aID = df[df[0] == 'Image ID'].loc[:,[1]].values[0] #pull animal id
                     aID = aID[0]
+                elif option == 'DateFlightInd':
+                    aID = os.path.split(os.path.split(f)[0])[1] #extract animal ID
                 mDict['Animal_ID'] = aID
 
                 image = os.path.split(df[df[0] == 'Image Path'].loc[:,1].values[0])[1] #extract image
@@ -428,6 +430,38 @@ class App(QWidget):
             csvs = [os.path.join(GUIfold,x) for x in files if x.endswith('.csv')] #if it's a csv, make full file path
 
             df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety) #run collating function
+
+        elif option == "DateFlightInd":
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            GUIfold = QFileDialog.getExistingDirectory(None, str("folder containing MorphoMetriX outputs"),options=options)
+            saveFold = QFileDialog.getExistingDirectory(None,str("folder where output should be saved"),options=options)
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+
+            #make lists
+            measurements = []
+            nonPercMeas = []
+            csvs = []
+
+            #set up list of csvs to loop through
+            files = os.listdir(GUIfold) #list all folders
+            print(files)
+            for i in files:
+                fx = os.path.join(GUIfold,i) #set up full path of folder
+                f = os.path.isdir(fx) #check if it's a folder
+                if f == True: #if it is a folder
+                    filesx = os.listdir(fx)
+                    for j in filesx:
+                        fy = os.path.join(fx,j)
+                        f1 = os.path.isdir(fy)
+                        if f1 == True:
+                            clist = os.listdir(fy) #list the contents of the folder (this is the individual folder)
+                            for ii in clist:
+                                if ii.endswith('.csv'): #if its a csv
+                                    iii = os.path.join(fy,ii) #set up full file path
+                                    csvs += [iii] #add to list of csvs
+
 
 
         df_all_cols = df_allx.columns.tolist() #make list of column names
