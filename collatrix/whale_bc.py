@@ -124,7 +124,8 @@ class App(QWidget):
             grBy = ['Animal_ID','Image'] #list of columns to group by
             groups = [x for x in cls if x not in grBy] #get list of columns to be grouped
             df1 = df.groupby(['Animal_ID','Image'])[groups].apply(lambda x: x.astype(float).sum()).reset_index() #group to make sure no duplicates
-            df_allx = pd.merge(df_all,df1,on = ['Animal_ID','Image']) #merge volume df with big df
+            df_vol = pd.merge(df_all,df1,on = ['Animal_ID','Image']) #merge volume df with big df
+            return df_vol
 
         def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
             bai_name = "BAIpar_{0}%".format(b_interval) #create BAI column header using interval
@@ -244,6 +245,8 @@ class App(QWidget):
 
         outcsv = os.path.join(saveFold,"{0}_bodycondition.csv".format(outname))
         df_all1.to_csv(outcsv,sep = ',')
+
+        print(df_all1)
 
         print("done, close GUI window to end script")
 if __name__ == '__main__':
