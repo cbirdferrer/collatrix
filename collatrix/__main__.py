@@ -330,7 +330,7 @@ class App(QWidget):
         cols = list(df_all)
         a = "AaIiTtEeJjRrBbFfWwCcDdGgHhKkLlMmNnOoPpQqSsUuVvXxYyZz" #make your own ordered alphabet
         col = sorted(cols, key=lambda word:[a.index(c) for c in word[0]]) #sort headers based on this alphabet
-        df_all1 = df_all1.loc[:,col] #sort columns based on sorted list of column header
+        df_all1 = df_all.loc[:,col] #sort columns based on sorted list of column header
         df_all1 = df_all1.replace(0,np.nan) #replace the 0s with nans
 
         outcsv = os.path.join(saveFold,"{0}_allIDs.csv".format(outname))
