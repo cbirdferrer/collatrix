@@ -59,7 +59,61 @@ Image | Altitude | Focal_Length | Pixel_Dimension
 whale1.JPG | 55.0 | 35 | 0.0039
 whale2.JPG | 40.0 | 35 | 0.0039
 
-### 3. Body Volume (for whales)
+### 3. List of Specific Individuals
+  If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want.
+  If you select 'yes', a window will open asking you to select this csv file containing the list of Animal_IDs that you want included in the subset list.  
+#### How to format this csv (note: header spelling and capitalization matters most)
+* If you want a second output csv containing only a specific subset of individuals you'll need to specify a csv containing that list.
+* Required column: Animal_ID
+* Make sure that the ID's listed are spelled exactly as those in the MorphoMetriX outputs
+
+Example 
+
+Animal_ID |
+--------- |
+Whale1
+
+### 4. Output name
+The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
+
+### 5. Location of MorphoMetriX files
+A window will open asking you to select the folder where the MorphoMetriX csvs are saved.
+* If you have them in one folder, select that folder
+* If you have them in individual folders, select the folder containing all the individual folders
+
+### 6. Location where output should be saved
+Select the folder where you want the output of this tool to be saved
+
+## Demo 
+A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
+
+# Add-on Functions
+
+## Board Calibration Function
+Barometers are known to provide inaccurate measures of altitude. Burnett et al. (2019) developed a method to calibrate the altitude of the drone using images of an object of known length. We have written a function to replicate this calibration.
+
+  ```
+  python -m collatrix.board_calib
+  ```
+### Inputs
+#### 1. Image information file
+
+#### 2. Board length measurement name
+
+#### 3. Board length in meters
+
+#### 4. Folder containing MorphoMetriX outputs
+
+## Whale Body Condition Function
+
+```
+python -m collatrix.whale_bc
+```
+### Inputs
+#### 1. CollatriX output csv
+Select the csv containing the collated measurements outputted by CollatriX
+
+#### 2. Body Volume
 CollatriX also provides the option to calculate body volume from perpendicular width intervals along a total length measurement following Christiansen et al. 2018. If you say "yes" to have body volume calculated, the following information will need to be provided:
 
 1. The name of your length measurement (i.e. if you named total length "TL" enter "TL")
@@ -71,7 +125,7 @@ CollatriX also provides the option to calculate body volume from perpendicular w
 
 If you calculate body volume, please cite Christiansen et al. 2018 in addition to this software.
 
-### 4. Body Area Index (BAI) (for whales)
+#### 3. Body Area Index (BAI)
 CollatriX also provides the option to calculate BAI from perpendicular width intervals along a total length measurement following Burnett et al. 2019. If you say "yes" to have BAI calculated, the following information will need to be provided:
 
 1. The method used to calculate BAI. Options: parabola, trapezoid, or both. 
@@ -86,41 +140,11 @@ CollatriX also provides the option to calculate BAI from perpendicular width int
 
 If you calculate BAI please cite Burnett et al. 2019 in addition to this software.
 
-### 5. List of Specific Individuals
-  If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want.
-  If you select 'yes', a window will open asking you to select this csv file containing the list of Animal_IDs that you want included in the subset list.  
-#### How to format this csv (note: header spelling and capitalization matters most)
-* If you want a second output csv containing only a specific subset of individuals you'll need to specify a csv containing that list.
-* Required column: Animal_ID
-* Make sure that the ID's listed are spelled exactly as those in the MorphoMetriX outputs
-
-Example 
-
-Animal_ID |
---------- |
-Whale1
-
-### 6. Output name
+#### 4. Output name
 The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
 
-### 7. Location of MorphoMetriX files
-A window will open asking you to select the folder where the MorphoMetriX csvs are saved.
-* If you have them in one folder, select that folder
-* If you have them in individual folders, select the folder containing all the individual folders
-
-### 8. Location where output should be saved
+#### 5. Location where output should be saved
 Select the folder where you want the output of this tool to be saved
-
-## Demo 
-A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
-
-# Collatrix - Board Calibration Function
-Barometers are known to provide inaccurate measures of altitude. Burnett et al. (2019) developed a method to calibrate the altitude of the drone using images of an object of known length. We have written a function to replicate this calibration.
-
-  ```
-  python -m collatrix.board_calib
-  ```
-
 
 # License
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
