@@ -84,9 +84,6 @@ A window will open asking you to select the folder where the MorphoMetriX csvs a
 ### 6. Location where output should be saved
 Select the folder where you want the output of this tool to be saved
 
-## Demo 
-A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
-
 # Add-on Functions
 
 ## Board Calibration Function
@@ -145,6 +142,9 @@ The tool will ask you what name you want for the output csv. The collated final 
 
 #### 5. Location where output should be saved
 Select the folder where you want the output of this tool to be saved
+
+## Demo 
+A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
 
 # License
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
