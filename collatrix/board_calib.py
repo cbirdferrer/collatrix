@@ -142,12 +142,20 @@ class App(QWidget):
             df_board = df_all.loc[df_all['DateFlight']==datefl]
             df_image = dfImg.loc[dfImg['DateFlight']==datefl]
 
-            Board = (df_board['Focal Length']*(ob_l/df_board['OLp']))/df_board['PixD'].tolist()
+            OLp = df_board['OLp'].tolist()
+            logOLp = [math.log10(x) for x in OLp]
 
             Alts = df_board['Altitude'].tolist()
+            logAlts = [math.log10(x) for x in Alts]
+            sns.scatterplot(logAlts,logOLp)
 
-            lm = np.polyfit(Alts,Board,1)
-            fit = np.poly1d(lm)
+            lm1 = np.polyfit(logAlts,logOLp,1)
+            fitsmooth = np.poly1d(lm1)
+            pred = 10**(fitsmooth(logAlts))
+            df_board['pred'] = pred
+            Board = (df_board['Focal Length']*(1/df_board['pred']))/df_board['PixD'].tolist()
+            lm2 = np.polyfit(Alts,Board,1)
+            fit = np.poly1d(lm2)
 
             for img, b_alt in zip(df_image['Image'],df_image['Baro_Alt']):
                 iDict['Image'] = img
