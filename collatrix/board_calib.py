@@ -147,13 +147,12 @@ class App(QWidget):
 
             Alts = df_board['Altitude'].tolist()
             logAlts = [math.log10(x) for x in Alts]
-            sns.scatterplot(logAlts,logOLp)
 
             lm1 = np.polyfit(logAlts,logOLp,1)
             fitsmooth = np.poly1d(lm1)
             pred = 10**(fitsmooth(logAlts))
             df_board['pred'] = pred
-            Board = (df_board['Focal Length']*(1/df_board['pred']))/df_board['PixD'].tolist()
+            Board = (df_board['Focal Length']*(ob_l/df_board['pred']))/df_board['PixD'].tolist()
             lm2 = np.polyfit(Alts,Board,1)
             fit = np.poly1d(lm2)
 
