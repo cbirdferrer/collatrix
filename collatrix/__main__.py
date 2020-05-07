@@ -34,11 +34,11 @@ class App(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.show()
 
-        #ask how csvs are saved
-        items = ('Individual Folders', 'One Folder', 'DateFlightInd')
-        option, okPressed = QInputDialog.getItem(self, "Option","Saved Where", items, 0, False)
-        if okPressed and option:
-            print("option selected: {0}".format(option))
+        #do you want the Animal ID to be assigned based on the name of the folder
+        items = ('yes', 'no')
+        anFold, okPressed = QInputDialog.getItem(self,"do you want the Animal ID to be assigned based on the name of the folder?", "Yes or No?",items,0,False)
+        if okPressed and anFold:
+            print("{0} Animal ID in folder name".format(anFold))
 
         #ask if they want safey net
         items = ('yes', 'no')
@@ -82,6 +82,14 @@ class App(QWidget):
         elif safety == 'no':
             df_L = "no safety"
 
+        #get folders
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        INDfold = QFileDialog.getExistingDirectory(None, "folder containing MorphoMetriX outputs",options=options)
+        saveFold = QFileDialog.getExistingDirectory(None,"folder where output should be saved",options = options)
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+
         #define functions
         ##duplicate check function
         def anydup(l): #we'll use this function later to check for duplicates
@@ -91,7 +99,7 @@ class App(QWidget):
                 seen.add(x)
             return False
         ##this is the function that does the collating
-        def collate(csvs,measurements,nonPercMeas,df_L,safety):
+        def collate(csvs,measurements,nonPercMeas,df_L,safety,anFold):
             for f in csvs: #first loop through all the csvs pulls the measurement names
                 print(f)
                 temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #read in csv as one column
@@ -160,13 +168,11 @@ class App(QWidget):
                 idx = df0.loc[df0[0]=='Object'].index #set object column to index
                 df = df0.truncate(after=idx[0]) #subset df to be only top info section
 
-                if option == 'Individual Folders':
+                if anFold == 'yes':
                     aID = os.path.split(os.path.split(f)[0])[1] #extract animal ID
-                elif option == 'One Folder':
+                elif anFold == 'no':
                     aID = df[df[0] == 'Image ID'].loc[:,[1]].values[0] #pull animal id
                     aID = aID[0]
-                elif option == 'DateFlightInd':
-                    aID = os.path.split(os.path.split(f)[0])[1] #extract animal ID
                 mDict['Animal_ID'] = aID
 
                 image = os.path.split(df[df[0] == 'Image Path'].loc[:,1].values[0])[1] #extract image
@@ -234,97 +240,36 @@ class App(QWidget):
             df_allx = df_all.drop(columns = ['Altitude','Focal Length','PixD']).replace(np.nan,0) #drop non-measurement cols
             return df_allx
 
-        if option == 'Individual Folders':
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
-            INDfold = QFileDialog.getExistingDirectory(None, "folder containing individual folders",options=options)
-            saveFold = QFileDialog.getExistingDirectory(None,"folder where output should be saved",options = options)
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
+        #make lists
+        #for csvs
+        csvs_all = []
+        csvs = []
+        not_mmx = []
+        #for measurements
+        measurements = []
+        nonPercMeas = []
 
-            #make lists
-            measurements = []
-            nonPercMeas = []
-            csvs = []
+        #walk through all folders in GUI folder and collect all csvs
+        for root,dirs,files in os.walk(GUIfold):
+            csvs_all += [os.path.join(root,f) for f in files if f.endswith('.csv')]
+        #make sure the csvs are morphometrix outputs by checking first row
+        csvs += [c for c in csvs_all if 'Image ID' in pd.read_csv(c,nrows=1,header=None)[0].tolist()]
+        #make list of all csvs that were not morphometrix csvs to tell user
+        not_mmx += [x for x in csvs if x not in csvs_all]
+        print("these csvs were not morphometrix outputs: {0}".format(not_mmx))
 
-            #loop through individual folders and make list of GUI output csvs
-            files = os.listdir(INDfold) #list all folders
-            for i in files:
-                fii = os.path.join(INDfold,i) #set up full path of folder
-                f = os.path.isdir(fii) #check if it's a folder
-                if f == True: #if it is a folder
-                    clist = os.listdir(fii) #list the contents of the folder (this is the individual folder)
-                    for ii in clist:
-                        if ii.endswith('.csv'): #if its a csv
-                            iii = os.path.join(fii,ii) #set up full file path
-                            csvs += [iii] #add to list of csvs
+        #run the collate function, get collated csv
+        df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety) #run collating function
 
-            df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety) #run collating function
-
-        elif option == 'One Folder':
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
-            GUIfold = QFileDialog.getExistingDirectory(None, str("folder containing MorphoMetriX outputs"),options=options)
-            saveFold = QFileDialog.getExistingDirectory(None,str("folder where output should be saved"),options=options)
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
-
-            #make empty lists
-            measurements= []
-            nonPercMeas = []
-
-            #set up list of csvs to loop through
-            files = os.listdir(GUIfold) #get list of files in the folder
-            csvs = [os.path.join(GUIfold,x) for x in files if x.endswith('.csv')] #if it's a csv, make full file path
-
-            df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety) #run collating function
-
-        elif option == "DateFlightInd":
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
-            GUIfold = QFileDialog.getExistingDirectory(None, str("folder containing MorphoMetriX outputs"),options=options)
-            saveFold = QFileDialog.getExistingDirectory(None,str("folder where output should be saved"),options=options)
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
-
-            #make lists
-            measurements = []
-            nonPercMeas = []
-            csvs = []
-
-            #set up list of csvs to loop through
-            files = os.listdir(GUIfold) #list all folders
-            print(files)
-            for i in files:
-                fx = os.path.join(GUIfold,i) #set up full path of folder
-                f = os.path.isdir(fx) #check if it's a folder
-                if f == True: #if it is a folder
-                    filesx = os.listdir(fx)
-                    for j in filesx:
-                        fy = os.path.join(fx,j)
-                        f1 = os.path.isdir(fy)
-                        if f1 == True:
-                            clist = os.listdir(fy) #list the contents of the folder (this is the individual folder)
-                            for ii in clist:
-                                if ii.endswith('.csv'): #if its a csv
-                                    iii = os.path.join(fy,ii) #set up full file path
-                                    csvs += [iii] #add to list of csvs
-
-            df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety) #run collating function
-
-
+        #now we group by ID and image just incase multiple images were measured for the same animal
+        #this would combine those measurements (it's why I replaced nans with 0)
         df_all_cols = df_allx.columns.tolist() #make list of column names
         gby = ['Animal_ID','Image','Notes'] #list of non-numeric columns
         togroup = [x for x in df_all_cols if x not in gby] #setting up list of columns to be grouped
 
-        #now we group by ID and image just incase multiple images were measured for the same animal
-        #this would combine those measurements (it's why I replaced nans with 0)
         df_all = df_allx.groupby(['Animal_ID','Image'])[togroup].apply(lambda x: x.astype(float).sum()).reset_index()
         df_notes = df_allx.groupby(['Animal_ID','Image'])['Notes'].first().reset_index()
         df_all =df_all.merge(df_notes,on=['Animal_ID','Image'])
-
-        #calculate body volume
-        df_all.columns = df_all.columns.str.replace(".00%", ".0%")
 
         #sort cols
         cols = list(df_all)
