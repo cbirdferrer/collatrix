@@ -85,7 +85,7 @@ class App(QWidget):
         #get folders
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        INDfold = QFileDialog.getExistingDirectory(None, "folder containing MorphoMetriX outputs",options=options)
+        GUIfold = QFileDialog.getExistingDirectory(None, "folder containing MorphoMetriX outputs",options=options)
         saveFold = QFileDialog.getExistingDirectory(None,"folder where output should be saved",options = options)
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
@@ -259,7 +259,7 @@ class App(QWidget):
         print("these csvs were not morphometrix outputs: {0}".format(not_mmx))
 
         #run the collate function, get collated csv
-        df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety) #run collating function
+        df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety,anFold) #run collating function
 
         #now we group by ID and image just incase multiple images were measured for the same animal
         #this would combine those measurements (it's why I replaced nans with 0)
