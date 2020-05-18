@@ -120,10 +120,11 @@ class App(QWidget):
 
                 df_op = pd.DataFrame(data = mDict,index=[1]) #make dictionary (now filled with the measurements from this one csv) into dataframe
                 df_all = pd.concat([df_all,df_op],sort = True)
-        print(df_all)
+
 
         df_total = df_all.merge(df_cal, on = ['Image'])
         df_total['DateFlight'] = [x + "_" + y for x,y in zip(df_total['Date'],df_total['Flight'])]
+
 
         #ok now we have a dataframe and want to make the linear model
         #read in list of images that we want altitude for
@@ -135,9 +136,9 @@ class App(QWidget):
         dlist = ['Image','Altitude']
         iDict = dict.fromkeys(dlist)
         k = list(iDict.keys())
-        df_calib = pd.DataFrame (columns = k)
+        df_calib = pd.DataFrame(columns = k)
         for datefl in dateflights:
-            df_board = df_all.loc[df_total['DateFlight']==datefl]
+            df_board = df_total.loc[df_total['DateFlight']==datefl]
             df_image = dfImg.loc[dfImg['DateFlight']==datefl]
 
             OLp = df_board['OLp'].tolist()
@@ -163,6 +164,7 @@ class App(QWidget):
         print(df_calib)
         outcsv = os.path.join(saveFold,"altitude_calibration.csv")
         df_calib.to_csv(outcsv,sep = ',')
+        print("done, close GUI window to end script")
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = App()
