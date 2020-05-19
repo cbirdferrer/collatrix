@@ -161,7 +161,7 @@ class App(QWidget):
 
             df_temp = pd.DataFrame(data=iDict,index=[1])
             df_calib = pd.concat([df_calib,df_temp])
-        df_calibx = df_calib.merge(df_Img,on=['Image'])
+        df_calibx = df_calib.merge(dfImg,on=['Image'])
         print(df_calibx)
         outcsv = os.path.join(saveFold,"altitude_calibration.csv")
         df_calibx.to_csv(outcsv,sep = ',')
