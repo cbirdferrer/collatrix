@@ -22,7 +22,6 @@ requirements:
     - pyqt=5
     - setuptools
     - scipy
-    - math
 
 about:
   home: https://github.com/cbirdferrer/collatrix
