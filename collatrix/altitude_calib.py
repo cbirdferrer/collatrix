@@ -151,19 +151,20 @@ class App(QWidget):
             fitsmooth = np.poly1d(lm1)
             pred = 10**(fitsmooth(logAlts))
             df_board['pred'] = pred
-            Board = (df_board['Focal_Length']*(ob_l/df_board['pred']))/df_board['PixD'].tolist()
+            Board = (df_board['Focal_Length']*(ob_l/df_board['pred']))/df_board['Pixel_Dimension'].tolist()
             lm2 = np.polyfit(Alts,Board,1)
             fit = np.poly1d(lm2)
 
-            for img, b_alt in zip(df_image['Image'],df_image['Baro_Alt']):
+            for img, b_alt in zip(df_image['Image'],df_image['UAS_Alt']):
                 iDict['Image'] = img
                 iDict['Altitude'] = fit(b_alt)
 
             df_temp = pd.DataFrame(data=iDict,index=[1])
             df_calib = pd.concat([df_calib,df_temp])
-        print(df_calib)
+        df_calibx = df_calib.merge(df_Img,on=['Image'])
+        print(df_calibx)
         outcsv = os.path.join(saveFold,"altitude_calibration.csv")
-        df_calib.to_csv(outcsv,sep = ',')
+        df_calibx.to_csv(outcsv,sep = ',')
         print("done, close GUI window to end script")
 if __name__ == '__main__':
     app = QApplication(sys.argv)
