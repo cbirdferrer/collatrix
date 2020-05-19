@@ -1,4 +1,0 @@
-Name of length measurement = TL
-Lower bound = 20
-Upper bound = 80
-Interval = 10
