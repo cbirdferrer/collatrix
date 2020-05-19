@@ -1,6 +1,12 @@
 # CollatriX
  This tool collates the csv outputs from the MorphoMetriX photogrammetry tool (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.
 
+## Background
+CollatriX was designed with several add-ons. A possible workflow is included below:  
+![alt text](https://github.com/cbirdferrer/collatrix/blob/master/images/workflow.jpg)
+
+The altitude calibration tool can be used to calculate corrected altitudes using images of an object of known length. If used, this function should be used before the main function. The output can be used to create the safety input file for the main `collatrix` function. The output of this main function can then be used to calculate metrics of whale body condition if desired.
+
 ## Installation
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/version.svg)](https://anaconda.org/cbird/collatrix)
 
@@ -86,20 +92,49 @@ Select the folder where you want the output of this tool to be saved
 
 # Add-on Functions
 
-## Board Calibration Function
+## Altitude Calibration Function
 Barometers are known to provide inaccurate measures of altitude. Burnett et al. (2019) developed a method to calibrate the altitude of the drone using images of an object of known length. We have written a function to replicate this calibration.
 
   ```
-  python -m collatrix.board_calib
+  python -m collatrix.altitude_calib
   ```
 ### Inputs
-#### 1. Image information file
+#### 1. Calibration object image list
+This sheet should contain information on the altitude, focal length, pixel dimension, date, and flight of the calibration object images. Like the safety sheet for the main function, this information is used to ensure proper calculation of the pixel count.
+##### How to format this csv (note: header spelling and capitalization matters most)
+* Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension, Date, Flight
+* Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
+* The contents of the Date and Flight columns can be formatted however the user prefers, however it needs to match the formatting of the Date and Flight columns in the image information file (input 2). 
 
-#### 2. Board length measurement name
+Image | Altitude | Focal_Length | Pixel_Dimension | Date | Flight |
+----- | -------- | ------------ | ---- | ---- | ------ |
+obj1.JPG | 25.0 | 35 | 0.0039 | 2017_05_12 | F4 |
+obj2.JPG | 20.0 | 35 | 0.0039 | 2017_05_12 | F4 |
 
-#### 3. Board length in meters
+#### 2. Image information file
+This sheet should contain information on the altitude, date, and flight per image. The altitude should be the altitude that needs to corrected. 
+##### How to format this csv (note: header spelling and capitalization matters most)
+* Required columns (spelled and capitalized just as written here): Image, UAS_Alt, Date, Flight
+* Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
+* The contents of the Date and Flight columns can be formatted however the user prefers, however it needs to match the formatting of the Date and Flight columns in the calibration object image list (input 1). 
+* Note: the output of this tool will merge the calibrated altitudes with this sheet, so the user can choose to add the Focal_Length and Pixel_Dimension columns before or after running this tool to make the safety sheet for the main function.
 
-#### 4. Folder containing MorphoMetriX outputs
+Image | UAS_Alt | Date | Flight |
+----- | -------- | ---- | ------ |
+whale1.JPG | 55.0 | 2017_05_12 | F4 |
+whale2.JPG | 40.0 | 2017_05_12 | F4 |
+
+#### 3. Calibration object length measurement name
+The name of your length measurement (i.e. if you named total length "OL" enter "OL")
+
+#### 4. Calibration object length in meters
+The length of the calibration object (i.e. if the object was 1.0 meters long enter 1.0)
+
+#### 5. Folder containing MorphoMetriX outputs
+Select the folder where the outputs are saved.
+
+#### 6. Folder where output should be saved
+Select the folder where you want the output to be saved.
 
 ## Whale Body Condition Function
 
