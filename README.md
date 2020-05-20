@@ -108,6 +108,7 @@ This sheet should contain information on the altitude, date, and flight per imag
 ##### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, UAS_Alt, Date, Flight
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
+* UAS_Alt should be the altitude that was recorded by the UAS. This is the altitude that will be corrected.
 * The contents of the Date and Flight columns can be formatted however the user prefers, however it needs to match the formatting of the Date and Flight columns in the calibration object image list (input 1).
 * Note: the output of this function will merge the calibrated altitudes with this sheet, so the user can choose to add the Focal_Length and Pixel_Dimension columns before or after running this function to make the safety sheet for the main function.
 
