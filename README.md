@@ -7,6 +7,11 @@ CollatriX was designed with several add-ons. A possible workflow is included bel
 
 The altitude calibration function (`collatrix.altitude_calib`) can be used to calculate corrected altitudes using images of an object of known length. If used, this function should be used before the main function. The output can be used to create the safety input file for the main `collatrix` function. Note that the altitude calibration function does not need be used, if no the user can start the workflow using the main `collatrix` function. The output of this main function can then be used to calculate metrics of whale body condition (`collatrix.whale_bc`) if desired.
 
+To jump to the altitude calibration function instructions click [here](https://github.com/cbirdferrer/collatrix#altitude-calibration-function)
+
+To jump to the whale body condition function click [here](https://github.com/cbirdferrer/collatrix#whale-body-condition-function)
+
+
 ## Installation
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/version.svg)](https://anaconda.org/cbird/collatrix)
 
