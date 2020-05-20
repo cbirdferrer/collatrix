@@ -92,7 +92,7 @@ Barometers are known to provide inaccurate measures of altitude. Burnett et al. 
   ```
 ### Inputs
 #### 1. Calibration object image list
-This sheet should contain information on the altitude, focal length, pixel dimension, date, and flight of the calibration object images. Like the safety sheet for the main function, this information is used to ensure proper calculation of the pixel count.
+This sheet should contain information on the altitude, focal length, pixel dimension, date, and flight of the calibration object images. Like the safety sheet for the main function, this information is used to ensure proper calculation of the pixel count. The output will be named **altitude_calibration.csv**.
 ##### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension, Date, Flight
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
