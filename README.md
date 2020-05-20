@@ -35,7 +35,7 @@ After the package has been installed in your preferred environment enter this co
 ## Inputs
 This script has several options and inputs to be aware of that will be explained here. Note, these are listed in the order that the function will ask you to enter them.
 
-### 1. Save Location
+### 1. Do you want the Animal ID to be assigned based on the name of the folder?
   MorphoMetriX output csvs can be saved in any file structure. The function will search through all folders within the folder provided and pull all csvs. If you have saved the outputs within folders named using Animal IDs, you can choose to have the Animal ID be pulled from the folder name.
 
   An example of a file structure where the folders are named using the Animal ID is:         

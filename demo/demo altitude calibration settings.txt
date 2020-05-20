@@ -3,4 +3,4 @@ For the altitude calibration
 - Use the image_list.csv as the img list w/ altitudes input
 - Board Length measurement name = BL
 - True length of calibration object = 1
-- Folder containing MorphoMetriX outputs = calibraton_outputs
+- Folder containing MorphoMetriX outputs = altitude_calibration_outputs
