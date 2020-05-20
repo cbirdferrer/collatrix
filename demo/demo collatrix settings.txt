@@ -1,1 +1,6 @@
 
+- Animal ID from folder name?: yes or no is fine
+- Safety: yes, use altitude calibration file from altitude calibration function. Or provided demo_safety.csv
+- List of Specific Individuals: if yes use demo_animal_list.csv
+- Output name: whatever you want
+- Location of MorphoMetrix files: measured_whales_outputs folder
