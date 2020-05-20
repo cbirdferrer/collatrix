@@ -9,7 +9,7 @@ The altitude calibration function (`collatrix.altitude_calib`) can be used to ca
 
 To jump to the altitude calibration function instructions click [here](https://github.com/cbirdferrer/collatrix#altitude-calibration-function)
 
-To jump to the whale body condition function click [here](https://github.com/cbirdferrer/collatrix#whale-body-condition-function)
+To jump to the whale body condition function instructions click [here](https://github.com/cbirdferrer/collatrix#whale-body-condition-function)
 
 
 ## Installation
