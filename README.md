@@ -1,11 +1,11 @@
 # CollatriX
- This tool collates the csv outputs from the MorphoMetriX photogrammetry tool (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.
+ This function collates the csv outputs from the MorphoMetriX photogrammetry function (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.
 
 ## Background
 CollatriX was designed with several add-ons. A possible workflow is included below:  
 ![alt text](https://github.com/cbirdferrer/collatrix/blob/master/images/workflow.jpg)
 
-The altitude calibration tool can be used to calculate corrected altitudes using images of an object of known length. If used, this function should be used before the main function. The output can be used to create the safety input file for the main `collatrix` function. The output of this main function can then be used to calculate metrics of whale body condition if desired.
+The altitude calibration function (`collatrix.altitude_calib`) can be used to calculate corrected altitudes using images of an object of known length. If used, this function should be used before the main function. The output can be used to create the safety input file for the main `collatrix` function. Note that the altitude calibration function does not need be used, if no the user can start the workflow using the main `collatrix` function. The output of this main function can then be used to calculate metrics of whale body condition (`collatrix.whale_bc`) if desired.
 
 ## Installation
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/version.svg)](https://anaconda.org/cbird/collatrix)
@@ -24,7 +24,7 @@ After the package has been installed in your preferred environment enter this co
 ## Important Tips
 1. If there is a repeated Object Name in a GUI output csv (i.e. two rows of Total Length) the script will end and give you a message telling you to get rid of the duplicate. If you want both instances of the measurement included, then just alter the name slightly (for example, "Total Length_1").
 
-2. Each measurement recieves its own column. Rows are simply left blank for images that do not contain a measurement.
+2. Each measurement receives its own column. Rows are simply left blank for images that do not contain a measurement.
 
 3. Naming recommendations: Create simple labels for measurements to reduce chances of mistyping a label while measuring (i.e. consider using "TL" for total length). If you want body volume to be calculated the name of the length measurement **cannot** contain a dash (-) (i.e.use "total length" or "TL" instead of "total-length").
 
@@ -33,18 +33,12 @@ After the package has been installed in your preferred environment enter this co
 5. If you measure the same whale in the same image twice (separate csvs), make sure that you do not repeat a measurement name as this will overwrite the previous measurement. For instance, if you are measuring the total length of a whale twice and want to create two separate csvs for each one, use "TL1" and "TL2" for each measurement.
 
 ## Inputs
-This script has several options and inputs to be aware of that will be explained here. Note, these are listed in the order that the tool will ask you to enter them.
+This script has several options and inputs to be aware of that will be explained here. Note, these are listed in the order that the function will ask you to enter them.
 
 ### 1. Save Location
-  MorphoMetriX output csvs can be saved in either **One Folder** or in **Individual Folders**
-  If you choose OneFolder, the Animal ID will be the Animal ID provided in MorphoMetriX. If you choose Individual Folders, each output csv needs to be saved in a folder with its respective Animal ID.
+  MorphoMetriX output csvs can be saved in any file structure. The function will search through all folders within the folder provided and pull all csvs. If you have saved the outputs within folders named using Animal IDs, you can choose to have the Animal ID be pulled from the folder name.
 
-  An example of **One Folder** is       
-  * Folder      
-        > image_name1.csv    
-        > image_name2.csv
-
-  An example of **Individual Folders** is         
+  An example of a file structure where the folders are named using the Animal ID is:         
   * Whale1      
         > image_name1.jpg    
         > image_name1.csv
@@ -53,12 +47,12 @@ This script has several options and inputs to be aware of that will be explained
         > image_name2.csv
 
 ### 2. Safety
-  Because it's easy to accidentally enter the wrong altitude, focal length, or pixel dimension in MorphoMetriX, this tool can recalculate the measurements using the correct values. Selecting "yes" for this input will have the tool recalculate, using values that you will need to provide through an additional csv. If you select 'yes',a box will pop up asking you to select this file from where it is saved.
+  Because it's easy to accidentally enter the wrong altitude, focal length, or pixel dimension in MorphoMetriX, this function can recalculate the measurements using the correct values. Selecting "yes" for this input will have the function recalculate, using values that you will need to provide through an additional csv. If you select 'yes',a box will pop up asking you to select this file from where it is saved.
 #### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
 
-Example 
+Example
 
 Image | Altitude | Focal_Length | Pixel_Dimension
 ----- | -------- | ------------ | ---------------
@@ -73,22 +67,20 @@ whale2.JPG | 40.0 | 35 | 0.0039
 * Required column: Animal_ID
 * Make sure that the ID's listed are spelled exactly as those in the MorphoMetriX outputs
 
-Example 
+Example
 
 Animal_ID |
 --------- |
 Whale1
 
 ### 4. Output name
-The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
+The function will ask you what name you want for the output csv. The collated final csv outputted by this function will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
 
 ### 5. Location of MorphoMetriX files
 A window will open asking you to select the folder where the MorphoMetriX csvs are saved.
-* If you have them in one folder, select that folder
-* If you have them in individual folders, select the folder containing all the individual folders
 
 ### 6. Location where output should be saved
-Select the folder where you want the output of this tool to be saved
+Select the folder where you want the output of this function to be saved
 
 # Add-on Functions
 
@@ -104,7 +96,7 @@ This sheet should contain information on the altitude, focal length, pixel dimen
 ##### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension, Date, Flight
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
-* The contents of the Date and Flight columns can be formatted however the user prefers, however it needs to match the formatting of the Date and Flight columns in the image information file (input 2). 
+* The contents of the Date and Flight columns can be formatted however the user prefers, however it needs to match the formatting of the Date and Flight columns in the image information file (input 2).
 
 Image | Altitude | Focal_Length | Pixel_Dimension | Date | Flight |
 ----- | -------- | ------------ | ---- | ---- | ------ |
@@ -112,12 +104,12 @@ obj1.JPG | 25.0 | 35 | 0.0039 | 2017_05_12 | F4 |
 obj2.JPG | 20.0 | 35 | 0.0039 | 2017_05_12 | F4 |
 
 #### 2. Image information file
-This sheet should contain information on the altitude, date, and flight per image. The altitude should be the altitude that needs to corrected. 
+This sheet should contain information on the altitude, date, and flight per image. The altitude should be the altitude that needs to corrected.
 ##### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, UAS_Alt, Date, Flight
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
-* The contents of the Date and Flight columns can be formatted however the user prefers, however it needs to match the formatting of the Date and Flight columns in the calibration object image list (input 1). 
-* Note: the output of this tool will merge the calibrated altitudes with this sheet, so the user can choose to add the Focal_Length and Pixel_Dimension columns before or after running this tool to make the safety sheet for the main function.
+* The contents of the Date and Flight columns can be formatted however the user prefers, however it needs to match the formatting of the Date and Flight columns in the calibration object image list (input 1).
+* Note: the output of this function will merge the calibrated altitudes with this sheet, so the user can choose to add the Focal_Length and Pixel_Dimension columns before or after running this function to make the safety sheet for the main function.
 
 Image | UAS_Alt | Date | Flight |
 ----- | -------- | ---- | ------ |
@@ -131,7 +123,7 @@ The name of your length measurement (i.e. if you named total length "OL" enter "
 The length of the calibration object (i.e. if the object was 1.0 meters long enter 1.0)
 
 #### 5. Folder containing MorphoMetriX outputs
-Select the folder where the outputs are saved.
+Select the folder where the outputs are saved. The files can be nested within a file structure.
 
 #### 6. Folder where output should be saved
 Select the folder where you want the output to be saved.
@@ -160,7 +152,7 @@ If you calculate body volume, please cite Christiansen et al. 2018 in addition t
 #### 3. Body Area Index (BAI)
 CollatriX also provides the option to calculate BAI from perpendicular width intervals along a total length measurement following Burnett et al. 2019. If you say "yes" to have BAI calculated, the following information will need to be provided:
 
-1. The method used to calculate BAI. Options: parabola, trapezoid, or both. 
+1. The method used to calculate BAI. Options: parabola, trapezoid, or both.
 * The parabola method will calculate a parabola for the sides of the whale using the width measurements and surface is calculated as the area under this curve. The trapezoid method calculates the surface area by summing the surface areas of the trapezoids created between each segment. You can also select both to have both methods used.
 
 2. The name of your length measurement (i.e. if you named total length "TL" enter "TL")
@@ -173,17 +165,17 @@ CollatriX also provides the option to calculate BAI from perpendicular width int
 If you calculate BAI please cite Burnett et al. 2019 in addition to this software.
 
 #### 4. Output name
-The tool will ask you what name you want for the output csv. The collated final csv outputted by this tool will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
+The function will ask you what name you want for the output csv. The collated final csv outputted by this function will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
 
 #### 5. Location where output should be saved
-Select the folder where you want the output of this tool to be saved
+Select the folder where you want the output of this function to be saved
 
-## Demo 
+## Demo
 A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
 
 # License
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
-  
+
 Copyright (c) 2020 Clara Bird, KC Bierlich
 
 `Collatrix` is free software made available under the MIT License. For details see the the [LICENSE](https://github.com/cbirdferrer/collatrix/blob/master/LICENSE) file.
