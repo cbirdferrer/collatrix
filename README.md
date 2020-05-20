@@ -1,5 +1,5 @@
 # CollatriX
- This function collates the csv outputs from the MorphoMetriX photogrammetry function (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.
+ This function collates the csv outputs from the MorphoMetriX photogrammetry GUI (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.
 
 ## Background
 CollatriX was designed with several add-ons. A possible workflow is included below:  
@@ -85,14 +85,14 @@ Select the folder where you want the output of this function to be saved
 # Add-on Functions
 
 ## Altitude Calibration Function
-Barometers are known to provide inaccurate measures of altitude. Burnett et al. (2019) developed a method to calibrate the altitude of the drone using images of an object of known length. We have written a function to replicate this calibration.
+Barometers are known to provide inaccurate measures of altitude. Burnett et al. (2019) developed a method to calibrate the altitude of the drone using images of an object of known length. We have written a function to replicate this calibration. The output will be named **altitude_calibration.csv**.
 
   ```
   python -m collatrix.altitude_calib
   ```
 ### Inputs
 #### 1. Calibration object image list
-This sheet should contain information on the altitude, focal length, pixel dimension, date, and flight of the calibration object images. Like the safety sheet for the main function, this information is used to ensure proper calculation of the pixel count. The output will be named **altitude_calibration.csv**.
+This sheet should contain information on the altitude, focal length, pixel dimension, date, and flight of the calibration object images. Like the safety sheet for the main function, this information is used to ensure proper calculation of the pixel count.
 ##### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension, Date, Flight
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
