@@ -92,7 +92,7 @@ Select the folder where you want the output of this function to be saved
 # Add-on Functions
 
 ## Altitude Calibration Function
-Barometers are known to provide inaccurate measures of altitude. Burnett et al. (2019) developed a method to calibrate the altitude of the drone using images of an object of known length. We have written a function to replicate this calibration. The output will be named **altitude_calibration.csv**.
+Barometers are known to provide inaccurate measures of altitude. Burnett et al. (2018) developed a method to calibrate the altitude of the drone using images of an object of known length. We have written a function to replicate this calibration. The output will be named **altitude_calibration.csv**.
 
   ```
   python -m collatrix.altitude_calib
@@ -158,7 +158,7 @@ CollatriX also provides the option to calculate body volume from perpendicular w
 If you calculate body volume, please cite Christiansen et al. 2018 in addition to this software.
 
 #### 3. Body Area Index (BAI)
-CollatriX also provides the option to calculate BAI from perpendicular width intervals along a total length measurement following Burnett et al. 2019. If you say "yes" to have BAI calculated, the following information will need to be provided:
+CollatriX also provides the option to calculate BAI from perpendicular width intervals along a total length measurement following Burnett et al. 2018. If you say "yes" to have BAI calculated, the following information will need to be provided:
 
 1. The method used to calculate BAI. Options: parabola, trapezoid, or both.
 * The parabola method will calculate a parabola for the sides of the whale using the width measurements and surface is calculated as the area under this curve (Burnett et al. 2018). The trapezoid method calculates the surface area by summing the surface areas of the trapezoids created between each segment (Christiansen et al. 2016). You can also select both to have both methods used.
@@ -167,9 +167,9 @@ CollatriX also provides the option to calculate BAI from perpendicular width int
 4. The upper bound (using the above example, 80 would be the upper bound)
 5. The interval that the widths were measured in (i.e 5 if you measured in 5% increments. **Note** this value cannot be less than the increments of width that you measured).
 
-*Burnett, Jonathan D., Leila Lemos, Dawn Barlow, Michael G. Wing, Todd Chandler, and Leigh G. Torres. 2019. “Estimating Morphometric Attributes of Baleen Whales with Photogrammetry from Small UASs: A Case Study with Blue and Gray Whales.” Marine Mammal Science 35 (1): 108–39. https://doi.org/10.1111/mms.12527.*
+*Burnett, Jonathan D., Leila Lemos, Dawn Barlow, Michael G. Wing, Todd Chandler, and Leigh G. Torres. 2018. “Estimating Morphometric Attributes of Baleen Whales with Photogrammetry from Small UASs: A Case Study with Blue and Gray Whales.” Marine Mammal Science 35 (1): 108–39. https://doi.org/10.1111/mms.12527.*
 
-If you calculate BAI please cite Burnett et al. 2019 in addition to this software.
+If you calculate BAI please cite Burnett et al. 2018 in addition to this software.
 
 #### 4. Output name
 The function will ask you what name you want for the output csv. The collated final csv outputted by this function will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
