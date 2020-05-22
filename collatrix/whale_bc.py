@@ -37,7 +37,7 @@ class App(QWidget):
 
         #ask if they want body Volume
         items = ('yes','no')
-        volchoice, okPressed = QInputDialog.getItem(self, 'Do you want body volume to be calculated? (you have to have measured Total_Length widths)','',items,0,False)
+        volchoice, okPressed = QInputDialog.getItem(self, 'Do you want body volume to be calculated? (width measurements required)','',items,0,False)
         if okPressed and volchoice:
             print("{0} body volume calculated".format(volchoice))
 

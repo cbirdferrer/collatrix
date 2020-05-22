@@ -2,10 +2,10 @@
  This function collates the csv outputs from the MorphoMetriX photogrammetry GUI (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.
 
 ## Background
-CollatriX was designed with several add-ons. A possible workflow is included below:  
-![alt text](https://github.com/cbirdferrer/collatrix/blob/master/images/workflow.jpg)
+CollatriX was designed with several add-ons. A figure showing the different routes available is included below:  
+![alt text](https://github.com/cbirdferrer/collatrix/blob/master/images/Figure1.png)
 
-The altitude calibration function (`collatrix.altitude_calib`) can be used to calculate corrected altitudes using images of an object of known length. If used, this function should be used before the main function. The output can be used to create the safety input file for the main `collatrix` function. Note that the altitude calibration function does not need be used, if no the user can start the workflow using the main `collatrix` function. The output of this main function can then be used to calculate metrics of whale body condition (`collatrix.whale_bc`) if desired.
+The altitude calibration function (`collatrix.altitude_calib`) can be used to calculate corrected altitudes using images of an object of known length. If used, this function should be used before the main function. The output can be used to create the safety input file for the main `collatrix` function. Note that the altitude calibration function is not required, the user can start the workflow using the main `collatrix` function. The output of this main function can then be used to calculate metrics of whale body condition (`collatrix.whale_bc`) if desired.
 
 To jump to the altitude calibration function instructions click [here](https://github.com/cbirdferrer/collatrix#altitude-calibration-function)
 
@@ -31,7 +31,7 @@ After the package has been installed in your preferred environment enter this co
 
 2. Each measurement receives its own column. Rows are simply left blank for images that do not contain a measurement.
 
-3. Naming recommendations: Create simple labels for measurements to reduce chances of mistyping a label while measuring (i.e. consider using "TL" for total length). If you want body volume to be calculated the name of the length measurement **cannot** contain a dash (-) (i.e.use "total length" or "TL" instead of "total-length").
+3. Naming recommendations: Create simple labels for measurements in MorphoMetriX to reduce chances of mistyping a label while measuring (i.e. consider using "TL" for total length). If you want body volume to be calculated the name of the length measurement **cannot** contain a dash (-) (i.e.use "total length" or "TL" instead of "total-length").
 
 4. The output file from CollatriX is linked by the "Image ID" input in MorphoMetriX, so it is ok to use the same image to generate multiple csv outputs as long as the image ID is unique or the output csv file is unique.
 
@@ -41,7 +41,7 @@ After the package has been installed in your preferred environment enter this co
 This script has several options and inputs to be aware of that will be explained here. Note, these are listed in the order that the function will ask you to enter them.
 
 ### 1. Do you want the Animal ID to be assigned based on the name of the folder?
-  MorphoMetriX output csvs can be saved in any file structure. The function will search through all folders within the folder provided and pull all csvs. If you have saved the outputs within folders named using Animal IDs, you can choose to have the Animal ID be pulled from the folder name.
+  MorphoMetriX output csvs can be saved in any file structure. The function will search through all folders within the folder provided and pull all csvs. If you have saved the outputs within folders named using Animal IDs, you can choose to have the Animal ID be pulled from the folder name. If no is selected, the Animal ID will be the 'Image ID' manually entered through MorphoMetriX.
 
   An example of a file structure where the folders are named using the Animal ID is:         
   * Whale1      
@@ -65,7 +65,7 @@ whale1.JPG | 55.0 | 35 | 0.0039
 whale2.JPG | 40.0 | 35 | 0.0039
 
 ### 3. List of Specific Individuals
-  If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs.If you want this you will need to provide a csv containing the ids you want.
+  If you want an extra output csv containing only a subset of animals, select 'yes' for this input. You will still get an output file containing the collated information from all the csvs. To pull a subset of individuals you will need to provide a csv containing the IDs you want.
   If you select 'yes', a window will open asking you to select this csv file containing the list of Animal_IDs that you want included in the subset list.  
 #### How to format this csv (note: header spelling and capitalization matters most)
 * If you want a second output csv containing only a specific subset of individuals you'll need to specify a csv containing that list.
@@ -79,7 +79,7 @@ Animal_ID |
 Whale1
 
 ### 4. Output name
-The function will ask you what name you want for the output csv. The collated final csv outputted by this function will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
+The function will ask you what name you want for the output csv. The collated final csv outputted by this function will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be produced and named inputname_IDS.csv.
 
 ### 5. Location of MorphoMetriX files
 A window will open asking you to select the folder where the MorphoMetriX csvs are saved.
@@ -100,8 +100,8 @@ Barometers are known to provide inaccurate measures of altitude. Burnett et al. 
 This sheet should contain information on the altitude, focal length, pixel dimension, date, and flight of the calibration object images. Like the safety sheet for the main function, this information is used to ensure proper calculation of the pixel count.
 ##### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension, Date, Flight
-* Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
-* The contents of the Date and Flight columns can be formatted however the user prefers, however it needs to match the formatting of the Date and Flight columns in the image information file (input 2).
+* Make sure that the image names are identical to the name of the images measured (be mindful of capitalization, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
+* The contents of the Date and Flight columns can be formatted, however, it needs to match the formatting of the Date and Flight columns in the image information file (input 2).
 
 Image | Altitude | Focal_Length | Pixel_Dimension | Date | Flight |
 ----- | -------- | ------------ | ---- | ---- | ------ |
@@ -109,7 +109,7 @@ obj1.JPG | 25.0 | 35 | 0.0039 | 2017_05_12 | F4 |
 obj2.JPG | 20.0 | 35 | 0.0039 | 2017_05_12 | F4 |
 
 #### 2. Image information file
-This sheet should contain information on the altitude, date, and flight per image. The altitude should be the altitude that needs to corrected.
+This sheet should contain information on the altitude, date, and flight per image. The altitude should be the entered altitude that needs to corrected.
 ##### How to format this csv (note: header spelling and capitalization matters most)
 * Required columns (spelled and capitalized just as written here): Image, UAS_Alt, Date, Flight
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
@@ -159,8 +159,7 @@ If you calculate body volume, please cite Christiansen et al. 2018 in addition t
 CollatriX also provides the option to calculate BAI from perpendicular width intervals along a total length measurement following Burnett et al. 2019. If you say "yes" to have BAI calculated, the following information will need to be provided:
 
 1. The method used to calculate BAI. Options: parabola, trapezoid, or both.
-* The parabola method will calculate a parabola for the sides of the whale using the width measurements and surface is calculated as the area under this curve. The trapezoid method calculates the surface area by summing the surface areas of the trapezoids created between each segment. You can also select both to have both methods used.
-
+* The parabola method will calculate a parabola for the sides of the whale using the width measurements and surface is calculated as the area under this curve (Burnett et al. 2018). The trapezoid method calculates the surface area by summing the surface areas of the trapezoids created between each segment (Christiansen et al. 2016). You can also select both to have both methods used.
 2. The name of your length measurement (i.e. if you named total length "TL" enter "TL")
 3. The lower bound percentage (i.e. if you want to use widths between 20-80% of total length to calculate body volume, then 20 would be the lower bound)
 4. The upper bound (using the above example, 80 would be the upper bound)
@@ -175,6 +174,9 @@ The function will ask you what name you want for the output csv. The collated fi
 
 #### 5. Location where output should be saved
 Select the folder where you want the output of this function to be saved
+
+#### Output format
+The output of this function will be the `collatrix` output with added columns. If all three metrics were calculated at 10% intervals the headers would be Body_Vol_10%, BAIpar_10%, and BAItrap_10%. BAIpar is BAI calculated using parabolas and BAItrap is BAI calculated using trapezoids.
 
 ## Demo
 A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
