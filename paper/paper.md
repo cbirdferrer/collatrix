@@ -41,7 +41,11 @@ Together, MorphoMetriX and CollatriX provide a toolkit that is flexible, easy to
 
 # Figures
 
+<<<<<<< HEAD
 ![Figure 1. Basic overview of CollatriX workflow using measurement outputs from MorphoMetriX (Torres and Bierlich 2020) Measurement outputs are collated into a single output file based on the ‘Image ID’. Solid arrows represent main pathway, dotted arrows represent pathway including add-on functions.](https://github.com/cbirdferrer/collatrix/blob/master/images/Figure1.png)
+=======
+![Figure 1. Basic overview of CollatriX workflow using measurement outputs from MorphoMetriX (Torres and Bierlich 2020) Measurement outputs are collated into a single output file based on the ‘Image ID’. Solid arrows represent main pathway, dotted arrows represent pathway including add-on functions.]((https://github.com/cbirdferrer/collatrix/blob/master/images/Figure1.png)
+>>>>>>> 893a3eb44e24781dcc2bfc81d0b1cb2ae784bac2
 
 # Acknowledgements
 
