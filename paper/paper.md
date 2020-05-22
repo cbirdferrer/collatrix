@@ -1,5 +1,5 @@
 ---
-title: 'CollatriX: A GUI to collate MophoMetriX outputs'
+title: 'CollatriX: A GUI to collate MorphoMetriX outputs'
 tags:
   - Python
   - Drones
