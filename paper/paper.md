@@ -14,7 +14,7 @@ authors:
   - name: KC Bierlich
     affiliation: 2
 affiliations:
- - name: Marine Mammal Institute, Department of Fisheries and Wildlife, Oregon State University
+ - name: Geospatial Ecology of Marine Megafauna Lab, Marine Mammal Institute, Department of Fisheries and Wildlife, Oregon State University
    index: 1
  - name: Nicholas School of the Environment, Duke University Marine Laboratory
    index: 2
