@@ -18,21 +18,21 @@
 
 **demo_animal_list.csv**: This is an example of the animal list that can be used to subset the collated datasheet by animal ID.
 
-## Demo altitude Calibration settings
+## Demo `collatrix.altitude_calib` settings
 - Use the calibration_obj_imglist.csv as the calibration object img list input
 - Use the image_list.csv as the img list w/ altitudes input
 - Board Length measurement name = BL
 - True length of calibration object = 1
 - Folder containing MorphoMetriX outputs = altitude_calibration_outputs
 
-## Demo collatrix settings
+## Demo `collatrix` settings
 - Animal ID from folder name?: either is fine
 - Safety: yes, use altitude calibration file from altitude calibration function. Or provided demo_safety.csv
 - List of Specific Individuals: either is fine, if yes use demo_animal_list.csv
 - Output name: whatever you want
 - Location of MorphoMetrix files: measured_whales_outputs folder
 
-## Demo whale body condition settings
+## Demo `collatrix.whale_bc` settings
 - Name of length measurement = TL
 - Lower bound = 20
 - Upper bound = 80
