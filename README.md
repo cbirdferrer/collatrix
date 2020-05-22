@@ -181,7 +181,7 @@ Select the folder where you want the output of this function to be saved
 The output of this function will be the `collatrix` output with added columns. If all three metrics were calculated at 10% intervals the headers would be Body_Vol_10%, BAIpar_10%, and BAItrap_10%. BAIpar is BAI calculated using parabolas and BAItrap is BAI calculated using trapezoids.
 
 ## Demo
-A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The directory includes a text file with the body volume settings that should be used for those files.
+A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The demo includes a separate README file with instructions for what inputs to use.
 
 # License
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
