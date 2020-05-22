@@ -100,10 +100,11 @@ Barometers are known to provide inaccurate measures of altitude. Burnett et al. 
 ### Inputs
 #### 1. Calibration object image list
 This sheet should contain information on the altitude, focal length, pixel dimension, date, and flight of the calibration object images. Like the safety sheet for the main function, this information is used to ensure proper calculation of the pixel count.
+
 **How to format this csv (note: header spelling and capitalization matters most)** 
 * Required columns (spelled and capitalized just as written here): Image, Altitude, Focal_Length, Pixel_Dimension, Date, Flight
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitalization, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
-* The contents of the Date and Flight columns can be formatted, however, it needs to match the formatting of the Date and Flight columns in the image information file (input 2).
+* The contents of the Date and Flight columns can be formatted however, it just needs to match the formatting of the Date and Flight columns in the image information file (input 2).
 
 Image | Altitude | Focal_Length | Pixel_Dimension | Date | Flight |
 ----- | -------- | ------------ | ---- | ---- | ------ |
@@ -112,7 +113,8 @@ obj2.JPG | 20.0 | 35 | 0.0039 | 2017_05_12 | F4 |
 
 #### 2. Image information file
 This sheet should contain information on the altitude, date, and flight per image. The altitude should be the entered altitude that needs to corrected.
-##### How to format this csv (note: header spelling and capitalization matters most)
+
+**How to format this csv (note: header spelling and capitalization matters most)**
 * Required columns (spelled and capitalized just as written here): Image, UAS_Alt, Date, Flight
 * Make sure that the image names are identical to the name of the images measured (be mindful of capitilzation, *especially of the file exentions*, .JPG and .jpg would not be considered matching).
 * UAS_Alt should be the altitude that was recorded by the UAS. This is the altitude that will be corrected.
@@ -172,7 +174,7 @@ CollatriX also provides the option to calculate BAI from perpendicular width int
 If you calculate BAI please cite Burnett et al. 2018 in addition to this software.
 
 #### 4. Output name
-The function will ask you what name you want for the output csv. The collated final csv outputted by this function will be named inputname_allIDs.csv. If you selected yes for list of specific individuals, a second list containing the subset will be outputed named inputname_IDS.csv.
+The function will ask you what name you want for the output csv. The csv outputted by this function will be named inputname_bodycondition.csv.
 
 #### 5. Location where output should be saved
 Select the folder where you want the output of this function to be saved
