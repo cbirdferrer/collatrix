@@ -123,13 +123,13 @@ class App(QWidget):
 
 
         df_total = df_all.merge(df_cal, on = ['Image'])
-        df_total['DateFlight'] = [x + "_" + y for x,y in zip(df_total['Date'],df_total['Flight'])]
+        df_total['DateFlight'] = [str(x) + "_" + str(y) for x,y in zip(df_total['Date'],df_total['Flight'])]
 
 
         #ok now we have a dataframe and want to make the linear model
         #read in list of images that we want altitude for
         dfImg = pd.read_csv(img_csv,sep =',')
-        dfImg['DateFlight'] = [x + "_" + y for x,y in zip(dfImg['Date'],dfImg['Flight'])]
+        dfImg['DateFlight'] = [str(x) + "_" + str(y) for x,y in zip(dfImg['Date'],dfImg['Flight'])]
 
         #loop through DateFlights, run linear model, predict acurate value for image altitude
         dateflights = set(df_total['DateFlight'])
