@@ -191,14 +191,21 @@ class App(QWidget):
                 notes = df[df[0] == 'Notes'].loc[:,[1]].values[0] #extract entered notes
                 mDict['Notes'] = notes[0]
 
-                #go into the cvs to look for the measurement values
                 dfGUI = df0.truncate(before=idx[0]) #now subset the df so we're just looking at the measurements
-                head = dfGUI.iloc[0] #isolate the current header row
-                dfGUI = dfGUI[1:] #chop off the top 2 rows
-                dfGUI.columns = head #make the header the original header
-                new_headerG = dfGUI.columns[0:2].values.tolist() + dfGUI.iloc[0,2:].values.tolist() #merge header with width names
-                dfGUI = dfGUI[1:] #take the data minus the header row
-                dfGUI.columns = new_headerG #reset the headers to this created version
+                #if the rows are weird because widths were measured make a new header
+                if any("% Width" in k for k in keys):
+                    head = dfGUI.iloc[0] #isolate the current header row
+                    dfGUI = dfGUI[1:] #chop off the top 2 rows
+                    dfGUI.columns = head #make the header the original header
+                    new_headerG = dfGUI.columns[0:2].values.tolist() + dfGUI.iloc[0,2:].values.tolist() #merge header with width names
+                    dfGUI = dfGUI[1:] #take the data minus the header row
+                    dfGUI.columns = new_headerG #reset the headers to this created version
+                #if widths were not measured no need for the weird new header
+                else:
+                    head = dfGUI.iloc[0]
+                    dfGUI = dfGUI[0:]
+                    dfGUI.columns = head
+
                 dfGUI = dfGUI.set_index('Object') #make index column the one named Object
 
                 if safety == 'yes': #pull the altitude, focal length, and pix d from the safety csv by image name
@@ -290,6 +297,7 @@ class App(QWidget):
             df_allID.to_csv(outidcsv,sep = ',')
         elif idchoice == 'no':
             pass
+        print(df_all1)
         print("done, close GUI window to end script")
 if __name__ == '__main__':
     app = QApplication(sys.argv)
