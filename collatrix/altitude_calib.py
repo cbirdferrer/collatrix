@@ -123,7 +123,7 @@ class App(QWidget):
 
 
         df_total = df_all.merge(df_cal, on = ['Image'])
-        df_total['DateFlight'] = [x + "_" + y for x,y in zip(df_total['Date'],df_total['Flight'])]
+        df_total['DateFlight'] = [str(x) + "_" + str(y) for x,y in zip(df_total['Date'],df_total['Flight'])]
 
 
         #ok now we have a dataframe and want to make the linear model
