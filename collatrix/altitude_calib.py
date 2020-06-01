@@ -71,7 +71,7 @@ class App(QWidget):
         print("these csvs were not morphometrix outputs: {0}".format(not_mmx))
 
         #import calibration object csv
-        df_cal = pd.read_csv(calib_csv,sep = ',')
+        df_cal = pd.read_csv(calib_csv,sep = ',',dtype={'Date':str,'Flight':str})
 
         #####COLLATE#####
         mDict = dict.fromkeys(measurements)
@@ -128,7 +128,7 @@ class App(QWidget):
 
         #ok now we have a dataframe and want to make the linear model
         #read in list of images that we want altitude for
-        dfImg = pd.read_csv(img_csv,sep =',')
+        dfImg = pd.read_csv(img_csv,sep =',',dtype={'Date':str,'Flight':str})
         dfImg['DateFlight'] = [str(x) + "_" + str(y) for x,y in zip(dfImg['Date'],dfImg['Flight'])]
 
         #loop through DateFlights, run linear model, predict acurate value for image altitude
