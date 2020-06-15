@@ -295,7 +295,7 @@ class App(QWidget):
             df_allID = df_all1[df_all1['Animal_ID'].isin(idList)] #subset full dataframe to just those IDs
 
             outidcsv = os.path.join(saveFold,"{0}_IDS.csv".format(outname))
-            df_allID.to_csv(outidcsv,sep = ',')
+            df_allID.to_csv(outidcsv,sep = ',',index_label = 'IX')
         elif idchoice == 'no':
             pass
         print(df_all1)

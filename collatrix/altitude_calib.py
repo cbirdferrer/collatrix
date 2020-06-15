@@ -164,7 +164,7 @@ class App(QWidget):
         df_calibx = df_calib.merge(dfImg,on=['Image'])
         print(df_calibx)
         outcsv = os.path.join(saveFold,"altitude_calibration.csv")
-        df_calibx.to_csv(outcsv,sep = ',')
+        df_calibx.to_csv(outcsv,sep = ',',index_label = 'IX')
         print("done, close GUI window to end script")
 if __name__ == '__main__':
     app = QApplication(sys.argv)

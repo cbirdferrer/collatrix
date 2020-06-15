@@ -245,7 +245,7 @@ class App(QWidget):
             df_all1 = df_allx
 
         outcsv = os.path.join(saveFold,"{0}_bodycondition.csv".format(outname))
-        df_all1.to_csv(outcsv,sep = ',')
+        df_all1.to_csv(outcsv,sep = ',',index_label = 'IX')
 
         print(df_all1)
 
