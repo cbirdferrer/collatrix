@@ -26,32 +26,34 @@ class App(QWidget):
         #ask for input csv
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        input_csv, _ = QFileDialog.getOpenFileName(self,"CollatriX output file", "","All Files (*);;csv files (*.csv)", options=options)
+        input_csv, _ = QFileDialog.getOpenFileName(self,"Input 1. CollatriX output file", "","All Files (*);;csv files (*.csv)", options=options)
         if input_csv:
             print("collatrix output file = {0}".format(input_csv))
 
         #import csv
         df_all = pd.read_csv(input_csv,sep = ",")
+        df_all = df_all.dropna(how="all",axis='rows').reset_index()
         df_all.columns = df_all.columns.str.replace(".00%", ".0%")
 
-
+        #set up empty message list
+        message = []
         #ask if they want body Volume
         items = ('yes','no')
-        volchoice, okPressed = QInputDialog.getItem(self, 'Do you want body volume to be calculated? (width measurements required)','',items,0,False)
+        volchoice, okPressed = QInputDialog.getItem(self, 'Input 2. Do you want body volume to be calculated? (width measurements required)','',items,0,False)
         if okPressed and volchoice:
             print("{0} body volume calculated".format(volchoice))
 
         if volchoice == 'yes':
-            n, okPressed = QInputDialog.getText(self, "What did you name the total length measurement?","Total Length Name:", QLineEdit.Normal, "")
+            n, okPressed = QInputDialog.getText(self, "2.1 What did you name the total length measurement?","Total Length Name:", QLineEdit.Normal, "")
             if okPressed and n != '':
                 tl_name= str(n)
-            l, okPressed = QInputDialog.getText(self, "Lower Bound","Lower Bound:", QLineEdit.Normal, "")
+            l, okPressed = QInputDialog.getText(self, "2.2 Lower Bound","Lower Bound:", QLineEdit.Normal, "")
             if okPressed and l != '':
                 lower= int(l)
-            u, okPressed = QInputDialog.getText(self, "Upper Bound","Upper Bound:", QLineEdit.Normal, "")
+            u, okPressed = QInputDialog.getText(self, "2.3 Upper Bound","Upper Bound:", QLineEdit.Normal, "")
             if okPressed and u != '':
                upper = int(u)
-            i, okPressed = QInputDialog.getText(self, "Interval","Interval:", QLineEdit.Normal, "")
+            i, okPressed = QInputDialog.getText(self, "2.4 Interval","Interval:", QLineEdit.Normal, "")
             if okPressed and i != '':
                 interval = int(i)
             print("for body volume: length name = {0}, lower bound = {1}, upper bound = {2}, interval = {3}".format(tl_name,lower,upper,interval))
@@ -60,27 +62,26 @@ class App(QWidget):
 
         #ask if they want BAI
         items = ('yes','no')
-        baichoice, okPressed = QInputDialog.getItem(self, 'Do you want BAI to be calculated? (you have to have measured Total_Length widths)','',items,0,False)
+        baichoice, okPressed = QInputDialog.getItem(self, 'Input 3. Do you want BAI to be calculated? (you have to have measured Total_Length widths)','',items,0,False)
         if okPressed and baichoice:
             print("{0} BAI calculated".format(baichoice))
-
         if baichoice == 'yes':
             #ask if they want trapezoid method, parabola method, or both methods
             items = ('parabola','trapezoid','both')
-            bai_method, okPressed = QInputDialog.getItem(self, 'Do you want BAI to be to measured using parabolas, trapezoids, or both?','',items,0,False)
+            bai_method, okPressed = QInputDialog.getItem(self, '3.1 Do you want BAI to be to measured using parabolas, trapezoids, or both?','',items,0,False)
             if okPressed and bai_method:
                 print("BAI calculated using {0} method(s)".format(bai_method))
             #get intervals
-            n, okPressed = QInputDialog.getText(self, "What did you name the total length measurement?","Total Length Name:", QLineEdit.Normal, "")
+            n, okPressed = QInputDialog.getText(self, "3.2 What did you name the total length measurement?","Total Length Name:", QLineEdit.Normal, "")
             if okPressed and n != '':
                 tl_name= str(n)
-            l, okPressed = QInputDialog.getText(self, "Lower Bound","Lower Bound:", QLineEdit.Normal, "")
+            l, okPressed = QInputDialog.getText(self, "3.3 Lower Bound","Lower Bound:", QLineEdit.Normal, "")
             if okPressed and l != '':
                 b_lower= int(l)
-            u, okPressed = QInputDialog.getText(self, "Upper Bound","Upper Bound:", QLineEdit.Normal, "")
+            u, okPressed = QInputDialog.getText(self, "3.4 Upper Bound","Upper Bound:", QLineEdit.Normal, "")
             if okPressed and u != '':
                b_upper = int(u)
-            i, okPressed = QInputDialog.getText(self, "Interval","Interval:", QLineEdit.Normal, "")
+            i, okPressed = QInputDialog.getText(self, "3.5 Interval","Interval:", QLineEdit.Normal, "")
             if okPressed and i != '':
                 b_interval = int(i)
             print("for BAI: length name = {0}, lower bound = {1}, upper bound = {2}, interval = {3}".format(tl_name,b_lower,b_upper,b_interval))

@@ -27,29 +27,29 @@ class App(QWidget):
         #get file containing board img list w/
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        calib_csv, _ = QFileDialog.getOpenFileName(self,"calibration object img list", "","All Files (*);;csv files (*.csv)", options=options)
+        calib_csv, _ = QFileDialog.getOpenFileName(self,"Input 1. Calibration object image list", "","All Files (*);;csv files (*.csv)", options=options)
         print("calibration object csv = {0}".format(calib_csv))
 
         #get file containing non-calibration img list (this will become the safety)
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        img_csv, _ = QFileDialog.getOpenFileName(self,"img list w/ altitudes", "","All Files (*);;csv files (*.csv)", options=options)
+        img_csv, _ = QFileDialog.getOpenFileName(self,"Input 2. Image list with altitude information", "","All Files (*);;csv files (*.csv)", options=options)
         print("image csv = {0}".format(img_csv))
 
         #what did they name the length of the board
-        n, okPressed = QInputDialog.getText(self, "What did you name the board length measurement?","Board Length Name:", QLineEdit.Normal, "")
+        n, okPressed = QInputDialog.getText(self, "Input 3. What did you name the board length measurement?","Board Length Name:", QLineEdit.Normal, "")
         if okPressed and n != '':
             bl_name= str(n)
 
-        n, okPressed = QInputDialog.getText(self, "What is the true length of the calibration object (in meters)?","Calibration Object Length", QLineEdit.Normal, "")
+        n, okPressed = QInputDialog.getText(self, "Input 4. What is the true length of the calibration object (in meters)?","Calibration Object Length", QLineEdit.Normal, "")
         if okPressed and n != '':
             ob_l= float(n)
 
         #get folder
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        GUIfold = QFileDialog.getExistingDirectory(None, str("folder containing MorphoMetriX outputs"),options=options)
-        saveFold = QFileDialog.getExistingDirectory(None,str("folder where output should be saved"),options=options)
+        GUIfold = QFileDialog.getExistingDirectory(None, str("Input 4. folder containing MorphoMetriX outputs"),options=options)
+        saveFold = QFileDialog.getExistingDirectory(None,str("Input 5. folder where output should be saved"),options=options)
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
 

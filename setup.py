@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-#from distutils import setup, find_packages
 
 setup(
     name = "collatrix",
@@ -16,5 +15,4 @@ setup(
     },
 
     packages = ['collatrix']
-#    packages= find_packages()
 )
