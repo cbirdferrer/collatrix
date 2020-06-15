@@ -185,6 +185,22 @@ The output of this function will be the `collatrix` output with added columns. I
 ## Demo
 A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The demo includes a separate README file with instructions for what inputs to use.
 
+# Attribution
+If you use this software please cite our paper.
+
+Additionally, if you used `collatrix.whale_bc` to measure cetacean body condition:
+* Cite Christiansen et al. (2018) for Body Volume  
+*Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. Maternal body size and condition determine calf growth rates in southern right whales (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
+
+* Cite Burnett et al. (2018) for Body Area Index  
+*Burnett, Jonathan D., Leila Lemos, Dawn Barlow, Michael G. Wing, Todd Chandler, and Leigh G. Torres. 2018. “Estimating Morphometric Attributes of Baleen Whales with Photogrammetry from Small UASs: A Case Study with Blue and Gray Whales.” Marine Mammal Science 35 (1): 108–39. https://doi.org/10.1111/mms.12527.*
+
+# Contributing
+We designed CollatriX with future collaborations in mind and we'd love for you to contribute! If you'd like to contribute please see our [contributing guidelines](https://github.com/cbirdferrer/collatrix/blob/master/CONTRIBUTING.md)
+
+# Code of Conduct
+See our [code of conduct](https://github.com/cbirdferrer/collatrix/blob/master/CODE_OF_CONDUCT.md)
+
 # License
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/license.svg)](https://anaconda.org/cbird/collatrix)
 
