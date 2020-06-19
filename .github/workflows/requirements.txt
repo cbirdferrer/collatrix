@@ -1,0 +1,15 @@
+#requirements.txt
+- numpy
+- pandas
+- pyqt=5
+- setuptools
+- scipy
+
+numpy
+pandas
+pyqt=5
+setuptools
+scipy
+os
+sys
+pytest
