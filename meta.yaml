@@ -12,12 +12,12 @@ build:
 
 requirements:
   build:
-    - python 
+    - python >= 3.6
   run:
-    - python
+    - python >= 3.6
     - numpy
     - pandas
-    - pyqt=5
+    - pyqt >= 5
     - setuptools
     - scipy
 
