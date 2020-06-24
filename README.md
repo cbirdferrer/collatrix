@@ -15,7 +15,7 @@ To jump to the whale body condition function instructions click [here](https://g
 ## Installation
 [![Anaconda-Server Badge](https://anaconda.org/cbird/collatrix/badges/version.svg)](https://anaconda.org/cbird/collatrix)
 
-  The easiest way to install is through the Anaconda python distribution. In anaconda create/use your preferred environment, open command line and enter
+  The easiest way to install is through the Anaconda python distribution. In anaconda create/use your preferred environment, open command line and enter. Note that you'll need python version 3.6 or higher.
   ```
   conda install -c cbird collatrix
   ```
