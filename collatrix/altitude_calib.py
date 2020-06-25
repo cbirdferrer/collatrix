@@ -80,7 +80,7 @@ class App(QWidget):
 
         for f in csvs:
             print(f)
-            temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #import as one column
+            temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"']) #import as one column
             df1=temp.X0.str.split(',',expand=True) #split on comma delimeter
             df00 = df1.replace("",np.nan)
             df0 = df00.dropna(how='all',axis = 'rows')

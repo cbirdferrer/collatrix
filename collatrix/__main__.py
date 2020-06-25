@@ -32,7 +32,7 @@ constants = ['Image ID', 'Image Path', 'Focal Length', 'Altitude', 'Pixel Dimens
 def collate(csvs,measurements,nonPercMeas,df_L,safety,anFold):
     for f in csvs: #first loop through all the csvs pulls the measurement names
         print(f)
-        temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #read in csv as one column
+        temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"']) #read in csv as one column
         df00=temp.X0.str.split(',',expand=True) #split rows into columns by delimeter
         df00 = df00.replace("",np.nan)
         df0 = df00.dropna(how='all',axis = 'rows')
@@ -90,7 +90,7 @@ def collate(csvs,measurements,nonPercMeas,df_L,safety,anFold):
     for f in csvs: #this second loop now goes back through the csvs and pulls the measurement values
         print(f)
         #pull the initial values i.e image, ID, alt, focal length
-        temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #import as one column
+        temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"'])#import as one column
         df1=temp.X0.str.split(',',expand=True) #split on comma delimeter
         df00 = df1.replace("",np.nan)
         df0 = df00.dropna(how='all',axis = 'rows')
@@ -287,7 +287,7 @@ class App(QWidget):
         df_all1 = df_all1.replace(0,np.nan) #replace the 0s with nans
 
         outcsv = os.path.join(saveFold,"{0}_allIDs.csv".format(outname))
-        df_all1.to_csv(outcsv,sep = ',')
+        df_all1.to_csv(outcsv,sep = ',',index_label = 'IX')
 
         if idchoice == 'yes':
             df_ids = pd.read_csv(idsCSV,sep = ',') #read in id csv
