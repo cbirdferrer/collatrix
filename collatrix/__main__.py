@@ -15,7 +15,8 @@ import pandas as pd
 import numpy as np
 import os, sys
 import math
-from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox, QLabel, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
 #define functions
@@ -193,15 +194,22 @@ class App(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.show()
 
+        #add message box with link to github documentation
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("For detailed input info click link below")
+        msgBox.setTextFormat(QtCore.Qt.RichText)
+        msgBox.setText('<a href = "https://github.com/cbirdferrer/collatrix">CLICK HERE</a> for detailed input instructions, \n then click on OK button to continue')
+        x = msgBox.exec_()
+
         #do you want the Animal ID to be assigned based on the name of the folder
         items = ('yes', 'no')
-        anFold, okPressed = QInputDialog.getItem(self,"Input 1. Do you want the Animal ID to be assigned based on the name of the folder?", "Yes or No?",items,0,False)
+        anFold, okPressed = QInputDialog.getItem(self,"Input #1", "Do you want the Animal ID to be assigned based on the name of the folder? \n yes or no",items,0,False)
         if okPressed and anFold:
             print("{0} Animal ID in folder name".format(anFold))
 
         #ask if they want safey net
         items = ('yes', 'no')
-        safety, okPressed = QInputDialog.getItem(self,"Input 2. Do you want to use the safety?", "Yes or No?",items,0,False)
+        safety, okPressed = QInputDialog.getItem(self,"Input #2", "Do you want to use the safety? \n Yes or No?",items,0,False)
         if okPressed and safety:
             print("{0} safety".format(safety))
         #if safety yes, ask for file
@@ -215,7 +223,7 @@ class App(QWidget):
 
         #animal id list?
         items = ('no','yes')
-        idchoice, okPressed = QInputDialog.getItem(self, "Input 3. Do you want output to only contain certain individuals?",'use animal id list?',items,0,False)
+        idchoice, okPressed = QInputDialog.getItem(self, "Input #3", "Do you want output to only contain certain individuals? \n Yes or No?",items,0,False)
         if idchoice and okPressed:
             print("{0} subset list".format(idchoice))
         if idchoice == 'yes':
@@ -228,7 +236,7 @@ class App(QWidget):
             pass
 
         #ask for name of output
-        outname, okPressed = QInputDialog.getText(self, "Input 4. Prefix for output file.",'name',QLineEdit.Normal,"")
+        outname, okPressed = QInputDialog.getText(self, "Input #4", "Prefix for output file",QLineEdit.Normal,"")
 
         #import safety csv if safety selected
         if safety == 'yes':

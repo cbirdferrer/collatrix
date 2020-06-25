@@ -4,7 +4,8 @@ import numpy as np
 import os, sys
 import math
 from scipy.integrate import quad
-from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox, QLabel, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
 class App(QWidget):
@@ -23,6 +24,13 @@ class App(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.show()
 
+        #add message box with link to github documentation
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("For detailed input info click link below")
+        msgBox.setTextFormat(QtCore.Qt.RichText)
+        msgBox.setText('<a href = "https://github.com/cbirdferrer/collatrix">CLICK HERE</a> for detailed input instructions, \n then click on OK button to continue')
+        x = msgBox.exec_()
+
         #####INPUTS#####
         #get file containing board img list w/
         options = QFileDialog.Options()
@@ -37,11 +45,11 @@ class App(QWidget):
         print("image csv = {0}".format(img_csv))
 
         #what did they name the length of the board
-        n, okPressed = QInputDialog.getText(self, "Input 3. What did you name the board length measurement?","Board Length Name:", QLineEdit.Normal, "")
+        n, okPressed = QInputDialog.getText(self, "Input 3", "What did you name the board length measurement? \n Board Length Name:", QLineEdit.Normal, "")
         if okPressed and n != '':
             bl_name= str(n)
 
-        n, okPressed = QInputDialog.getText(self, "Input 4. What is the true length of the calibration object (in meters)?","Calibration Object Length", QLineEdit.Normal, "")
+        n, okPressed = QInputDialog.getText(self, "Input 4", "What is the true length of the calibration object (in meters)?", QLineEdit.Normal, "")
         if okPressed and n != '':
             ob_l= float(n)
 
