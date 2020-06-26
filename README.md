@@ -185,6 +185,16 @@ The output of this function will be the `collatrix` output with added columns. I
 ## Demo
 A demonstration is available in the [demo](https://github.com/cbirdferrer/collatrix/tree/master/demo) directory. The demo includes a separate README file with instructions for what inputs to use.
 
+### Automated Testing
+A GitHub Action has been set up to test the main `collatrix` function when an update is pushed to the master branch using `pytest`. If you are working on editing `collatrix` and would like to run the automated tests locally, open a terminal or command prompt window, then change the directory (`cd`) to the folder where you have cloned `collatrix` to, then type `pytest`, the test should then run.
+
+For example:
+
+```
+(base) :~ user$ cd github/collatrix
+(base) :collatrix user$ pytest
+```
+
 # Attribution
 If you use this software please cite our paper.
 
