@@ -1,4 +1,3 @@
-#requirements.txt
 - numpy
 - pandas
 - pyqt=5
