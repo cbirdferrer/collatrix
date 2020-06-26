@@ -28,7 +28,7 @@ class App(QWidget):
         msgBox = QMessageBox()
         msgBox.setWindowTitle("For detailed input info click link below")
         msgBox.setTextFormat(QtCore.Qt.RichText)
-        msgBox.setText('<a href = "https://github.com/cbirdferrer/collatrix">CLICK HERE</a> for detailed input instructions, \n then click on OK button to continue')
+        msgBox.setText('<a href = "https://github.com/cbirdferrer/collatrix#altitude-calibration-function">CLICK HERE</a> for detailed input instructions, \n then click on OK button to continue')
         x = msgBox.exec_()
 
         #####INPUTS#####
