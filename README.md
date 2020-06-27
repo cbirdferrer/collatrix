@@ -20,7 +20,7 @@ To jump to the whale body condition function instructions click [here](https://g
   conda install -c cbird collatrix
   ```
 
-  Note that `collatrix` can be installed and run in the same environment as `morphometrix`.
+  Note that `collatrix` can be installed and run in the same [environment](https://github.com/wingtorres/morphometrix#installation) as `morphometrix`.
 
 ## Running
 After the package has been installed in your preferred environment enter this command
