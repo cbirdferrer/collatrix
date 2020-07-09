@@ -1,7 +1,8 @@
 # CollatriX
- This function collates the csv outputs from the MorphoMetriX photogrammetry GUI (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.
+[![DOI](https://zenodo.org/badge/243385218.svg)](https://zenodo.org/badge/latestdoi/243385218)  
 
 ## Background
+This function collates the csv outputs from the MorphoMetriX photogrammetry GUI (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.  
 CollatriX was designed with several add-ons. A figure showing the different routes available is included below:  
 ![alt text](https://github.com/cbirdferrer/collatrix/blob/master/images/Figure1.png)
 
