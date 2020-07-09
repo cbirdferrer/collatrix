@@ -1,5 +1,5 @@
 # CollatriX
-[![DOI](https://zenodo.org/badge/243385218.svg)](https://zenodo.org/badge/latestdoi/243385218)  
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.02328/status.svg)](https://doi.org/10.21105/joss.02328) [![DOI](https://zenodo.org/badge/243385218.svg)](https://zenodo.org/badge/latestdoi/243385218)  
 
 ## Background
 This function collates the csv outputs from the MorphoMetriX photogrammetry GUI (https://github.com/wingtorres/morphometrix) into one large single data frame containing the image, animal ID, measurements, and notes.  
@@ -197,13 +197,14 @@ For example:
 ```
 
 # Attribution
-If you use this software please cite our paper.
+If you use this software please cite our paper:  
+*Bird et al., (2020). CollatriX: A GUI to collate MorphoMetriX outputs. Journal of Open Source Software, 5(51), 2328, https://doi.org/10.21105/joss.02328*
 
-Additionally, if you used `collatrix.whale_bc` to measure cetacean body condition:
-* Cite Christiansen et al. (2018) for Body Volume  
+Additionally:
+* if you used `collatrix.whale_bc` to calculate Body Volume cite:
 *Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. Maternal body size and condition determine calf growth rates in southern right whales (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 
-* Cite Burnett et al. (2018) for Body Area Index  
+* if us used `collatrix.whale_bc ` to calculate BAI or `collatrix.altitude_calib` for the altitude calibration cite: 
 *Burnett, Jonathan D., Leila Lemos, Dawn Barlow, Michael G. Wing, Todd Chandler, and Leigh G. Torres. 2018. “Estimating Morphometric Attributes of Baleen Whales with Photogrammetry from Small UASs: A Case Study with Blue and Gray Whales.” Marine Mammal Science 35 (1): 108–39. https://doi.org/10.1111/mms.12527.*
 
 # Contributing
