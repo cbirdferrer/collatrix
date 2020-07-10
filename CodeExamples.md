@@ -6,7 +6,7 @@ In this example, the outputs were stored in a file structure that looked like th
 GUI FOLD     
      YYMMDD    
           Flight Number     
-               Whale ID       
+               whale ID       
                     img.csv        
                     img.csv    
 ```
@@ -34,7 +34,7 @@ If, however, you had calibration files and measured animal files nested in the s
 
 ```
 Flight Number
-     Whale ID
+     whale ID
      Calibration  
 ```
 
