@@ -1,13 +1,15 @@
 # Example Setup Code
 Many of the inputs to  `CollatriX` are image lists. `CollatriX` can work with files saved in any file structure. However, if you still need to make a list and don't want to go through the tedious process of making it manually, here's some example code written for previous projects to make the **Image** column of the input lists. Even if it's not exactly what you're looking for, we hope it's a useful starting off point.
 
-In this example, the outputs were stored in a file structure that looked like this:
-**GUI FOLD**
-      * YYMMDD
-            * Flight Number
-                  * Whale ID
-                        * img.csv
-                        * img.csv
+In this example, the outputs were stored in a file structure that looked like this:  
+```
+GUI FOLD     
+     YYMMDD    
+          Flight Number     
+               Whale ID       
+                    img.csv        
+                    img.csv    
+```
 
 So I also used the folders to create the Date and Flight columns for the altitude calibration.
 ```
@@ -30,9 +32,11 @@ for r,d,f in os.walk(wd):
 ```
 If, however, you had calibration files and measured animal files nested in the same structure.  
 
-* Flight Number
-      * Whale ID
-      * Calibration  
+```
+Flight Number
+     Whale ID
+     Calibration  
+```
 
 Then you could add a statement:
 ```
@@ -58,4 +62,8 @@ dfb['csv'] = [i[1].replace(".csv",".png") for i in dfb['split']]
 dfb['Flight'] = [os.path.split(os.path.split(i[0])[0])[1] for i in dfb['split']]
 #isolate the date
 dfb['Date'] = [os.path.split(os.path.split(os.path.split(i[0])[0])[0])[1] for i in dfb['split']]
+
+#finally export dataframe to csv
+outname = os.path.join(wd,"imagelist.csv")
+dfb.to_csv(outname,sep=',')
 ```
