@@ -195,6 +195,8 @@ For example:
 (base) :~ user$ cd github/collatrix
 (base) :collatrix user$ pytest
 ```
+## Example Code
+We've put together a document with example code used while setting up the input files. Check it out [here](https://github.com/cbirdferrer/collatrix/blob/master/CodeExamples.md)
 
 # Attribution
 If you use this software please cite our paper:  
