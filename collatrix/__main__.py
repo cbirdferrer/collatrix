@@ -27,32 +27,29 @@ def anydup(l): #we'll use this function later to check for duplicates
         if x in seen: return True
         seen.add(x)
     return False
-##function that reads in the csvs as one column and then splits
-def readfile(f):
-    temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #read in csv as one column
-    df00=temp.X0.str.split(',',expand=True) #split rows into columns by delimeter
-    df00 = df00.replace("",np.nan)
-    df0 = df00.dropna(how='all',axis = 'rows')
-    df0 = df0.fillna('') #replace nans by blank space
-    return df0
-##function the resets header
-def fheader(df):
-    head = df.iloc[0] #make list out of names in first row
-    df = df[1:] #take the data less the header row
-    df.columns = head #set the header row as the df header
-    return(df)
 ##this is the function that does the collating
 #set up list of constants
 constants = ['Image ID', 'Image Path', 'Focal Length', 'Altitude', 'Pixel Dimension']
 def collate(csvs,measurements,nonPercMeas,df_L,safety,anFold):
-    for f in csvs:
+    for f in csvs: #first loop through all the csvs pulls the measurement names
         print(f)
-        df0 = readfile(f)
+        temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"']) #read in csv as one column
+        df00=temp.X0.str.split(',',expand=True) #split rows into columns by delimeter
+        df00 = df00.replace("",np.nan)
+        df0 = df00.dropna(how='all',axis = 'rows')
+        df0 = df0.fillna('') #replace nans by blank space
         idx = df0.loc[df0[0] == 'Object'].index #find index (row) values of 'Object'
         df = df0.truncate(before=idx[0]) #take subset of df starting at first row containing Object
-        df = fheader(df)
+        head = df.iloc[0] #make list out of names in first row
+        df = df[1:] #take the data less the header row
+        df.columns = head #set the header row as the df header
 
-        #make list of Length measurements
+        wlist = df.iloc[0] #make list of all the width types
+        widths = []
+        for ww in wlist: #loop through widths row to make sure only widths are in list
+            if "Width" in str(ww):
+                widths += [str(ww)]
+
         l = df['Object'].tolist() #make list of Object columns aka. names of measurements made
         l = [x for x in l if pd.isna(x) == False] #eliminate all empty cells
         l = [x for x in l if x not in constants and x != 'Object'] #elimate all other instances of Object
@@ -61,35 +58,23 @@ def collate(csvs,measurements,nonPercMeas,df_L,safety,anFold):
         measurements = measurements + l #add the measurement names to the master list
         nonPercMeas = nonPercMeas + l #copy of the master list that does not include widths
 
-        #make list of Width measurements
-        iwx = df.loc[df['Widths (%)'].str.contains("Width")].index.tolist()
-        for ix,iw in enumerate(iwx):
-            if ix +1 < len(iwx):
-                iw1 = iwx[ix+1]-1
-            else:
-                iw1 = len(df0)
-            dfw = df.truncate(before=iw,after=iw1)
-            head = dfw.iloc[0] #make list out of names in first row
-            dfw = dfw[1:] #take the data less the header row
-            dfw.columns = head #set the header row as the df header
+        new_header = df.columns[0:2].values.tolist() + df.iloc[0,2:].values.tolist() #merge header with width names
+        df = df[1:] #cut header row off
+        df.columns = new_header #make the updated list the new header
 
-            dfw = dfw.set_index(dfw.iloc[:,0]) #set Object column as the index
-            dfw = dfw.replace(r'^\s*$', np.nan, regex=True) #replace blank space with nan
+        df = df.set_index('Object') #set Object column as the index
+        df = df.replace(r'^\s*$', np.nan, regex=True) #replace blank space with nan
 
-            widths = dfw.columns.tolist()
-            widths = [x for x in widths if x != ""]
-
-            if anydup(l) == True: #check for any duplicate measurement names, if exists, exit code, print error msg
-                print("please check file {0} for duplicate Objects and remove duplicates".format(f))
-                sys.exit("remove duplicate and run script again")
-            elif anydup(l) == False:
-                for i in l: #loop through list of measurement types
-                    if i in dfw.index:
-                        for w in (w for w in widths if w[0].isdigit()): #loop through the widths
-                            x = dfw.loc[i,w] #extract cell value of width of measurement type
-                            if pd.isna(x) == False: #if the cell isn't empty
-                                ww = i + "-" + w #combine the names
-                                measurements += [ww] #add this combined name to the master list
+        if anydup(l) == True: #check for any duplicate measurement names, if exists, exit code, print error msg
+            print("please check file {0} for duplicate Objects and remove duplicates".format(f))
+            sys.exit("remove duplicate and run script again")
+        elif anydup(l) == False:
+            for i in l: #loop through list of measurement types
+                for w in (w for w in widths if w[0].isdigit()): #loop through the widths
+                    x = df.loc[i,w] #extract cell value of width of measurement type
+                    if pd.isna(x) == False: #if the cell isn't empty
+                        ww = i + "-" + w #combine the names
+                        measurements += [ww] #add this combined name to the master list
 
     #now we're going to set up a dictionary to fill in with all the measurements
     #that we will eventually turn into a dataframe where the keys are the columns
@@ -103,8 +88,14 @@ def collate(csvs,measurements,nonPercMeas,df_L,safety,anFold):
 
     rawMM = set(rawM) #get unique list of measurements
 
-    for f in csvs:
-        df0 = readfile(f)
+    for f in csvs: #this second loop now goes back through the csvs and pulls the measurement values
+        print(f)
+        #pull the initial values i.e image, ID, alt, focal length
+        temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"'])#import as one column
+        df1=temp.X0.str.split(',',expand=True) #split on comma delimeter
+        df00 = df1.replace("",np.nan)
+        df0 = df00.dropna(how='all',axis = 'rows')
+        df0 = df0.fillna('') #replace nans by blank space
         idx = df0.loc[df0[0]=='Object'].index #set object column to index
         df = df0.truncate(after=idx[0]) #subset df to be only top info section
 
@@ -131,6 +122,23 @@ def collate(csvs,measurements,nonPercMeas,df_L,safety,anFold):
         notes = df[df[0] == 'Notes'].loc[:,[1]].values[0] #extract entered notes
         mDict['Notes'] = notes[0]
 
+        dfGUI = df0.truncate(before=idx[0]) #now subset the df so we're just looking at the measurements
+        #if the rows are weird because widths were measured make a new header
+        if any("% Width" in k for k in keys):
+            head = dfGUI.iloc[0] #isolate the current header row
+            dfGUI = dfGUI[1:] #chop off the top 2 rows
+            dfGUI.columns = head #make the header the original header
+            new_headerG = dfGUI.columns[0:2].values.tolist() + dfGUI.iloc[0,2:].values.tolist() #merge header with width names
+            dfGUI = dfGUI[1:] #take the data minus the header row
+            dfGUI.columns = new_headerG #reset the headers to this created version
+        #if widths were not measured no need for the weird new header
+        else:
+            head = dfGUI.iloc[0]
+            dfGUI = dfGUI[0:]
+            dfGUI.columns = head
+
+        dfGUI = dfGUI.set_index('Object') #make index column the one named Object
+
         if safety == 'yes': #pull the altitude, focal length, and pix d from the safety csv by image name
             alt_act = float(df_L[df_L.Image == image].loc[:,'Altitude'].values[0]) #this says: find row where image = image and pull altitude
             foc_act = float(df_L[df_L.Image == image].loc[:,'Focal_Length'].values[0])
@@ -138,52 +146,31 @@ def collate(csvs,measurements,nonPercMeas,df_L,safety,anFold):
         else:
             pass
 
-        dfg = df0.truncate(before=idx[0]) #look at part of dataframe that contains measurment data
-        dfg = fheader(dfg) #reset the header
-        iwx = dfg.loc[dfg['Widths (%)'].str.contains("Width")].index.tolist() #find all rows containing the names of the widths measured
-        if len(iwx) == 0: iwx = [0] #if no widths were measured, make index list just 0
-        else: iwx = iwx
-        dfgg = dfg.set_index(dfg.iloc[:,0]) #make the index the Object column
+        for key in keys: #loop through the keys aka future column headers
+            if key in nonPercMeas: #if that key is in the list of measurement types (not widths)
+                if key in dfGUI.index: #if that key (measurement) is in this csv
+                    x = float(dfGUI.loc[key,'Length (m)']) #extract the measurement value using location
+                    if safety == 'yes': # now is the time to do the back calculations
+                        pixc = (x/pixd)*(focl/alt) #back calculate the pixel count
+                        xx = ((alt_act/foc_act)*pixd_act)*pixc #recalculate using the accurate focal length and altitude
+                    elif safety == 'no':
+                        xx = x
+                else: #if this key is not in the csv
+                    xx = np.nan
+                mDict[key] = xx #add the value to the respective key
+            elif "%" in key and key.split("-")[0] in dfGUI.index: #if the key is a width
+                row = key.split("-")[0] #split the name of the measurement
+                col = key.split("-")[1] #to get the row and column indices
+                y = float(dfGUI.loc[row,col]) #to extract the measurement value
+                if safety == 'yes': #back calculate and recalculate
+                    pixc = (y/pixd)*(focl/alt) #back calculate the pixel count
+                    yy = ((alt_act/foc_act)*pixd_act)*pixc #recalculate using the accurate focal length and altitude
+                elif safety == 'no':
+                    yy = y
+                mDict[key] = yy
+            elif key not in dfGUI.index and key not in names: #if measurement not in this csv
+                mDict[key] = np.nan
 
-        for ix,iw in enumerate(iwx): #loop through and make a dataframe for each section of measured widths
-            if ix +1 < len(iwx): #if there's an index following the current one
-                iw1 = iwx[ix+1]-1 #make the bottom cutoff the next row
-            else: #if there is no next width rows
-                iw1 = len(df0) #make the bottom cutoff the bottom of the dataframe
-            dfw = dfg.truncate(before=iw,after=iw1) #truncate the dataframe to contain just a set of wdiths
-            dfGUI = dfw.set_index(dfw.iloc[:,0]) #set Object column as the index
-            dfGUI = dfGUI.replace(r'^\s*$', np.nan, regex=True) #replace blank space with nan
-
-            for key in keys: #loop through the keys aka future column headers
-                #for the non-width measurements, use full dataframe
-                if key in nonPercMeas: #if that key is in the list of measurement types (not widths)
-                    if key in dfgg.index: #if the key is in the index of the full dataframe
-                        x = float(dfgg.loc[key,'Length (m)']) #extract the measurement value using location
-                        if safety == 'yes': # now is the time to do the back calculations
-                            pixc = (x/pixd)*(focl/alt) #back calculate the pixel count
-                            xx = ((alt_act/foc_act)*pixd_act)*pixc #recalculate using the accurate focal length and altitude
-                        elif safety == 'no':
-                            xx = x
-                    elif key not in dfgg.index: #if this key is not in the csv
-                        xx = np.nan
-                    mDict[key] = xx #add the value to the respective key
-                #for the width measurements, use the truncated dataframes
-                elif "%" in key:
-                    if key.split("-")[0] in dfGUI.index: #if the key is a width
-                        head = dfGUI.iloc[0] #make list out of names in first row
-                        dfG = dfGUI[1:] #take the data less the header row
-                        dfG.columns = head #set the header row as the df header
-                        row = key.split("-")[0] #split the name of the measurement
-                        col = key.split("-")[1] #to get the row and column indices
-                        y = float(dfG.loc[row,col]) #to extract the measurement value
-                        if safety == 'yes': #back calculate and recalculate
-                            pixc = (y/pixd)*(focl/alt) #back calculate the pixel count
-                            yy = ((alt_act/foc_act)*pixd_act)*pixc #recalculate using the accurate focal length and altitude
-                        elif safety == 'no':
-                            yy = y
-                    elif key.split("-")[0] not in dfGUI.index:
-                        yy = np.nan
-                    mDict[key] = yy
 
         df_op = pd.DataFrame(data = mDict,index=[1]) #make dictionary (now filled with the measurements from this one csv) into dataframe
         df_all = pd.concat([df_all,df_op],sort = True) # add this dataframe to the empty one with all the measurements as headers
