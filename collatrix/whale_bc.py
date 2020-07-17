@@ -47,7 +47,7 @@ class App(QWidget):
         message = []
         #ask if they want body Volume
         items = ('yes','no')
-        volchoice, okPressed = QInputDialog.getItem(self, 'Input 2', 'Do you want body volume to be calculated? (width measurements required)',items,0,False)
+        volchoice, okPressed = QInputDialog.getItem(self, 'Input 2.', 'Do you want body volume to be calculated? (width measurements required)',items,0,False)
         if okPressed and volchoice:
             print("{0} body volume calculated".format(volchoice))
 
@@ -65,12 +65,14 @@ class App(QWidget):
             if okPressed and i != '':
                 interval = int(i)
             print("for body volume: length name = {0}, lower bound = {1}, upper bound = {2}, interval = {3}".format(tl_name,lower,upper,interval))
+            volmess = "for body volume: length name = {0}, lower bound = {1}, upper bound = {2}, interval = {3}".format(tl_name,lower,upper,interval)
         elif volchoice == 'no':
+            volmess = "no body volume calculated"
             pass
 
         #ask if they want BAI
         items = ('yes','no')
-        baichoice, okPressed = QInputDialog.getItem(self, 'Input 3", "Do you want BAI to be calculated? (you have to have measured Total_Length widths)',items,0,False)
+        baichoice, okPressed = QInputDialog.getItem(self, 'Input 3', "Do you want BAI to be calculated? (you have to have measured Total_Length widths)",items,0,False)
         if okPressed and baichoice:
             print("{0} BAI calculated".format(baichoice))
         if baichoice == 'yes':
@@ -93,7 +95,9 @@ class App(QWidget):
             if okPressed and i != '':
                 b_interval = int(i)
             print("for BAI: length name = {0}, lower bound = {1}, upper bound = {2}, interval = {3}".format(tl_name,b_lower,b_upper,b_interval))
+            baimess = "for BAI: length name = {0}, lower bound = {1}, upper bound = {2}, interval = {3}".format(tl_name,b_lower,b_upper,b_interval)
         elif baichoice == 'no':
+            baimess = 'no BAI calculated'
             pass
 
         #ask for name of output
@@ -105,6 +109,12 @@ class App(QWidget):
         saveFold = QFileDialog.getExistingDirectory(None, "Input 5: folder where output should be saved",options=options)
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
+
+        #set up output with inputs
+        message = "Whale Body Condition Processing Inputs: {0}, {1}".format(volmess,baimess)
+        mess = pd.DataFrame(data={'Processing Notes':message},index=[1])
+        mess_out = os.path.join(saveFold,"{0}_processing_notes.txt".format(outname))
+        mess.to_csv(mess_out)
 
         #functions
         def body_vol(df_all,tl_name,interval,lower,upper):

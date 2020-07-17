@@ -289,6 +289,29 @@ class App(QWidget):
         not_mmx += [x for x in csvs if x not in csvs_all]
         print("these csvs were not morphometrix outputs: {0}".format(not_mmx))
 
+        #check for csvs that (for whatever reason) hit an error when being read in.
+        #makes a list of those csvs for users to examine
+        badcsvs = []
+        for f in csvs:
+            try:
+                temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python') #read in csv as one column
+            except:
+                print(f)
+                badcsvs += [f]
+                pass
+        badcsvs = set(badcsvs)
+        csvs = [x for x in csvs if x not in badcsvs]
+
+        #put together dataframe of inputs and error csvs to output
+        if safety == 'yes':
+            message = "Animal ID from folder name?: {0} \n\nThe safety file was: {1}\n\n\nThese csvs were not morphometrix outputs:{2}\n\nThese csvs could not be read in: {3}".format(anFold, safe_csv, not_mmx, badcsvs)
+        elif safety == 'no':
+            message = "Animal ID from folder name?: {0} \n\nSafety not used\n\n\nThese csvs were not morphometrix outputs:{1}\n\nThese csvs could not be read in: {2}".format(anFold, not_mmx, badcsvs)
+
+        mess = pd.DataFrame(data={'Processing Notes':message},index=[1])
+        mess_out = os.path.join(saveFold,"{0}_processing_notes.txt".format(outname))
+        mess.to_csv(mess_out)
+
         #run the collate function, get collated csv
         df_allx = collate(csvs,measurements,nonPercMeas,df_L,safety,anFold) #run collating function
 
