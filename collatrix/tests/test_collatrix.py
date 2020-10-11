@@ -27,8 +27,9 @@ nonPercMeas = []
 df_L = pd.read_csv("https://raw.githubusercontent.com/cbirdferrer/collatrix/master/demo/demo_safety.csv")
 safety = "yes"
 anFold = 'no'
+constants = ['Image ID', 'Image Path', 'Focal Length', 'Altitude', 'Pixel Dimension']
 
 def test_col():
-    dfx = collate(csvs,measurements,nonPercMeas,df_L,safety,anFold)
+    dfx = collate(csvs,constants,measurements,nonPercMeas,df_L,safety,anFold)
     return(print(dfx))
     assert dfx.empty == False
