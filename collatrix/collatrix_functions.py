@@ -163,6 +163,7 @@ def collate(csvs,constants,measurements,nonPercMeas,df_L,safety,anFold):
                             xx = x
                     elif key not in dfgg.index: #if this key is not in the csv
                         xx = np.nan
+                        pixc = np.nan
                     mDict[key] = xx #add the value to the respective key
                     mDict_pixc["{0}.PixCount".format(key)] = pixc #add pixel count to respecitive key in pixel count dataframe
                 #for the width measurements, use the truncated dataframes
@@ -191,7 +192,7 @@ def collate(csvs,constants,measurements,nonPercMeas,df_L,safety,anFold):
         df_all_pixc = pd.concat([df_all_pixc,df_dict_pixc],sort = True) #add this dataframe to the empty one with all the measurements as headers
 
     df_allx = df_all.drop(columns = ['Altitude','Focal Length','PixD']).replace(np.nan,0) #drop non-measurement cols
-    df_allx_pixc = df_all_pixc.replace(np.nan,0) #replace nans with 0 for grouping in final formatting)
+    df_allx_pixc = df_all_pixc.drop(columns = ['Altitude','Focal Length','PixD']).replace(np.nan,0) #replace nans with 0 for grouping in final formatting)
     return df_allx, df_allx_pixc
 
 #format the dataframe after collating
