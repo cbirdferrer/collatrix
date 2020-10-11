@@ -20,11 +20,12 @@ from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFil
 from PyQt5.QtGui import QIcon
 
 #import functions
-from collatrix_functions import anydup
-from collatrix_functions import readfile
-from collatrix_functions import fheader
-from collatrix_functions import collate
-from collatrix_functions import df_formatting
+import collatrix.collatrix_functions
+from collatrix.collatrix_functions import anydup
+from collatrix.collatrix_functions import readfile
+from collatrix.collatrix_functions import fheader
+from collatrix.collatrix_functions import collate
+from collatrix.collatrix_functions import df_formatting
 
 class App(QWidget):
 
