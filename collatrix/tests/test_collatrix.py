@@ -2,9 +2,9 @@ import pytest
 import pandas as pd
 import os,sys
 import numpy as np
-import collatrix.__main__
-from collatrix.__main__ import anydup
-from collatrix.__main__ import collate
+import collatrix.collatrix_functions
+from collatrix.collatrix_functions import anydup
+from collatrix.collatrix_functions import collate
 
 def test_dup():
     l = ['a','b']
