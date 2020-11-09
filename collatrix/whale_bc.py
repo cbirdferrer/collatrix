@@ -9,9 +9,10 @@ from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFil
 from PyQt5.QtGui import QIcon
 
 #import functions
-from bodycondition_functions import body_vol
-from bodycondition_functions import bai_parabola
-from bodycondition_functions import bai_trapezoid
+import collatrix.bodycondition_functions
+from collatrix.bodycondition_functions import body_vol
+from collatrix.bodycondition_functions import bai_parabola
+from collatrix.bodycondition_functions import bai_trapezoid
 
 class App(QWidget):
 
