@@ -36,14 +36,14 @@ def body_vol(df_all,tl_name,interval,lower,upper):
     v = p1[:,None]*p2 #calculate the volume of each frustrum
     vsum = np.nansum(v,axis=1) #sum all frustrums per ID
     vol_arr = np.column_stack((ids,vsum)) #make 2D array (df) of IDs and volumes
-    dfvx = pd.DataFrame(data=vol_arr,columns=["index",body_name]) #convert array to dataframe
+    dfvx = pd.DataFrame(data=vol_arr,columns=["Animal_ID",body_name]) #convert array to dataframe
     #check for duplicates and group
     cls = dfvx.columns.tolist() #get list of column headers
-    grBy = ['index'] #list of columns to group by
+    grBy = ['Animal_ID','Image'] #list of columns to group by
     groups = [x for x in cls if x not in grBy] #get list of columns to be grouped
-    df1 = dfvx.groupby(['index'])[groups].apply(lambda x: x.astype(float).sum()).reset_index() #group to make sure no duplicates
-
-    return df1
+    df1 = dfvx.groupby(['Animal_ID','Image'])[groups].apply(lambda x: x.astype(float).sum()).reset_index() #group to make sure no duplicates
+    df_vol = pd.merge(df_all,df1,on = ['Animal_ID','Image']) #merge volume df with big df
+    return df_vol
 
 #BAI from parabola functions
 def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
@@ -85,10 +85,9 @@ def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
     bai_arr = np.column_stack((ids,bais,sas))
     dfb = pd.DataFrame(data = bai_arr,columns= ['index',bai_name,sa_name])
     cls = dfb.columns.tolist()
-    grBy = ['index']
+    grBy = ['Animal_ID','Image'] #list of columns to group by
     groups = [x for x in cls if x not in grBy]
-    dfp = dfb.groupby(['index'])[groups].apply(lambda x: x.astype(float).sum()).reset_index()
-
+    dfp = dfb.groupby(["Animal_ID",'Image'])[groups].apply(lambda x: x.astype(float).sum()).reset_index()
     return dfp
 
 #BAI trapezoid function
