@@ -141,6 +141,11 @@ class App(QWidget):
         elif baichoice == 'no':
             df_all1 = df_allx
 
+        if 'index' in df_all1.columns:
+            df_all1 = df_all1.drop(['index'],axis=1)
+        else:
+            df_all1 = df_all1
+
         outcsv = os.path.join(saveFold,"{0}_bodycondition.csv".format(outname))
         df_all1.to_csv(outcsv,sep = ',',index_label = 'IX')
 
