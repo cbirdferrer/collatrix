@@ -24,7 +24,8 @@ def body_vol(df_all,tl_name,interval,lower,upper):
     vlist = ['index',tl_name]
     vlist.extend(cc)
     ##calculate body col
-    df1 = df_all[vlist] #subset dataframe to just columns we want to use
+    df_all_ix['index'] = df_all['Animal_ID']+"*"+df_all['Image'] #make column thats Image and AID combined
+    df1 = df_all_ix[vlist] #subset dataframe to just columns we want to use
     df1['spacer'] = np.NaN #add row of nans, we need this for the roll
     dfnp = np.array(df1) #convert dataframe to a numpy array
     ids = dfnp[:,0] #isolate array of just IDs
@@ -36,7 +37,11 @@ def body_vol(df_all,tl_name,interval,lower,upper):
     v = p1[:,None]*p2 #calculate the volume of each frustrum
     vsum = np.nansum(v,axis=1) #sum all frustrums per ID
     vol_arr = np.column_stack((ids,vsum)) #make 2D array (df) of IDs and volumes
-    dfvx = pd.DataFrame(data=vol_arr,columns=["Animal_ID",body_name]) #convert array to dataframe
+    dfvx = pd.DataFrame(data=vol_arr,columns=["index",body_name]) #convert array to dataframe
+    #make Animal_ID and Image columns again and drop index
+    dfvx['Animal_ID'] = [x.split("*")[0] for x in dfvx['index']]
+    dfvx['Image'] = [x.split("*")[1] for x in dfvx['index']]
+    dfvx = dfvx.drop(["index"],axis=1)
     #check for duplicates and group
     cls = dfvx.columns.tolist() #get list of column headers
     grBy = ['Animal_ID','Image'] #list of columns to group by
@@ -64,10 +69,11 @@ def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
     blist = []
     blist.extend(cc)
     #calculate BAI
-    npy = np.array(df_all[bai]) #make array out of width values to be used
-    ids = np.array(df_all['index'])
+    df_all_ix['index'] = df_all['Animal_ID']+"*"+df_all['Image'] #make column thats Image and AID combined
+    npy = np.array(df_all_ix[bai]) #make array out of width values to be used
+    ids = np.array(df_all_ix['index'])
     plist = np.array(perc_l) #make array of the percents
-    npTL = np.array(df_all['TL']) #make array of the total lengths
+    npTL = np.array(df_all_ix['TL']) #make array of the total lengths
     x = np.tile(npTL.reshape(npTL.shape[0],-1), (1,plist.size)) #make a 2D array of TL's repeating to be multiplied with the percs
     npx = x * plist #make 2D array of the x values for the regression
     min_tl = npTL*(b_lower/100)
@@ -84,6 +90,9 @@ def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
     bais = (sas/((npTL*((b_upper-b_lower)/float(100)))**2))*100
     bai_arr = np.column_stack((ids,bais,sas))
     dfb = pd.DataFrame(data = bai_arr,columns= ['index',bai_name,sa_name])
+    dfb['Animal_ID'] = [x.split("*")[0] for x in dfb['index']]
+    dfb['Image'] = [x.split("*")[1] for x in dfb['index']]
+    dfb = dfb.drop(["index"],axis=1)
     cls = dfb.columns.tolist()
     grBy = ['Animal_ID','Image'] #list of columns to group by
     groups = [x for x in cls if x not in grBy]
