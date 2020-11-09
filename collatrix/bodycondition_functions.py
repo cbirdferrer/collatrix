@@ -24,7 +24,8 @@ def body_vol(df_all,tl_name,interval,lower,upper):
     vlist = ['index',tl_name]
     vlist.extend(cc)
     ##calculate body col
-    df_all_ix['index'] = df_all['Animal_ID']+"*"+df_all['Image'] #make column thats Image and AID combined
+    df_all_ix = df_all
+    df_all_ix['index'] = df_all_ix['Animal_ID']+"*"+df_all_ix['Image'] #make column thats Image and AID combined
     df1 = df_all_ix[vlist] #subset dataframe to just columns we want to use
     df1['spacer'] = np.NaN #add row of nans, we need this for the roll
     dfnp = np.array(df1) #convert dataframe to a numpy array
@@ -69,7 +70,8 @@ def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
     blist = []
     blist.extend(cc)
     #calculate BAI
-    df_all_ix['index'] = df_all['Animal_ID']+"*"+df_all['Image'] #make column thats Image and AID combined
+    df_all_ix = df_all
+    df_all_ix['index'] = df_all_ix['Animal_ID']+"*"+df_all_ix['Image'] #make column thats Image and AID combined
     npy = np.array(df_all_ix[bai]) #make array out of width values to be used
     ids = np.array(df_all_ix['index'])
     plist = np.array(perc_l) #make array of the percents
