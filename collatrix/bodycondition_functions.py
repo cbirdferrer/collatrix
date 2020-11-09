@@ -16,7 +16,7 @@ def body_vol(df_all,tl_name,interval,lower,upper):
     body_name = "BV_{0}".format(vname) #name of body volume column will use interval amount
     volm = [] #make empty list of widths
     #now fill list with the names of the width columns we want
-    volm += ["{0}.{1}.00..Width".format(tl_name,str(x)) for x in range(lower,(upper + interval), interval)]
+    volm += ["{0}-{1}.0% Width".format(tl_name,str(x)) for x in range(lower,(upper + interval), interval)]
     #check that those columns are in the dataframe
     colarr = np.array(df_all.columns)
     mask = np.isin(colarr,volm)
@@ -54,7 +54,7 @@ def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
     bai = [] #list of columns containing the width data we want to use to calculate BAI
     perc_l = []
     for x in range(b_lower,(b_upper + b_interval), b_interval): # loop through columns w/in range we want
-        xx = "{0}.{1}.00..Width".format(tl_name,str(x)).format(str(x)) #set up column name
+        xx = "{0}-{1}.0% Width".format(tl_name,str(x)).format(str(x)) #set up column name
         bai += [xx]
         perc_l += [x/100]
     #here we check that the widths are actually in the column headers
@@ -96,7 +96,7 @@ def bai_trapezoid(df_all,tl_name,b_interval,b_lower,b_upper):
     bai_name = "BAItrap_{0}%".format(b_interval) #create BAI column header using interval
     bai = [] #list of columns containing the width data we want to use to calculate BAI
     for x in range(b_lower,(b_upper + b_interval), b_interval): # loop through columns w/in range we want
-        xx = "{0}-{1}.0%".format(tl_name,str(x)) #set up column name
+        xx = "{0}-{1}.0% Width".format(tl_name,str(x)) #set up column name
         bai += [xx]
     blist = []
     for i in bai:
