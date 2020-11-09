@@ -11,7 +11,8 @@ import math
 from scipy.integrate import quad
 
 #body volume function
-def body_vol(df_all,tl_name,interval,lower,upper,vname):
+def body_vol(df_all,tl_name,interval,lower,upper):
+    vname = "{0}%".format(interval)
     body_name = "BV_{0}".format(vname) #name of body volume column will use interval amount
     volm = [] #make empty list of widths
     #now fill list with the names of the width columns we want
@@ -45,8 +46,9 @@ def body_vol(df_all,tl_name,interval,lower,upper,vname):
     return df1
 
 #BAI from parabola functions
-def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper,vname):
+def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
     df_all = df_all.dropna(how="all",axis='rows').reset_index()
+    vname = '{0}%'.format(b_interval)
     bai_name = "BAIpar_{0}".format(vname) #create BAI column header using interval
     sa_name = 'SA_{0}'.format(vname)
     bai = [] #list of columns containing the width data we want to use to calculate BAI
