@@ -26,7 +26,7 @@ For example:
 
 # Attribution
 If you use this software please cite our paper:  
-*Bird C. & Bierlich K., (2020). CollatriX: A GUI to collate MorphoMetriX outputs. Journal of Open Source Software, 5(51), 2328, https://doi.org/10.21105/joss.02328*
+*Bird C.N. & Bierlich K.C., (2020). CollatriX: A GUI to collate MorphoMetriX outputs. Journal of Open Source Software, 5(51), 2328, https://doi.org/10.21105/joss.02328*
 
 Additionally:
 * if you used `collatrix.whale_bc` to calculate Body Volume cite:
