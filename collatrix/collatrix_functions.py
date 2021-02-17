@@ -55,10 +55,10 @@ def collate(csvs,constants,measurements,nonPercMeas,df_L,safety,anFold):
         iwx = df.loc[df['Widths (%)'].str.contains("Width")].index.tolist()
 
         for ix,iw in enumerate(iwx):
-            if ix +1 < len(iwx):
-                iw1 = iwx[ix+1]-1
-            else:
-                iw1 = len(df0)
+            if ix +1 < len(iwx): #if there's more than one row containing Width headers
+                iw1 = iwx[ix+1]-1 #make the end row for this truncated df the last row before the next width headers
+            else: #if there's only one width header
+                iw1 = len(df0) #make the end row for this truncated df the last row of the df
             dfw = df.truncate(before=iw,after=iw1)
             head = dfw.iloc[0] #make list out of names in first row
             dfw = dfw[1:] #take the data less the header row
