@@ -24,6 +24,11 @@ import collatrix.collatrix_functions
 from collatrix.collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
 from collatrix.collatrix_functions import collate_v4and5, collate_v6
 
+
+# import v18_funcs
+# from v18_funcs import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
+# from v18_funcs import collate_v4and5, collate_v6
+
 class App(QWidget):
 
     def __init__(self):
@@ -46,6 +51,16 @@ class App(QWidget):
         msgBox.setTextFormat(QtCore.Qt.RichText)
         msgBox.setText('<a href = "https://github.com/cbirdferrer/collatrix#inputs">CLICK HERE</a> for detailed input instructions, \n then click on OK button to continue')
         x = msgBox.exec_()
+
+        ####### FOR TESTING ###########
+        # anFold = 'no'
+        # safety = 'no'
+        # df_L = 'no safety'
+        # idchoice = 'no'
+        # outname = 'test2'
+        # GUIfold = r'/Users/clarabird/Box Sync/marrs_misc/collatrix gui/troubleshooting for Jake Linksy/KC_multiversion'
+        # saveFold = r'/Users/clarabird/Box Sync/marrs_misc/collatrix gui/troubleshooting for Jake Linksy'
+        #############################
 
         #do you want the Animal ID to be assigned based on the name of the folder
         items = ('yes', 'no')
@@ -196,6 +211,10 @@ class App(QWidget):
             df_all1 = pd.concat([df_all1,v6_all])
             df_all1_pc = pd.concat([df_all1_pc,v6_all_pixc])
         else: pass
+
+        print(v4csvs)
+        print(v5csvs)
+        print(v6csvs)
 
         #now we group by ID and image just incase multiple images were measured for the same animal
         #this would combine those measurements (it's why I replaced nans with 0)
