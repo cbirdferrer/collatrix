@@ -45,7 +45,7 @@ def lmeas(df, object, constants):
     return(l)
 
 #function that uses anydup and makes list of width measurements
-def wmeas(df,l,widths):
+def wmeas(df,l,widths,f):
     wlist = []
     if anydup(l) == True: #check for any duplicate measurement names, if exists, exit code, print error msg
         print("please check file {0} for duplicate Object Names and remove duplicates".format(f))
@@ -156,7 +156,7 @@ def collate_v4and5(csvs, object, length, constants,safety,df_L,measurements, non
         df = df.set_index(object)
         df = df.replace('nan',np.nan,regex=True)
 
-        wlist = wmeas(df,l,widths)
+        wlist = wmeas(df,l,widths,f)
         measurements = measurements + wlist
 
     measurements,names,mDict,mDict_pixc,keys,keys_pixc,df_all,df_all_pixc = setup(measurements)
@@ -247,7 +247,7 @@ def collate_v6(csvs, object, length, constants,safety,df_L,measurements, nonPerc
             widths = dfw.columns.tolist()
             widths = [x for x in widths if x != ""]
 
-            wlist = wmeas(dfw,l,widths)
+            wlist = wmeas(dfw,l,widths,f)
 
             measurements = measurements + wlist
 
