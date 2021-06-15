@@ -3,8 +3,8 @@ import pandas as pd
 import os,sys
 import numpy as np
 import collatrix.collatrix_functions
-from collatrix.collatrix_functions import anydup
-from collatrix.collatrix_functions import collate
+from collatrix.collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
+from collatrix.collatrix_functions import collate_v4and5, collate_v6
 
 def test_dup():
     l = ['a','b']
