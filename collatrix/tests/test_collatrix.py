@@ -30,6 +30,6 @@ anFold = 'no'
 constants = ['Image ID', 'Image Path', 'Focal Length', 'Altitude', 'Pixel Dimension']
 
 def test_col():
-    dfx = collate_v6(v6csvs, 'Object',  'Length (m)',constants,safety,df_L,measurements, nonPercMeas, anFold)
+    dfx = collate_v6(csvs, 'Object',  'Length (m)',constants,safety,df_L,measurements, nonPercMeas, anFold)
     return(print(dfx))
     assert dfx.empty == False
