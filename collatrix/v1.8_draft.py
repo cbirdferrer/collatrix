@@ -1,6 +1,15 @@
-###########
-# testing update
-##########
+#---------------------------------------------------------------
+#__main__.py
+#this script collates measurements from individual csv outputs of
+#the morphometriX GUI
+#the csvs can be saved either all in one folder or within each individual
+#animals folder.
+#this version includes a safety net that recalculates the measurement using
+#accurate altitude and focal lengths that the user must provie in csvs.
+# this version uses PyQt5 instead of easygui (used in v2.0)
+#created by: Clara Bird (clara.birdferrer#gmail.com), March 2020
+#updated by: Clara Bird, June 2021
+#----------------------------------------------------------------
 
 #import modules
 import pandas as pd
@@ -11,16 +20,14 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox, QLabel, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
-#import functions
-# import collatrix.collatrix_functions
-# from collatrix.collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
-# from collatrix.collatrix_functions import collate_v4and5, collate_v6
+import collatrix.collatrix_functions
+from collatrix.collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
+from collatrix.collatrix_functions import collate_v4and5, collate_v6
 
-sys.path.insert(0,'/Users/clarabird/github/collatrix/collatrix')
 
-import v18_funcs
-from v18_funcs import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
-from v18_funcs import collate_v4and5, collate_v6
+# import v18_funcs
+# from v18_funcs import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
+# from v18_funcs import collate_v4and5, collate_v6
 
 class App(QWidget):
 
@@ -46,68 +53,68 @@ class App(QWidget):
         x = msgBox.exec_()
 
         ####### FOR TESTING ###########
-        anFold = 'no'
-        safety = 'no'
-        df_L = 'no safety'
-        idchoice = 'no'
-        outname = 'test1'
-        GUIfold = r'/Users/clarabird/Box Sync/marrs_misc/collatrix gui/troubleshooting for Jake Linksy/KC_multiversion'
-        saveFold = r'/Users/clarabird/Box Sync/marrs_misc/collatrix gui/troubleshooting for Jake Linksy'
+        # anFold = 'no'
+        # safety = 'no'
+        # df_L = 'no safety'
+        # idchoice = 'no'
+        # outname = 'test2'
+        # GUIfold = r'/Users/clarabird/Box Sync/marrs_misc/collatrix gui/troubleshooting for Jake Linksy/KC_multiversion'
+        # saveFold = r'/Users/clarabird/Box Sync/marrs_misc/collatrix gui/troubleshooting for Jake Linksy'
         #############################
 
-        # #do you want the Animal ID to be assigned based on the name of the folder
-        # items = ('yes', 'no')
-        # anFold, okPressed = QInputDialog.getItem(self,"Input #1", "Do you want the Animal ID to be assigned based on the name of the folder? \n yes or no",items,0,False)
-        # if okPressed and anFold:
-        #     print("{0} Animal ID in folder name".format(anFold))
-        #
-        # #ask if they want safey net
-        # items = ('yes', 'no')
-        # safety, okPressed = QInputDialog.getItem(self,"Input #2", "Do you want to use the safety? \n Yes or No?",items,0,False)
-        # if okPressed and safety:
-        #     print("{0} safety".format(safety))
-        # #if safety yes, ask for file
-        # if safety == 'yes':
-        #     options = QFileDialog.Options()
-        #     options |= QFileDialog.DontUseNativeDialog
-        #     safe_csv, _ = QFileDialog.getOpenFileName(self,"2.1 Safety File: Image list with altitudes and other information.", "","All Files (*);;csv files (*.csv)", options=options)
-        #     print("safety csv = {0}".format(safe_csv))
-        # elif safety == 'no':
-        #     pass
-        #
-        # #animal id list?
-        # items = ('no','yes')
-        # idchoice, okPressed = QInputDialog.getItem(self, "Input #3", "Do you want output to only contain certain individuals? \n Yes or No?",items,0,False)
-        # if idchoice and okPressed:
-        #     print("{0} subset list".format(idchoice))
-        # if idchoice == 'yes':
-        #     options = QFileDialog.Options()
-        #     options |= QFileDialog.DontUseNativeDialog
-        #     idsCSV, _ = QFileDialog.getOpenFileName(self,"3.1 File containing ID list", "","All Files (*);;csv files (*.csv)", options=options)
-        #     if idsCSV:
-        #         print("ID list file = {0}".format(idsCSV))
-        # elif idchoice == 'no':
-        #     pass
-        #
-        # #ask for name of output
-        # outname, okPressed = QInputDialog.getText(self, "Input #4", "Prefix for output file",QLineEdit.Normal,"")
-        #
-        # #import safety csv if safety selected
-        # if safety == 'yes':
-        #     dfList = pd.read_csv(safe_csv, sep = ",")
-        #     dfList = dfList.dropna(how="all",axis='rows').reset_index()
-        #     df_L = dfList.groupby('Image').first().reset_index()
-        #     df_L['Image'] = [x.strip() for x in df_L['Image']]
-        # elif safety == 'no':
-        #     df_L = "no safety"
-        #
-        # #get folders
-        # options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
-        # GUIfold = QFileDialog.getExistingDirectory(None, "Input 5. Folder containing MorphoMetriX outputs",options=options)
-        # saveFold = QFileDialog.getExistingDirectory(None,"Input 6. Folder where output should be saved",options = options)
-        # options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
+        #do you want the Animal ID to be assigned based on the name of the folder
+        items = ('yes', 'no')
+        anFold, okPressed = QInputDialog.getItem(self,"Input #1", "Do you want the Animal ID to be assigned based on the name of the folder? \n yes or no",items,0,False)
+        if okPressed and anFold:
+            print("{0} Animal ID in folder name".format(anFold))
+
+        #ask if they want safey net
+        items = ('yes', 'no')
+        safety, okPressed = QInputDialog.getItem(self,"Input #2", "Do you want to use the safety? \n Yes or No?",items,0,False)
+        if okPressed and safety:
+            print("{0} safety".format(safety))
+        #if safety yes, ask for file
+        if safety == 'yes':
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            safe_csv, _ = QFileDialog.getOpenFileName(self,"2.1 Safety File: Image list with altitudes and other information.", "","All Files (*);;csv files (*.csv)", options=options)
+            print("safety csv = {0}".format(safe_csv))
+        elif safety == 'no':
+            pass
+
+        #animal id list?
+        items = ('no','yes')
+        idchoice, okPressed = QInputDialog.getItem(self, "Input #3", "Do you want output to only contain certain individuals? \n Yes or No?",items,0,False)
+        if idchoice and okPressed:
+            print("{0} subset list".format(idchoice))
+        if idchoice == 'yes':
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            idsCSV, _ = QFileDialog.getOpenFileName(self,"3.1 File containing ID list", "","All Files (*);;csv files (*.csv)", options=options)
+            if idsCSV:
+                print("ID list file = {0}".format(idsCSV))
+        elif idchoice == 'no':
+            pass
+
+        #ask for name of output
+        outname, okPressed = QInputDialog.getText(self, "Input #4", "Prefix for output file",QLineEdit.Normal,"")
+
+        #import safety csv if safety selected
+        if safety == 'yes':
+            dfList = pd.read_csv(safe_csv, sep = ",")
+            dfList = dfList.dropna(how="all",axis='rows').reset_index()
+            df_L = dfList.groupby('Image').first().reset_index()
+            df_L['Image'] = [x.strip() for x in df_L['Image']]
+        elif safety == 'no':
+            df_L = "no safety"
+
+        #get folders
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        GUIfold = QFileDialog.getExistingDirectory(None, "Input 5. Folder containing MorphoMetriX outputs",options=options)
+        saveFold = QFileDialog.getExistingDirectory(None,"Input 6. Folder where output should be saved",options = options)
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
 
         #make lists
         #for csvs
@@ -124,7 +131,7 @@ class App(QWidget):
         #make sure the csvs are morphometrix outputs by checking first row
         csvs += [c for c in csvs_all if 'Image ID' in pd.read_csv(c,nrows=1,header=None)[0].tolist()]
         #make list of all csvs that were not morphometrix csvs to tell user
-        not_mmx += [x for x in csvs if x not in csvs_all]
+        not_mmx += [x for x in csvs_all if x not in csvs]
 
         #check for csvs that (for whatever reason) hit an error when being read in.
         #makes a list of those csvs for users to examine

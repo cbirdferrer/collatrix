@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "collatrix",
-    version = "1.0.7",
+    version = "1.0.8",
     description="A GUI for collating MorphoMetriX outputs",
     author = "Clara Bird",
     author_email = "clara.birdferrer@gmail.com",
