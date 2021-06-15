@@ -8,6 +8,7 @@
 #accurate altitude and focal lengths that the user must provie in csvs.
 # this version uses PyQt5 instead of easygui (used in v2.0)
 #created by: Clara Bird (clara.birdferrer#gmail.com), March 2020
+#updated by: Clara Bird, June 2021
 #----------------------------------------------------------------
 
 #import modules
@@ -19,13 +20,9 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox, QLabel, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
-#import functions
 import collatrix.collatrix_functions
-from collatrix.collatrix_functions import anydup
-from collatrix.collatrix_functions import readfile
-from collatrix.collatrix_functions import fheader
-from collatrix.collatrix_functions import collate
-from collatrix.collatrix_functions import df_formatting
+from collatrix.collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
+from collatrix.collatrix_functions import collate_v4and5, collate_v6
 
 class App(QWidget):
 
@@ -104,7 +101,6 @@ class App(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
 
-
         #make lists
         #for csvs
         csvs_all = []
@@ -120,8 +116,7 @@ class App(QWidget):
         #make sure the csvs are morphometrix outputs by checking first row
         csvs += [c for c in csvs_all if 'Image ID' in pd.read_csv(c,nrows=1,header=None)[0].tolist()]
         #make list of all csvs that were not morphometrix csvs to tell user
-        not_mmx += [x for x in csvs if x not in csvs_all]
-        print("these csvs were not morphometrix outputs: {0}".format(not_mmx))
+        not_mmx += [x for x in csvs_all if x not in csvs]
 
         #check for csvs that (for whatever reason) hit an error when being read in.
         #makes a list of those csvs for users to examine
@@ -136,6 +131,34 @@ class App(QWidget):
         badcsvs = set(badcsvs)
         csvs = [x for x in csvs if x not in badcsvs]
 
+        #sort csvs into different versions of morphometrix measured_whales_outputs
+        v4csvs = []; v5csvs = []; v6csvs = []
+
+        for f in csvs:
+            df0 = readfile(f)
+            if 'Object' in df0[0].tolist():
+                idx = df0.loc[df0[0] == 'Object'].index #find index (row) values of 'Object'
+            elif 'Object Name' in df0[0].tolist():
+                idx = df0.loc[df0[0] == 'Object Name'].index #find index (row) values of 'Object'
+            df = df0.truncate(before=idx[0]) #take subset of df starting at first row containing Object
+            df = fheader(df)
+
+            ch = df.columns.tolist()
+
+            if 'Object Name' in ch:
+                v4csvs += [f]
+            elif 'Object' in ch:
+                if  any("% Width" in c for c in ch):
+                    v5csvs += [f]
+                elif any('% Width' in x for x in df['Widths (%)']):
+                    v6csvs += [f]
+                else:
+                    v5csvs += [f]
+            else:
+                not_mmx += [f]
+
+        print("these csvs were not morphometrix outputs: {0}".format(not_mmx))
+
         #put together dataframe of inputs and error csvs to output
         if safety == 'yes':
             message = "Animal ID from folder name?: {0} \n\nThe safety file was: {1}\n\n\nThese csvs were not morphometrix outputs:{2}\n\nThese csvs could not be read in: {3}".format(anFold, safe_csv, not_mmx, badcsvs)
@@ -149,13 +172,35 @@ class App(QWidget):
         #set up list of constants
         constants = ['Image ID', 'Image Path', 'Focal Length', 'Altitude', 'Pixel Dimension']
 
-        #run the collate function, get collated csv
-        df_allx, df_allx_pixc = collate(csvs,constants,measurements,nonPercMeas,df_L,safety,anFold) #run collating function
+        # set up empty dataframes
+        df_all1 = pd.DataFrame(data = {})
+        df_all1_pc = pd.DataFrame(data = {})
+
+        ## COLLATE V4 CSVS
+        if len(v4csvs) > 0:
+            v4_all,v4_all_pixc = collate_v4and5(v4csvs,'Object Name', 'Length', constants,safety,df_L, measurements, nonPercMeas, anFold)
+            df_all1 = pd.concat([df_all1,v4_all])
+            df_all1_pc = pd.concat([df_all1_pc,v4_all_pixc])
+        else: pass
+
+        ## COLLATE V5 CSVS
+        if len(v5csvs) >0:
+            v5_all,v5_all_pixc = collate_v4and5(v5csvs,'Object', 'Length (m)', constants,safety,df_L,measurements, nonPercMeas, anFold)
+            df_all1 = pd.concat([df_all1,v5_all])
+            df_all1_pc = pd.concat([df_all1_pc,v5_all_pixc])
+        else: pass
+
+        ## COLLATE V4 CSVS
+        if len(v6csvs) >0:
+            v6_all,v6_all_pixc = collate_v6(v6csvs, 'Object',  'Length (m)',constants,safety,df_L,measurements, nonPercMeas, anFold)
+            df_all1 = pd.concat([df_all1,v6_all])
+            df_all1_pc = pd.concat([df_all1_pc,v6_all_pixc])
+        else: pass
 
         #now we group by ID and image just incase multiple images were measured for the same animal
         #this would combine those measurements (it's why I replaced nans with 0)
-        df_all1 = df_formatting(df_allx)
-        df_all1_pc = df_formatting(df_allx_pixc)
+        df_all1 = df_formatting(df_all1)
+        df_all1_pc = df_formatting(df_all1_pc)
 
         #output to csvs
         outcsv = os.path.join(saveFold,"{0}_allIDs.csv".format(outname))
@@ -175,6 +220,7 @@ class App(QWidget):
             pass
         print(df_all1)
         print("done, close GUI window to end script")
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = App()

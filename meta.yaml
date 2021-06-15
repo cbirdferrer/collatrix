@@ -1,6 +1,6 @@
 package:
   name: collatrix
-  version: '1.0.7'
+  version: '1.0.8'
 
 source:
   git_url: https://github.com/cbirdferrer/collatrix/
