@@ -32,7 +32,7 @@ Additionally:
 * if you used `collatrix.whale_bc` to calculate Body Volume cite:
 *Christiansen, F., Vivier, F., Charlton, C., Ward, R., Amerson, A., Burnell, S., & Bejder, L. Maternal body size and condition determine calf growth rates in southern right whales (2018). Maternal body size and condition determine calf growth rates in southern right whales. Marine Ecology Progress Series, 592, 267–281. http://doi.org/10.3354/meps12522*
 
-* if us used `collatrix.whale_bc ` to calculate BAI or `collatrix.altitude_calib` for the altitude calibration cite: 
+* if you used `collatrix.whale_bc ` to calculate BAI or `collatrix.altitude_calib` for the altitude calibration cite: 
 *Burnett, Jonathan D., Leila Lemos, Dawn Barlow, Michael G. Wing, Todd Chandler, and Leigh G. Torres. 2018. “Estimating Morphometric Attributes of Baleen Whales with Photogrammetry from Small UASs: A Case Study with Blue and Gray Whales.” Marine Mammal Science 35 (1): 108–39. https://doi.org/10.1111/mms.12527.*
 
 # Contributing
