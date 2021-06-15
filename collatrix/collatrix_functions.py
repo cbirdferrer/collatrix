@@ -170,7 +170,7 @@ def collate_v4and5(csvs, object, length, constants,safety,df_L,measurements, non
         mDict, mDict_pixc, image, alt, focl, pixd = pull_data(f, df, mDict, mDict_pixc,anFold)
 
         if safety == 'yes': #pull the altitude, focal length, and pix d from the safety csv by image name
-            alt_act,foc_act,pixd_act == safe_data(df_L, image)
+            alt_act,foc_act,pixd_act = safe_data(df_L, image)
         else: pass
 
         #go into the cvs to look for the values
@@ -262,7 +262,7 @@ def collate_v6(csvs, object, length, constants,safety,df_L,measurements, nonPerc
         mDict, mDict_pixc, image, alt, focl, pixd = pull_data(f, df, mDict, mDict_pixc,anFold)
 
         if safety == 'yes': #pull the altitude, focal length, and pix d from the safety csv by image name
-            alt_act,foc_act,pixd_act == safe_data(df_L, image)
+            alt_act,foc_act,pixd_act = safe_data(df_L, image)
         else: pass
 
         dfg = df0.truncate(before=idx[0]) #look at part of dataframe that contains measurment data
