@@ -20,8 +20,6 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox, QLabel, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
-#sys.path.insert(0,'/Users/clarabird/github/collatrix')
-
 import collatrix.collatrix_functions
 from collatrix.collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
 from collatrix.collatrix_functions import collate_v4and5, collate_v6

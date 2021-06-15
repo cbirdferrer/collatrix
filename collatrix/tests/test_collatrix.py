@@ -22,7 +22,7 @@ for i in w1csvs:
 for ii in w2csvs:
     csvs += [os.path.join(w2fold,ii)]
 
-measurements = ['test']
+measurements = []
 nonPercMeas = []
 df_L = pd.read_csv("https://raw.githubusercontent.com/cbirdferrer/collatrix/master/demo/demo_safety.csv")
 safety = "yes"
