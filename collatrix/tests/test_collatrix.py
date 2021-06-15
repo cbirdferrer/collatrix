@@ -22,7 +22,7 @@ for i in w1csvs:
 for ii in w2csvs:
     csvs += [os.path.join(w2fold,ii)]
 
-measurements = []
+measurements = ['test']
 nonPercMeas = []
 df_L = pd.read_csv("https://raw.githubusercontent.com/cbirdferrer/collatrix/master/demo/demo_safety.csv")
 safety = "yes"
@@ -30,6 +30,6 @@ anFold = 'no'
 constants = ['Image ID', 'Image Path', 'Focal Length', 'Altitude', 'Pixel Dimension']
 
 def test_col():
-    dfx,dfx_pc = collate_v6(csvs, 'Object',  'Length (m)',constants,safety,df_L,measurements, nonPercMeas, anFold)
+    dfx,dfx_pc = collate_v6(csvs, 'Object',  'Length (m)', constants, safety, df_L, measurements, nonPercMeas, anFold)
     return(print(dfx))
     assert dfx.empty == False
