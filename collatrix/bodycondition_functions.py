@@ -75,7 +75,7 @@ def bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper):
     npy = np.array(df_all_ix[bai]) #make array out of width values to be used
     ids = np.array(df_all_ix['index'])
     plist = np.array(perc_l) #make array of the percents
-    npTL = np.array(df_all_ix['TL']) #make array of the total lengths
+    npTL = np.array(df_all_ix[tl_name]) #make array of the total lengths
     x = np.tile(npTL.reshape(npTL.shape[0],-1), (1,plist.size)) #make a 2D array of TL's repeating to be multiplied with the percs
     npx = x * plist #make 2D array of the x values for the regression
     min_tl = npTL*(b_lower/100)
