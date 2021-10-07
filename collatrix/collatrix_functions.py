@@ -21,7 +21,7 @@ def anydup(l): #we'll use this function later to check for duplicates
 
 # function that reads in csv as one column, then splits
 def readfile(f):
-    temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"']) #read in csv as one column
+    temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"'], encoding_errors = "ignore") #read in csv as one column
     df00=temp.X0.str.split(',',expand=True) #split rows into columns by delimeter
     df00 = df00.replace("",np.nan)
     df0 = df00.dropna(how='all',axis = 'rows').reset_index(drop=True)
