@@ -114,7 +114,7 @@ class App(QWidget):
         for root,dirs,files in os.walk(GUIfold):
             csvs_all += [os.path.join(root,f) for f in files if f.endswith('.csv')]
         #make sure the csvs are morphometrix outputs by checking first row
-        csvs += [c for c in csvs_all if 'Image ID' in pd.read_csv(c,nrows=1,header=None, encoding_errors = "ignore")[0].tolist()]
+        csvs += [c for c in csvs_all if 'Image ID' in pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"'],encoding_errors = "ignore")['X0'][0]]
         #make list of all csvs that were not morphometrix csvs to tell user
         not_mmx += [x for x in csvs_all if x not in csvs]
 
@@ -123,7 +123,7 @@ class App(QWidget):
         badcsvs = []
         for f in csvs:
             try:
-                temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"']) #read in csv as one column
+                temp=pd.read_csv(f,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"'],encoding_errors = "ignore") #read in csv as one column
             except:
                 print(f)
                 badcsvs += [f]
