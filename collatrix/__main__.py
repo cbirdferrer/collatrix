@@ -86,7 +86,7 @@ class App(QWidget):
 
         #import safety csv if safety selected
         if safety == 'yes':
-            dfList = pd.read_csv(safe_csv, sep = ",")
+            dfList = pd.read_csv(safe_csv, sep = ",",encoding_errors = "ignore")
             dfList = dfList.dropna(how="all",axis='rows').reset_index()
             df_L = dfList.groupby('Image').first().reset_index()
             df_L['Image'] = [x.strip() for x in df_L['Image']]
