@@ -1,4 +1,6 @@
 from setuptools import setup, find_packages
+from distutils import sysconfig
+site_packages_path = sysconfig.get_python_lib()
 
 setup(
     name = "collatrix",
@@ -14,5 +16,6 @@ setup(
         ]
     },
 
-    packages = ['collatrix']
+    packages = ['collatrix'],
+    data_files=[(site_packages_path, ["collatrix.pth"])]
 )
