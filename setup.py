@@ -17,5 +17,9 @@ setup(
     },
 
     packages = ['collatrix'],
+<<<<<<< HEAD
     data_files=[(site_packages_path, ["collatrix.pth"])]
+=======
+    data_files=[(site_packages_path, ["mypackage.pth"])]
+>>>>>>> f374ddefa898abc7f917020bd08c83b53840a2e4
 )
