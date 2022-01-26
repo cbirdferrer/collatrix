@@ -17,5 +17,5 @@ setup(
     },
 
     packages = ['collatrix'],
-    data_files=[(site_packages_path, ["collatrix.pth"])]
+    data_files=[(site_packages_path, ["./collatrix.pth"])]
 )
