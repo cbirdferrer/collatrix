@@ -8,12 +8,8 @@ source:
 build:
   noarch: python
   number: '0'
-  script:
-    - mkdir -p $PREFIX/site-packages
-    - cp -r <package_src_dir> $PREFIX/site-packages/collatrix
-  entry_points:
-    - collatrix = collatrix.__main__:main
-
+  script: python setup.py install
+  
 requirements:
   build:
     - python >=3.6
