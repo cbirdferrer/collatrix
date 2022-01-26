@@ -18,7 +18,7 @@ requirements:
     - numpy
     - pandas
     - pyqt=5
-    - setuptools=60.5.0
+    - setuptools
     - scipy
 
 about:
