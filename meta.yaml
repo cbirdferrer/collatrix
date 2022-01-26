@@ -9,8 +9,8 @@ build:
   noarch: python
   number: '0'
   script:
-    - mkdir -p ${SP_DIR}
-    - cp -r src/* ${SP_DIR}
+    - mkdir -p $PREFIX/site-packages
+    - cp -r <package_src_dir> $PREFIX/site-packages/collatrix
   entry_points:
     - collatrix = collatrix.__main__:main
 
