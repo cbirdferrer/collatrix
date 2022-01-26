@@ -86,7 +86,7 @@ class App(QWidget):
 
         #import safety csv if safety selected
         if safety == 'yes':
-            dfList = pd.read_csv(safe_csv, sep = ",",encoding_errors = "ignore")
+            dfList = pd.read_csv(safe_csv, sep = ",",engine = 'python',quoting=3, na_values = ['""','"'],encoding_errors = "ignore")
             dfList = dfList.dropna(how="all",axis='rows').reset_index()
             df_L = dfList.groupby('Image').first().reset_index()
             df_L['Image'] = [x.strip() for x in df_L['Image']]
@@ -112,7 +112,7 @@ class App(QWidget):
 
         #walk through all folders in GUI folder and collect all csvs
         for root,dirs,files in os.walk(GUIfold):
-            csvs_all += [os.path.join(root,f) for f in files if f.endswith('.csv')]
+            csvs_all += [os.path.join(root,f) for f in files if f.endswith('.csv') & ~f.startswith(".")]
         #make sure the csvs are morphometrix outputs by checking first row
         csvs += [c for c in csvs_all if 'Image ID' in pd.read_csv(c,sep='^',header=None,prefix='X',engine = 'python',quoting=3, na_values = ['""','"'],encoding_errors = "ignore")['X0'][0]]
         #make list of all csvs that were not morphometrix csvs to tell user
