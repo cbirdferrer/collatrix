@@ -190,6 +190,7 @@ def collate_v4and5(csvs, object, length, constants,safety,df_L,measurements, non
                         xx = x
                 else: #if this key is not in the csv
                     xx = np.nan
+                    pixc = np.nan
                 mDict[key] = xx #add the value to the respective key
                 mDict_pixc["{0}.PixCount".format(key)] = pixc #add pixel count to respecitive key in pixel count dataframe
 
@@ -208,6 +209,7 @@ def collate_v4and5(csvs, object, length, constants,safety,df_L,measurements, non
 
             elif key not in dfGUI.index and key not in names:
                 mDict[key] = np.nan
+                mDict_pixc[key] = np.nan
 
         df_all = end_concat(mDict, df_all)
         df_all_pixc = end_concat(mDict_pixc, df_all_pixc)
@@ -312,6 +314,7 @@ def collate_v6(csvs, object, length, constants,safety,df_L,measurements, nonPerc
                             yy = y
                     elif key.split("-")[0] not in dfGUI.index:
                         yy = np.nan
+                        pixc = np.nan
                     mDict[key] = yy
                     mDict_pixc["{0}.PixCount".format(key)] = pixc #add pixel count to respecitive key in pixel count dataframe
             df_all = end_concat(mDict, df_all)

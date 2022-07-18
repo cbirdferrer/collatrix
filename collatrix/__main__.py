@@ -20,9 +20,13 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox, QLabel, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
-import collatrix.collatrix_functions
-from collatrix.collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
-from collatrix.collatrix_functions import collate_v4and5, collate_v6
+# import collatrix.collatrix_functions
+# from collatrix.collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
+# from collatrix.collatrix_functions import collate_v4and5, collate_v6
+
+import collatrix_functions
+from collatrix_functions import anydup, readfile, fheader, lmeas, wmeas, setup, pull_data, safe_data, end_concat, df_formatting
+from collatrix_functions import collate_v4and5, collate_v6
 
 class App(QWidget):
 
