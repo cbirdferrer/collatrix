@@ -13,15 +13,14 @@
 
 #import modules
 import pandas as pd
-import numpy as np
 import os, sys
-import math
+# import math
 import webbrowser
 from pathlib import Path
-from PyQt6 import QtGui, QtCore
-from PyQt6.QtWidgets import QFileDialog, QApplication, QMainWindow, QPushButton, QCheckBox, QVBoxLayout, QWidget, QLabel, QLineEdit, QComboBox, QGridLayout, QSpacerItem, QSizePolicy
-from PyQt6.QtCore import Qt, QtMsgType
-from PyQt6.QtGui import QFont
+from PySide6 import QtCore
+from PySide6.QtWidgets import QFileDialog, QApplication, QMainWindow, QPushButton, QCheckBox, QVBoxLayout, QWidget, QLabel, QLineEdit, QComboBox, QGridLayout, QSpacerItem, QSizePolicy
+from PySide6.QtCore import Qt, QMetaObject
+from PySide6.QtGui import QFont
 
 class FileSelector:
     def select_file():
@@ -101,13 +100,6 @@ class collateWindow(QWidget):
 
         #layout grid settings
         grid_layout = QGridLayout()
-        # grid_layout.setColumnMinimumWidth(0, 1) #column 0
-        # grid_layout.setColumnMinimumWidth(1, 1) #column 1
-        # grid_layout.setRowMinimumHeight(0, 1) # row 0
-        # grid_layout.setRowMinimumHeight(1, 1) #row 1
-        # grid_layout.setRowMinimumHeight(2, 1) # row 2
-        # grid_layout.setRowMinimumHeight(3, 1) # row 3
-        # grid_layout.setRowMinimumHeight(4, 1) # row 3
 
         #add inputs
         welcome_label = QLabel("Welcome to the collating tool!\nthis tool will collate your morphometrix outputs into on clean csv")
@@ -151,6 +143,12 @@ class collateWindow(QWidget):
         savefold_button.clicked.connect(lambda: self.select_dir(2))
         self.savefold_sel_label = QLabel("",self)
         self.savefold_sel_label.setStyleSheet("border: 1px dashed black; padding: 2px; font-style: italic;")
+
+        #choose output options
+        outtypes_label = QLabel("Select which outputs you'd like")
+        self.outtypes_list = QComboBox(self)
+        self.outtypes_list.addItems(['Both in one file','Both in seperate files',
+                                     'Just pixels','Just meters'])
 
         #run buttons
         collate_button = QPushButton("Collate Data! (click to run)",self)
@@ -201,9 +199,14 @@ class collateWindow(QWidget):
 
         grid_layout.addItem(spacer, 15, 0,1,2)
 
-        grid_layout.addWidget(collate_button,16,0,1,2)
+        grid_layout.addWidget(outtypes_label,16,1,1,1)
+        grid_layout.addWidget(self.outtypes_list,16,0,1,1)
 
-        grid_layout.addWidget(self.end_msg,17,0,1,2)
+        grid_layout.addItem(spacer, 17, 0,1,2)
+
+        grid_layout.addWidget(collate_button,18,0,1,2)
+
+        grid_layout.addWidget(self.end_msg,19,0,1,2)
 
         self.setLayout(grid_layout)
 
@@ -220,6 +223,8 @@ class collateWindow(QWidget):
             self.safety_sel_label.setText(file_path)
             # Read the file using pandas
             self.dfsafe = pd.read_csv(file_path)
+            self.safe_file_path = file_path
+        
 
     def select_dir(self, button_id):
         dir_path = DirSelector.select_dir()
@@ -236,6 +241,7 @@ class collateWindow(QWidget):
         #pull in prefix for naming and saving
         prefix = self.prefix_box.text()
         outfold = self.savepath
+        out_option = self.outtypes_list.currentText()
 
         #make lists
         #for csvs
@@ -253,63 +259,119 @@ class collateWindow(QWidget):
 
         #combine all csvs
         df_all = pd.DataFrame()
+        #list of csvs containing duplicate measurement names
+        dup_csvs = []
         for c in csvs:
             df_temp = pd.read_csv(c)
             image_name = os.path.split(df_temp.loc[df_temp['Object']=='Image Path','Value'].item())[-1]
             df_temp['Image'] = image_name
+            df_temp['csv'] = c
 
+            #if use folder name for aID is checked, replace Image ID w/ folder name
             if self.aIDcheckbox.isChecked():
                 Image_ID = Path(df_temp.loc[df_temp['Object']=='Image Path','Value'].item()).parts[-2]
-                df_temp['Image ID'] = Image_ID
+                df_temp.loc[df_temp['Object']=='Image ID','Value'] = Image_ID
+            else: pass
+            
+            #if this df contains duplicate measurement names (ex. TL twice), add to list, this throws problems when pivoting
+            dup_check = df_temp.loc[df_temp['Value_unit'] == 'Meters']
+            if dup_check.duplicated(subset=['Object']).any() == True:
+                dup_csvs += [c]
             else: pass
 
             df_all = pd.concat([df_all,df_temp])
-        
+
+        #stop run if duplicate measurement names exist
+        if len(dup_csvs) > 0:
+            #export text file containg list of csvs containing duplicate names
+            with open(os.path.join(outfold,"{0}_csvs containing duplicate measurements.txt").format(prefix), "w") as f:
+                f.write(f"{dup_csvs}")
+            #update message to alert user to this
+            self.end_msg.setText("edit duplicate Object names and run script again, see file in output folder for list of csvs")
+        else: pass
+
         #split out into metadata, meters, and pixels
         df_meta = df_all.loc[df_all['Value_unit'] == 'Metadata']
         df_meters = df_all.loc[df_all['Value_unit'] == 'Meters']
         df_pixels = df_all.loc[df_all['Value_unit'] == 'Pixels']
 
+        #TEMPORARY!!!!!!!!
+        df_pixels['Object'] = [x.replace(".0",".00") for x in df_pixels['Object']]
+
         #pivot metadata
-        df_meta['ix'] = 'ix'
-        df_meta1= df_meta.pivot(index=["ix","Image"],columns='Object',values='Value')
-        df_meta1.to_csv(os.path.join(outfold,"{0}_metadata.csv".format(prefix)),index=False)
+        df_meta1= df_meta.pivot(index=["Image",'csv'],columns='Object',values='Value').reset_index().rename(columns={"Image ID":"Image_ID",
+                                                                                                             "Image Path":"Image_Path",
+                                                                                                             "Focal Length":"Focal_Length",
+                                                                                                             "Pixel Dimension":"Pixel_Dimension",
+                                                                                                             "Mirror Side":"Mirror_Side"
+                                                                                                             })
 
         #if safety
         if self.safecheckbox.isChecked():
             #merge with safety to get scaling metadata
-            df_safe = df_pixels.merge(self.dfsafe,how='left',on='Image')
+            df_safe = df_meta1[['csv','Image','Image_ID','Image_Path','Mirror_Side','Notes']].merge(self.dfsafe,how='left',on='Image')
+            df_sx = df_pixels.merge(df_safe,how='left',on=['Image','csv'])
 
             #set up to run equation
-            alt = df_safe['Altitude'].values
-            focl = df_safe['Focal_Length'].values
-            pixd = df_safe['Pixel_Dimension'].values
-            pixc = df_safe['Value'].values
+            alt = df_sx['Altitude'].values
+            focl = df_sx['Focal_Length'].values
+            pixd = df_sx['Pixel_Dimension'].values
+            pixc = df_sx['Value'].values.astype(float)
             #run equation to calculate scaled measurements
-            df_safe['Value_m'] = ((alt/focl)*pixd)*pixc
+            df_sx['Value_m'] = ((alt/focl)*pixd)*pixc
 
-            #make export dfs
-            df_safe['ix'] = 'ix'
-            df_ux = df_safe.pivot(index=["ix","Image"],columns='Object',values='Value').merge(self.dfsafe,how='left',on='Image')
-            df_safeM = df_safe.pivot(index=["ix","Image"],columns='Object',values='Value_m').merge(self.dfsafe,how='left',on='Image')
+            print(df_sx)
+
+            #make meters output df
+            df_mx = df_sx.pivot(index=['Image','csv'],columns='Object',values='Value_m').merge(df_safe,how='left',on=['Image','csv'])
+            df_mx['metadata_source'] = "safety_file"
+
+            #make pixels output df
+            df_px = df_sx.pivot(index=['Image','csv'],columns='Object',values='Value').merge(df_safe,how='left',on=['Image','csv'])
+            df_px['metadata_source'] = "safety_file"
+
+            #make both m and px output df
+            df_mpx = df_mx.merge(df_sx.pivot(index=['Image','csv'],columns='Object',values='Value'),how='left',on=['Image','csv'],suffixes=['_m','_px'])
             
-            #export
-            df_ux.to_csv(os.path.join(outfold,"{0}_for_ux_model.csv".format(prefix)),index=False)
-            df_safeM.to_csv(os.path.join(outfold,"{0}_meters_from_safety.csv".format(prefix)),index=False)
-
         else:
-            df_meters['ix'] = 'ix'
-            df_pixels['ix'] = 'ix'
-            df_rawM = df_meters.pivot(index=["ix","Image"],columns='Object',values='Value').merge(df_meta1,how='left',on='Image')
-            df_ux = df_pixels.pivot(index=["ix","Image"],columns='Object',values='Value').merge(df_meta1,how='left',on='Image') 
+            #prep meters output df
+            df_mx = df_meters.pivot(index=['Image','csv'],columns='Object',values='Value').merge(df_meta1,how='left',on=['Image','csv'])
+            df_mx['metadata_source'] = 'mmx_input'
 
-            #export
-            df_ux.to_csv(os.path.join(outfold,"{0}_for_ux_model.csv".format(prefix)),index=False)
-            df_rawM.to_csv(os.path.join(outfold,"{0}_meters_from_mmx.csv".format(prefix)),index=False)  
+            #prep pixels output df
+            df_px = df_pixels.pivot(index=['Image','csv'],columns='Object',values='Value').merge(df_meta1,how='left',on=['Image','csv']) 
+            df_px['metadata_source'] = 'mmx_input'
+
+            #make both m and px output df
+            df_mpx = df_mx.merge(df_pixels.pivot(index=['Image','csv'],columns='Object',values='Value'),how='left',on=['Image','csv'],suffixes=['_m','_px'])
+            
+        #sort columns in all dataframes
+        start_columns = ['csv','Image','Image_ID','Image_Path','Altitude','Focal_Length',
+                         'Pixel_Dimension','Mirror_Side','Notes','metadata_source']
+        #here we split and concatenate so that the start columns are now first
+        df_mpx = pd.concat([df_mpx[start_columns],df_mpx.drop(start_columns,axis=1)],axis=1)
+        df_px = pd.concat([df_px[start_columns],df_px.drop(start_columns,axis=1)],axis=1)
+        df_mx = pd.concat([df_mx[start_columns],df_mx.drop(start_columns,axis=1)],axis=1)
+
+        #export based on option selected
+        if out_option == 'Both in one file':
+            df_mpx.to_csv(os.path.join(outfold,"{0}_MetersAndPixels.csv".format(prefix)),index=False)
+        elif out_option == 'Both in seperate files':
+            df_mx.to_csv(os.path.join(outfold,"{0}_Meters.csv".format(prefix)),index=False) 
+            df_px.to_csv(os.path.join(outfold,"{0}_Pixels.csv".format(prefix)),index=False)
+        elif out_option == 'Just pixels':
+            df_px.to_csv(os.path.join(outfold,"{0}_Pixels.csv".format(prefix)),index=False)
+        elif out_option == 'Just meters':
+            df_mx.to_csv(os.path.join(outfold,"{0}_Meters.csv".format(prefix)),index=False)
 
         self.end_msg.setText("Done running - check output folders for files!")
         
-
+        #export text file of input data
+        #make notes as string
+        notes = "CollatriX Run: {0} \n\nAnimal ID from folder name?: {1} \n\nSafety file: {2}\n\nNumber of files collated: {3}\n\n".format(prefix,("yes" if self.aIDcheckbox.isChecked() else "no"), (self.safe_file_path if self.safecheckbox.isChecked() else "no safety used"), len(csvs))
+        #write to text file
+        with open(os.path.join(outfold,"{0}_ProcessingNotes.txt").format(prefix), "w") as f:
+            f.write(f"{notes}")
 
 class bodycondWindow(QWidget):
     def __init__(self):
@@ -407,9 +469,41 @@ class MainWindow(QMainWindow):
     def open_window(self,window):
         window.show()
 
+    def closeEvent(self, event):
+        event.accept()
+
+# Program crash hook for error logging
+def except_hook(exc_type, exc_value, exc_tb):
+    tb = "".join(traceback.format_exception(exc_type, exc_value, exc_tb))
+    dialog = QMessageBox()
+    dialog.setIcon(QMessageBox.Icon.Critical)
+    dialog.setWindowTitle("Error")
+    dialog.setText("Error: Crash caught, save details to file.")
+    dialog.setDetailedText(tb)
+    dialog.setStandardButtons(QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Cancel)
+    ret = dialog.exec()   # Show dialog box
+    if ret == QMessageBox.StandardButton.Save:
+        path = QFileDialog().getExistingDirectory(dialog,'Select a directory')
+        if(path):
+            path += '/' + str(date.today()) + "_CollatriX_Crashlog" + ".txt"
+            print("saving: ", path)
+            with open(path, 'w') as file:
+                file.write("System: " + platform.system() + '\n')
+                file.write("OS: " + os.name + '\n')
+                file.write("Python Version: " + platform.python_version() + '\n')
+                file.write("Python Implementation: " + platform.python_implementation() + '\n')
+                file.write("Release: " + platform.release() + '\n')
+                file.write("Version: " + platform.version() + '\n')
+                file.write("Machine: " + platform.machine() + '\n')
+                file.write("Processor: " + platform.processor() + '\n' + '\n')
+                file.write(tb)
+
+    QApplication.quit() # Quit application
 
 if __name__ == '__main__':
+    sys.excepthook = except_hook
     app = QApplication([])
     window = MainWindow()
     window.show()
     app.exec()
+    sys.exit()
