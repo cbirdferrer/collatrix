@@ -1,14 +1,7 @@
 #---------------------------------------------------------------
 #__main__.py
-#this script collates measurements from individual csv outputs of
-#the morphometriX GUI
-#the csvs can be saved either all in one folder or within each individual
-#animals folder.
-#this version includes a safety net that recalculates the measurement using
-#accurate altitude and focal lengths that the user must provie in csvs.
-# this version uses PyQt5 instead of easygui (used in v2.0)
-#created by: Clara Bird (clara.birdferrer#gmail.com), March 2020
-#updated by: Clara Bird, June 2021
+
+#updated by: Clara Bird, January 2024
 #----------------------------------------------------------------
 
 #import modules
@@ -25,9 +18,9 @@ import platform
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from PySide6 import QtCore
-from PySide6.QtWidgets import QFileDialog, QApplication, QMainWindow, QPushButton, QCheckBox, QVBoxLayout, QWidget, QMessageBox, QLabel, QLineEdit, QComboBox, QGridLayout, QSpacerItem, QSizePolicy, QScrollArea, QTableView
+from PySide6.QtWidgets import QFileDialog, QApplication, QMainWindow, QPushButton, QCheckBox, QVBoxLayout, QWidget, QMessageBox, QLabel, QLineEdit, QComboBox, QGridLayout, QSpacerItem, QSizePolicy, QScrollArea, QTableView, QToolTip, QToolButton
 from PySide6.QtCore import Qt, QMetaObject
-from PySide6.QtGui import QFont, QDoubleValidator, QStandardItemModel, QStandardItem
+from PySide6.QtGui import QFont, QDoubleValidator, QStandardItemModel, QStandardItem, QIcon
 
 
 class FileSelector:
@@ -121,7 +114,6 @@ class lidarwranglerWindow(QWidget):
         self.outfold_sel_label = QLabel("", self)
         self.outfold_sel_label.setStyleSheet("border: 1px dashed black; padding: 2px; font-style: italic;")
 
-
         #run button
         lidarwrangle_run_button = QPushButton("Run!",self)
         lidarwrangle_run_button.setFont(font)
@@ -173,7 +165,6 @@ class lidarwranglerWindow(QWidget):
         main_layout.addWidget(scroll_area)
         self.setLayout(main_layout)
 
-
     def select_dir(self, button_id):
         dir_path = DirSelector.select_dir()
         if dir_path:
@@ -203,7 +194,6 @@ class lidarwranglerWindow(QWidget):
             print(laser_all)
             #export 
             laser_all.to_csv(os.path.join(self.outpath,"{0}_CleanedLidar.csv".format(self.output_prefix_box.text())),index=False)
-
 
         elif self.lidartypes_list.currentText() == 'LemHex (gpx)':
             print("lemhex")
@@ -338,7 +328,6 @@ class lidarvideoWindow(QWidget):
         outfold_button.clicked.connect(lambda: self.select_dir(2))
         self.outfold_sel_label = QLabel("", self)
         self.outfold_sel_label.setStyleSheet("border: 1px dashed black; padding: 2px; font-style: italic;")
-
 
         #run button
         lidarvideo_run_button = QPushButton("Run!",self)
@@ -954,7 +943,7 @@ class lidarmatchWindow(QWidget):
 class lidarimageWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Pull and Merge LidAR Data for Images")
+        self.setWindowTitle("Pull and Merge LiDAR Data for Images")
 
         #set sizing
         D = self.screen().availableGeometry()
@@ -1457,9 +1446,9 @@ class collateWindow(QWidget):
         self.savefold_sel_label.setStyleSheet("border: 1px dashed black; padding: 2px; font-style: italic;")
 
         #choose output options
-        outtypes_label = QLabel("Select which outputs you'd like")
+        outtypes_label = QLabel("Select which outputs you'd like\n(if calculating body condition, don't choose 'both in one')")
         self.outtypes_list = QComboBox(self)
-        self.outtypes_list.addItems(['Both in one file','Both in seperate files',
+        self.outtypes_list.addItems(['Both in seperate files','Both in one file',
                                      'Just pixels','Just meters'])
 
         #run buttons
@@ -1702,8 +1691,7 @@ class bodycondWindow(QWidget):
         #add inputs
         welcome_label = QLabel("Welcome to the body condition metrix tool!\nthis tool can calculate common cetacean body condition metrics and add them to your output file")
         welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        font = QFont()
-        font.setBold(True)
+        font = QFont(); font.setBold(True)
         welcome_label.setFont(font)
 
         spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -1714,28 +1702,17 @@ class bodycondWindow(QWidget):
         self.ccxfile_sel_label = QLabel("",self)
         self.ccxfile_sel_label.setStyleSheet("border: 1px dashed black; padding: 2px; font-style: italic;")
 
-        #calculate BAI
-        self.BAIcheckbox = QCheckBox("Calculate Body Area Index (BAI)?",self)
-
-        ## BAI method choice
-        self.BAImeth_list = QComboBox(self)
-        self.BAImeth_list.addItems(['Parabola','Trapazoid', "Both"])
-
-        ## BAI inputs
-        self.BAI_TL_box = QLineEdit() #name of TL
-        self.BAI_low_box = QLineEdit() #lower bound
-        self.BAI_low_box.setValidator(QDoubleValidator())
-        self.BAI_upp_box = QLineEdit() #upper bound
-        self.BAI_upp_box.setValidator(QDoubleValidator())
-        self.BAI_int_box = QLineEdit() #inter
-        self.BAI_int_box.setValidator(QDoubleValidator())
-
         #calculate body volume
         self.BVcheckbox = QCheckBox("Calculate Body Volume?", self)
 
         ## BV method choice
         self.BVmeth_list = QComboBox(self)
-        self.BVmeth_list.addItems(['Ellipse','Frustrum', "Both"])
+        self.BVmeth_list.addItems(['Ellipse','Circle', "Both"])
+
+        ## note on ellipse settings
+        ellipse_notes = QLabel("Note: ellipse method always uses lower = 0, upper = 100, and interval = 5. If you choose 'Both', enter values for the circle method.")
+        font1 = QFont(); font1.setItalic(True)
+        ellipse_notes.setFont(font1)
 
         ## BV inputs
         self.BV_TL_box = QLineEdit() #name of TL
@@ -1745,6 +1722,22 @@ class bodycondWindow(QWidget):
         self.BV_upp_box.setValidator(QDoubleValidator())
         self.BV_int_box = QLineEdit() #interval 
         self.BV_int_box.setValidator(QDoubleValidator())
+
+        #calculate BAI
+        self.BAIcheckbox = QCheckBox("Calculate Body Area Index (BAI)?",self)
+
+        ## BAI method choice
+        self.BAImeth_list = QComboBox(self)
+        self.BAImeth_list.addItems(['Parabola','Trapezoid', "Both"])
+
+        ## BAI inputs
+        self.BAI_TL_box = QLineEdit() #name of TL
+        self.BAI_low_box = QLineEdit() #lower bound
+        self.BAI_low_box.setValidator(QDoubleValidator())
+        self.BAI_upp_box = QLineEdit() #upper bound
+        self.BAI_upp_box.setValidator(QDoubleValidator())
+        self.BAI_int_box = QLineEdit() #inter
+        self.BAI_int_box.setValidator(QDoubleValidator())
 
         #output prefix
         self.prefix_box = QLineEdit()
@@ -1781,53 +1774,58 @@ class bodycondWindow(QWidget):
         grid_layout.addWidget(QLabel("Check if you want to calculate Body Volume"),5,1,1,1)
         grid_layout.addWidget(self.BVcheckbox,5,0,1,1)
 
-        grid_layout.addWidget(QLabel("Length measurement name"),6,0,1,1)
-        grid_layout.addWidget(self.BV_TL_box,6,1,1,1)
+        grid_layout.addWidget(QLabel("Select Body Volume calculation method"),6,1,1,1)
+        grid_layout.addWidget(self.BVmeth_list,6,0,1,1)
 
-        grid_layout.addWidget(QLabel("Lower bound"),7,0,1,1)
-        grid_layout.addWidget(self.BV_low_box,7,1,1,1)
+        grid_layout.addWidget(ellipse_notes,7,0,1,2)
 
-        grid_layout.addWidget(QLabel("Upper bound"),8,0,1,1)
-        grid_layout.addWidget(self.BV_upp_box,8,1,1,1)
+        grid_layout.addWidget(QLabel("Length measurement name"),8,0,1,1)
+        grid_layout.addWidget(self.BV_TL_box,8,1,1,1)
 
-        grid_layout.addWidget(QLabel("Interval"),9,0,1,1)
-        grid_layout.addWidget(self.BV_int_box,9,1,1,1)
+        grid_layout.addWidget(QLabel("Lower bound"),9,0,1,1)
+        grid_layout.addWidget(self.BV_low_box,9,1,1,1)
 
-        grid_layout.addItem(spacer, 10, 0,1,2)
+        grid_layout.addWidget(QLabel("Upper bound"),10,0,1,1)
+        grid_layout.addWidget(self.BV_upp_box,10,1,1,1)
 
-        grid_layout.addWidget(QLabel("Check if you want to calculate Body Area Index (BAI)"),11,1,1,1)
-        grid_layout.addWidget(self.BAIcheckbox,11,0,1,1)
+        grid_layout.addWidget(QLabel("Interval"),11,0,1,1)
+        grid_layout.addWidget(self.BV_int_box,11,1,1,1)
 
-        grid_layout.addWidget(QLabel("Select BAI calculation method"),12,1,1,1)
-        grid_layout.addWidget(self.BAImeth_list,12,0,1,1)
+        grid_layout.addItem(spacer, 12, 0,1,2)
 
-        grid_layout.addWidget(QLabel("Length measurement name"),13,0,1,1)
-        grid_layout.addWidget(self.BAI_TL_box,13,1,1,1)
+        grid_layout.addWidget(QLabel("Check if you want to calculate Body Area Index (BAI)"),13,1,1,1)
+        grid_layout.addWidget(self.BAIcheckbox,13,0,1,1)
 
-        grid_layout.addWidget(QLabel("Lower bound"),14,0,1,1)
-        grid_layout.addWidget(self.BAI_low_box,14,1,1,1)
+        grid_layout.addWidget(QLabel("Select BAI calculation method"),14,1,1,1)
+        grid_layout.addWidget(self.BAImeth_list,14,0,1,1)
 
-        grid_layout.addWidget(QLabel("Upper bound"),15,0,1,1)
-        grid_layout.addWidget(self.BAI_upp_box,15,1,1,1)
+        grid_layout.addWidget(QLabel("Length measurement name"),15,0,1,1)
+        grid_layout.addWidget(self.BAI_TL_box,15,1,1,1)
 
-        grid_layout.addWidget(QLabel("Interval"),16,0,1,1)
-        grid_layout.addWidget(self.BAI_int_box,16,1,1,1)
+        grid_layout.addWidget(QLabel("Lower bound"),16,0,1,1)
+        grid_layout.addWidget(self.BAI_low_box,16,1,1,1)
 
-        grid_layout.addItem(spacer, 17, 0,1,2)
+        grid_layout.addWidget(QLabel("Upper bound"),17,0,1,1)
+        grid_layout.addWidget(self.BAI_upp_box,17,1,1,1)
 
-        grid_layout.addWidget(QLabel("Enter prefix for output file"),18,1,1,1)
-        grid_layout.addWidget(self.prefix_box,18,0,1,1)
+        grid_layout.addWidget(QLabel("Interval"),18,0,1,1)
+        grid_layout.addWidget(self.BAI_int_box,18,1,1,1)
 
-        grid_layout.addWidget(savefold_label,19,1,1,1)
-        grid_layout.addWidget(savefold_button, 19, 0,1,1)
+        grid_layout.addItem(spacer, 19, 0,1,2)
 
-        grid_layout.addWidget(self.savefold_sel_label,20,0,1,2)
+        grid_layout.addWidget(QLabel("Enter prefix for output file"),20,1,1,1)
+        grid_layout.addWidget(self.prefix_box,20,0,1,1)
 
-        grid_layout.addItem(spacer, 21, 0,1,2)
+        grid_layout.addWidget(savefold_label,21,1,1,1)
+        grid_layout.addWidget(savefold_button, 21, 0,1,1)
 
-        grid_layout.addWidget(bodycond_button,22,0,1,2)
+        grid_layout.addWidget(self.savefold_sel_label,22,0,1,2)
 
-        grid_layout.addWidget(self.end_msg,23,0,1,2)
+        grid_layout.addItem(spacer, 23, 0,1,2)
+
+        grid_layout.addWidget(bodycond_button,24,0,1,2)
+
+        grid_layout.addWidget(self.end_msg,25,0,1,2)
 
         self.setLayout(grid_layout)
 
@@ -1860,19 +1858,37 @@ class bodycondWindow(QWidget):
         prefix = self.prefix_box.text()
         outfold = self.savepath
 
+        #### BODY VOLUME
         if self.BVcheckbox.isChecked():
             tl_name = self.BV_TL_box.text()
             lower = self.BV_low_box.text()
             upper = self.BV_upp_box.text()
             interval = self.BV_int_box.text()
 
-            BV_inputs = "TL name = {0} \n\nlower bound = {1}\n\n upper bound = {2}\n\n interval = {3}".format(tl_name,lower,upper,interval)
+            bv_method = self.BVmeth_list.currentText()
 
-            df_allx = self.body_vol(df_all,tl_name,interval,lower,upper)
+            if bv_method == 'Ellipse':
+                df_vol = self.bv_ellipse(df_all,tl_name)
+                BV_inputs = "TL name = {0}\n\nBV method = {1}\n\nlower bound = {2}\n\nupper bound = {3}\n\ninterval = {4}".format(tl_name,bv_method,0,100,5)
+            elif bv_method == 'Circle':
+                df_vol= self.bv_circle(df_all,tl_name,interval,lower,upper)
+                BV_inputs = "TL name = {0}\n\nBV method = {1}\n\nlower bound = {2}\n\nupper bound = {3}\n\ninterval = {4}".format(tl_name,bv_method,lower,upper,interval)
+            elif bv_method == 'Both':
+                df_ell = self.bv_ellipse(df_all,tl_name)
+                print(df_ell)
+                df_frust = self.bv_circle(df_all,tl_name,interval,lower,upper)
+                print(df_frust)
+                df_vol = pd.merge(df_ell,df_frust,on=['Image_ID','Image'])
+                BV_inputs = "TL name = {0}\n\nBV method = Both\n\nFor Ellipse: set lower, upper, and interval of 0,100,5\n\nFor circular:lower bound = {1}\n\nupper bound = {2}\n\ninterval = {3}".format(tl_name,lower,upper,interval)
+
+            # merge w/ big data frame 
+            df_allx = pd.merge(df_all,df_vol,on=['Image_ID','Image'])
+
         else: 
             BV_inputs = "Body volume not calculated"
             df_allx = df_all
 
+        #### BODY AREA INDEX
         if self.BAIcheckbox.isChecked():
             tl_name = self.BAI_TL_box.text()
             b_lower = self.BAI_low_box.text()
@@ -1881,23 +1897,26 @@ class bodycondWindow(QWidget):
 
             bai_method = self.BAImeth_list.currentText()
 
-            BAI_inputs = "TL name = {0} \n\nBAI method = {1} \n\nlower bound = {2}\n\n upper bound = {3}\n\n interval = {4}".format(tl_name,bai_method,b_lower,b_upper,b_interval)
+            BAI_inputs = "BAI method = {1}\n\nTL name = {0}\n\nlower bound = {2}\n\nupper bound = {3}\n\ninterval = {4}".format(tl_name,bai_method,b_lower,b_upper,b_interval)
 
             if bai_method == 'Parabola':
-                df_bai = self.bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper)
+                df_bai = self.bai_parabola(df_allx,tl_name,b_interval,b_lower,b_upper)
             elif bai_method == 'Trapezoid':
-                df_bai = self.bai_trapezoid(df_all,tl_name,b_interval,b_lower,b_upper)
+                df_bai = self.bai_trapezoid(df_allx,tl_name,b_interval,b_lower,b_upper)
             elif bai_method == 'Both':
-                df_par = self.bai_parabola(df_all,tl_name,b_interval,b_lower,b_upper)
-                df_trap = self.bai_trapezoid(df_all,tl_name,b_interval,b_lower,b_upper)
+                df_par = self.bai_parabola(df_allx,tl_name,b_interval,b_lower,b_upper)
+                print(df_par)
+                df_trap = self.bai_trapezoid(df_allx,tl_name,b_interval,b_lower,b_upper)
+                print(df_trap)
                 df_bai = pd.merge(df_par,df_trap,on = ['Image_ID','Image'])
 
-            df_all1 = pd.merge(df_allx,df_bai,on = ['Image_ID','Image'])
+            df_all1 = pd.merge(df_allx,df_bai,on=['Image_ID','Image'])
 
         else:
             BAI_inputs = "BAI not calculated"
             df_all1 = df_allx
 
+        #### PREP for export
         if 'index' in df_all1.columns:
             df_all1 = df_all1.drop(['index'],axis=1)
         else:
@@ -1912,15 +1931,14 @@ class bodycondWindow(QWidget):
         
         #export text file of input data
         #make notes as string
-        notes = "CollatriX Body Condition Run: {0} \n\nInput File: {1} \n\nBody Volume: \n\n{2} \n\nBody Area Index: \n\n{3}".format(prefix, self.ccx_file_path, BV_inputs, BAI_inputs)
+        notes = "CollatriX Body Condition Run: {0}\n\nInput File: {1}\n\nBody Volume: \n\n{2}\n\n\n\nBody Area Index:\n\n{3}".format(prefix, self.ccx_file_path, BV_inputs, BAI_inputs)
         #write to text file
         with open(os.path.join(outfold,"{0}_ProcessingNotes.txt").format(prefix), "w") as f:
             f.write(f"{notes}")
 
-    #body volume function
-    def body_vol(self,df_all,tl_name,interval,lower,upper):
-        vname = "{0}%".format(float(interval))
-        body_name = "BV_{0}".format(vname) #name of body volume column will use interval amount
+    #body volume circular frustrum function
+    def bv_circle(self,df_all,tl_name,interval,lower,upper):
+        body_name = "BVcir_{0}perc".format(interval) #name of body volume column will use interval amount
         volm = [] #make empty list of widths
         #now fill list with the names of the width columns we want
         volm += ["{0}_w{1}".format(tl_name,format(x, f".{2}f")) for x in np.arange(float(lower),(float(upper)+ float(interval)), float(interval))]
@@ -1954,9 +1972,108 @@ class bodycondWindow(QWidget):
         cls = dfvx.columns.tolist() #get list of column headers
         grBy = ['Image_ID','Image'] #list of columns to group by
         groups = [x for x in cls if x not in grBy] #get list of columns to be grouped
-        df1 = dfvx.groupby(['Image_ID','Image'])[groups].apply(lambda x: x.astype(float).sum()).reset_index() #group to make sure no duplicates
-        df_vol = pd.merge(df_all,df1,on = ['Image_ID','Image']) #merge volume df with big df
+        df_vol = dfvx.groupby(['Image_ID','Image'])[groups].apply(lambda x: x.astype(float).sum()).reset_index() #group to make sure no duplicates
         return df_vol
+    
+    #body volume ellipse frustrum
+    ## this code is based on Christiansen et al 2019 https://datadryad.org/stash/dataset/doi:10.5061/dryad.m0087p4
+    def bv_ellipse(self,df_all,tl_name):
+        # first, we need to add height columns
+        ## for 5-85% we'll use the ratio column
+        for x in np.arange(5,90,5):
+            w = "{0}_w{1}".format(tl_name,format(x, f".{2}f"))
+            # add error flag here if column doesn't exist
+            h = w.replace("w","h")
+            # pull ratio column
+            r = w.replace("w","ratio")
+
+            df_all[h] = df_all[w] * df_all[r]
+
+        ## for 0, 100, 90, and 95...
+        # 0 and 100 are set to 0. 90 and 95 are interpolated based on the 85% value
+        # need 85% values
+        w85 = "{0}_w{1}".format(tl_name,format(85, f".{2}f")) #set up column name
+        h85 = "{0}_h{1}".format(tl_name,format(85, f".{2}f")) #set up column name
+
+        for x in [90,95,0,100]:
+            # set up column that is being calculated
+            wx = "{0}_w{1}".format(tl_name,format(x, f".{2}f")) #set up column name
+            hx = "{0}_h{1}".format(tl_name,format(x, f".{2}f")) #set up column name
+
+            # if 90 or 95, interpolate
+            if x == 90:
+                df_all[wx] = df_all[w85] - (1*(df_all[w85]/3))
+                df_all[hx] = df_all[h85] - (1*(df_all[h85]/3))
+            elif x == 95:
+                df_all[wx] = df_all[w85] - (2*(df_all[w85]/3))
+                df_all[hx] = df_all[h85] - (2*(df_all[h85]/3))
+            
+            #if 0 or 100, set to 0
+            else:
+                df_all[wx] = 0; df_all[hx] = 0
+
+        # now for the actual calculation
+        # calculate BVe
+        ## set up column lists
+        lower = 0; upper = 100; interval = 5
+        body_name = "BVell_{0}perc".format(interval) #name of body volume column will use interval amount
+        volm = [] #make empty list of widths
+        for x in range(lower,(upper + interval), interval): #loop through range of widths
+            xx = "{0}_w{1}".format(tl_name,format(x, f".{2}f")) #create the name of the headers to pull measurements from
+            volm += [xx] #add to list
+        wlist = []
+        for i in volm: #loop through column headers
+            for ii in df_all.columns:
+                if i in ii:
+                    wlist += [ii]
+        hlist = [x.replace("w","h") for x in wlist]
+
+        ## actually calculate
+        ### but first, make our own quad function since scipy doesn't have a universal mac distribution
+        def quad_function(ww, WW, hh, HH, TL, interval):
+            ph = float(interval) / float(100)
+            tl_h = float(TL) * ph
+
+            # Set up equation for volume of elliptical frustum
+            def efunc(x, ww, WW, hh, HH):
+                return math.pi * ((ww + (WW - ww) * x) / 2) * ((hh + (HH - hh) * x) / 2)
+
+            # Manually integrate using the trapezoidal rule
+            integral = 0.0
+            num_steps = 100
+            step_size = 1.0 / num_steps
+
+            for j in range(num_steps):
+                x0 = j * step_size; x1 = (j + 1) * step_size
+                y0 = efunc(x0, ww, WW, hh, HH)
+                y1 = efunc(x1, ww, WW, hh, HH)
+                trap_area = 0.5 * (x1 - x0) * (y0 + y1)
+                integral += trap_area
+
+            return integral * tl_h
+        
+        ### ok now loop through 5% section
+        ids = []; vs = []; imgs = []
+        for i,j in enumerate(wlist[:-1]):
+            jj = wlist[i+1]
+            k = hlist[i]
+            kk = hlist[i+1]
+            #calculate volume by looping through two columns at a time
+            for ww, WW, hh,HH,TL,anid,img in zip(df_all[j],df_all[jj],df_all[k],df_all[kk],df_all[tl_name],df_all['Image_ID'],df_all['Image']):
+                #run quad function
+                v1 = quad_function(ww, WW, hh, HH, TL, interval)
+                
+                # add values to lists
+                ids += [anid]; vs += [v1]; imgs += [img]
+        
+        d = {'Image_ID':ids, body_name:vs, 'Image':imgs} #make dataframe of id and body volume
+        df = pd.DataFrame(data = d) #make dataframe
+        cls = df.columns.tolist() #get list of column headers
+        grBy = ['Image_ID','Image'] #list of columns to group by
+        groups = [x for x in cls if x not in grBy] #get list of columns to be grouped
+        dfvol = df.groupby(['Image_ID','Image'])[groups].apply(lambda x: x.astype(float).sum()).reset_index() #group to make sure no duplicates
+        return(dfvol)
+
 
     #BAI from parabola functions
     def bai_parabola(self,df_all,tl_name,b_interval,b_lower,b_upper):
@@ -1964,9 +2081,8 @@ class bodycondWindow(QWidget):
         b_lower = float(b_lower)
         b_upper = float(b_upper)
         df_all = df_all.dropna(how="all",axis='rows').reset_index()
-        vname = '{0}%'.format(b_interval)
-        bai_name = "BAIpar_{0}".format(vname) #create BAI column header using interval
-        sa_name = 'SA_{0}'.format(vname)
+        bai_name = "BAIpar_{0}perc".format(b_interval) #create BAI column header using interval
+        sa_name = 'SA_{0}perc'.format(b_interval)
         bai = [] #list of columns containing the width data we want to use to calculate BAI
         perc_l = []
         for x in np.arange(b_lower,(b_upper + b_interval), b_interval): # loop through columns w/in range we want
@@ -2023,7 +2139,7 @@ class bodycondWindow(QWidget):
         b_interval = float(b_interval)
         b_lower = float(b_lower)
         b_upper = float(b_upper)
-        bai_name = "BAItrap_{0}%".format(b_interval) #create BAI column header using interval
+        bai_name = "BAItrap_{0}perc".format(b_interval) #create BAI column header using interval
         bai = [] #list of columns containing the width data we want to use to calculate BAI
         for x in np.arange(b_lower,(b_upper + b_interval), b_interval): # loop through columns w/in range we want
             xx = "{0}_w{1}".format(tl_name,format(x, f".{2}f")) #set up column name
@@ -2062,7 +2178,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         
         #set window title
-        self.setWindowTitle("CollatriX Home")
+        self.setWindowTitle("CollatriX Home (v2.0 beta)")
 
         #set sizing of window
         D = self.screen().availableGeometry()
@@ -2238,6 +2354,7 @@ def except_hook(exc_type, exc_value, exc_tb):
                 file.write("Version: " + platform.version() + '\n')
                 file.write("Machine: " + platform.machine() + '\n')
                 file.write("Processor: " + platform.processor() + '\n' + '\n')
+                file.write("CollatriX version: 2.0 beta")
                 file.write(tb)
 
     QApplication.quit() # Quit application
