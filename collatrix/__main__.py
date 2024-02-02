@@ -17,6 +17,7 @@ import traceback
 import platform
 from datetime import date, datetime, timedelta
 from pathlib import Path
+import subprocess
 from PySide6 import QtCore
 from PySide6.QtWidgets import QFileDialog, QApplication, QMainWindow, QPushButton, QCheckBox, QVBoxLayout, QWidget, QMessageBox, QLabel, QLineEdit, QComboBox, QGridLayout, QSpacerItem, QSizePolicy, QScrollArea, QTableView, QToolTip, QToolButton
 from PySide6.QtCore import Qt, QMetaObject
@@ -546,7 +547,22 @@ class lidarvideoWindow(QWidget):
                 self.example_video_input.setText(first_video)
 
                 # Fetch Exif tags for the selected file
-                self.exif_tags = ExifToolHelper().get_tags(self.video_list[0],[])
+                # Determine the absolute path to the executable
+                executable_path = os.path.abspath(sys.executable)
+
+                if os.name == 'nt': #windows
+                    exifpath = os.path.join(sys._MEIPASS,"exiftool.exe")
+                else: #mac
+                    exifpath = os.path.join(sys._MEIPASS, "exiftool")
+                
+
+                result = subprocess.run([exifpath, '-ver'], capture_output=True, text=True)
+                # print(result.stdout)
+
+                self.end_msg.setText(result.stdout)
+
+                with ExifToolHelper(exifpath) as et:
+                    self.exif_tags = et.get_tags(self.video_list[0],[])
                 exif_tags1 = [x.split(":")[1] if len(x.split(":"))>1 else x for x in list(self.exif_tags[0].keys()) ]
                 # run update exiftag drop down
                 for dropdown, default_selection in self.default_selections.items():
@@ -582,7 +598,13 @@ class lidarvideoWindow(QWidget):
 
         dfvideo = pd.DataFrame()
         tagnames = []
-        with ExifToolHelper() as et:
+
+        #set up path to exiftool
+        if os.name == 'nt': #windows
+            exifpath = os.path.join(".","exiftool.exe")
+        else: #mac
+            exifpath = os.path.join(".","Contents","MacOS","exiftool")
+        with ExifToolHelper(exifpath) as et:
             for d in et.get_tags(movs, tags=[self.exif_tags_dropdown_name.currentText(),
                                              self.exif_tags_dropdown_dur.currentText(),
                                              self.exif_tags_dropdown_date.currentText()]):
@@ -1267,7 +1289,11 @@ class lidarimageWindow(QWidget):
                 self.example_img_input.setText(first_img)
 
                 # Fetch Exif tags for the selected file
-                self.exif_tags = ExifToolHelper().get_tags(self.img_list[0],[])
+                if os.name == 'nt': #windows
+                    exifpath = os.path.join(".","exiftool.exe")
+                else: #mac
+                    exifpath = os.path.join(".","Contents","MacOS","exiftool")
+                self.exif_tags = ExifToolHelper(exifpath).get_tags(self.img_list[0],[])
                 exif_tags1 = [x.split(":")[1] if len(x.split(":"))>1 else x for x in list(self.exif_tags[0].keys()) ]
                 # run update exiftag drop down
                 for dropdown, default_selection in self.default_selections.items():
@@ -1300,7 +1326,11 @@ class lidarimageWindow(QWidget):
         #use exift tool to pull the image time
         dfimages = pd.DataFrame()
         tagnames = []
-        with ExifToolHelper() as et:
+        if os.name == 'nt': #windows
+            exifpath = os.path.join(".","exiftool.exe")
+        else: #mac
+            exifpath = os.path.join(".","Contents","MacOS","exiftool")
+        with ExifToolHelper(exifpath) as et:
             for d in et.get_tags(self.img_list, tags=[self.exif_tags_dropdown_name.currentText(),
                                                       self.exif_tags_dropdown_date.currentText()]):
                 tempdict = {}
@@ -1335,7 +1365,7 @@ class lidarimageWindow(QWidget):
 
         #### PART 2 - calculate offset using GPS images ####
         dfgpsimgs = pd.DataFrame()
-        with ExifToolHelper() as et:
+        with ExifToolHelper(exifpath) as et:
             for d in et.get_tags(self.gpsimg_list, tags=["FileName", "EXIF:CreateDate"]):
                 tempdict = {}
                 for k, v in d.items():
@@ -2353,11 +2383,13 @@ def except_hook(exc_type, exc_value, exc_tb):
                 file.write("Release: " + platform.release() + '\n')
                 file.write("Version: " + platform.version() + '\n')
                 file.write("Machine: " + platform.machine() + '\n')
-                file.write("Processor: " + platform.processor() + '\n' + '\n')
-                file.write("CollatriX version: 2.0 beta")
+                file.write("Processor: " + platform.processor() + '\n')
+                file.write("Current Working Directory" + os.getcwd() + '\n')
+                # file.write("Environment Variables:" + os.environ + '\n')
+                file.write("CollatriX version: 2.0 beta" + '\n'+ '\n')
                 file.write(tb)
 
-    QApplication.quit() # Quit application
+    # QApplication.quit() # Quit applications
 
 if __name__ == '__main__':
     sys.excepthook = except_hook
