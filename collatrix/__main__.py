@@ -8,7 +8,7 @@
 import pandas as pd
 import os, sys
 import numpy as np
-from exiftool import ExifToolHelper
+from pyexifhelper_exiftool import ExifToolHelper
 import xml.etree.ElementTree
 import argparse
 import math
@@ -17,7 +17,6 @@ import traceback
 import platform
 from datetime import date, datetime, timedelta
 from pathlib import Path
-import subprocess
 from PySide6 import QtCore
 from PySide6.QtWidgets import QFileDialog, QApplication, QMainWindow, QPushButton, QCheckBox, QVBoxLayout, QWidget, QMessageBox, QLabel, QLineEdit, QComboBox, QGridLayout, QSpacerItem, QSizePolicy, QScrollArea, QTableView, QToolTip, QToolButton
 from PySide6.QtCore import Qt, QMetaObject
@@ -547,22 +546,12 @@ class lidarvideoWindow(QWidget):
                 self.example_video_input.setText(first_video)
 
                 # Fetch Exif tags for the selected file
-                # Determine the absolute path to the executable
-                executable_path = os.path.abspath(sys.executable)
-
                 if os.name == 'nt': #windows
                     exifpath = os.path.join(sys._MEIPASS,"exiftool.exe")
                 else: #mac
                     exifpath = os.path.join(sys._MEIPASS, "exiftool")
-                
 
-                result = subprocess.run([exifpath, '-ver'], capture_output=True, text=True)
-                # print(result.stdout)
-
-                self.end_msg.setText(result.stdout)
-
-                with ExifToolHelper(exifpath) as et:
-                    self.exif_tags = et.get_tags(self.video_list[0],[])
+                self.exif_tags = ExifToolHelper().get_tags(self.video_list[0],[])
                 exif_tags1 = [x.split(":")[1] if len(x.split(":"))>1 else x for x in list(self.exif_tags[0].keys()) ]
                 # run update exiftag drop down
                 for dropdown, default_selection in self.default_selections.items():
@@ -2385,7 +2374,6 @@ def except_hook(exc_type, exc_value, exc_tb):
                 file.write("Machine: " + platform.machine() + '\n')
                 file.write("Processor: " + platform.processor() + '\n')
                 file.write("Current Working Directory" + os.getcwd() + '\n')
-                # file.write("Environment Variables:" + os.environ + '\n')
                 file.write("CollatriX version: 2.0 beta" + '\n'+ '\n')
                 file.write(tb)
 

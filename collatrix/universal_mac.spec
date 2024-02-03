@@ -2,11 +2,13 @@
 
 block_cipher = None
 
+from PyInstaller.utils.hooks import collect_data_files
+
 a = Analysis(
     ['__main__.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('pyexifhelper_exiftool','pyexifhelper_exiftool')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
