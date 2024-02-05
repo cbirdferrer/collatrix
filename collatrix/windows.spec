@@ -8,7 +8,7 @@ a = Analysis(
     ['__main__.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('pyexifhelper_exiftool','pyexifhelper_exiftool')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
