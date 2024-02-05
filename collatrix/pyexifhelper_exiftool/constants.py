@@ -64,7 +64,7 @@ By default, the executable is searched for on one of the paths listed in the
 if PLATFORM_WINDOWS:
 	DEFAULT_EXECUTABLE = "exiftool.exe"
 else:  # pytest-cov:windows: no cover
-	DEFAULT_EXECUTABLE = os.path.join(sys._MEIPASS, "exiftool")
+	DEFAULT_EXECUTABLE = '/usr/local/bin/exiftool'
 
 
 
