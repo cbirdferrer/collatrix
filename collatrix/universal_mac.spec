@@ -40,7 +40,7 @@ exe = EXE(
 )
 coll = COLLECT(
     exe,
-    a.binaries + [('exiftool','exiftool', 'BINARY')],
+    a.binaries,
     a.zipfiles,
     a.datas,
     strip=False,

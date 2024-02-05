@@ -549,9 +549,11 @@ class lidarvideoWindow(QWidget):
                 if os.name == 'nt': #windows
                     exifpath = os.path.join(sys._MEIPASS,"exiftool.exe")
                 else: #mac
-                    exifpath = os.path.join(sys._MEIPASS, "exiftool")
+                    exifpath = '/usr/local/bin/exiftool'
 
-                self.exif_tags = ExifToolHelper().get_tags(self.video_list[0],[])
+                with ExifToolHelper(exifpath) as et:
+                    self.exif_tags = et.get_tags(self.video_list[0],[])
+
                 exif_tags1 = [x.split(":")[1] if len(x.split(":"))>1 else x for x in list(self.exif_tags[0].keys()) ]
                 # run update exiftag drop down
                 for dropdown, default_selection in self.default_selections.items():
@@ -590,9 +592,10 @@ class lidarvideoWindow(QWidget):
 
         #set up path to exiftool
         if os.name == 'nt': #windows
-            exifpath = os.path.join(".","exiftool.exe")
+            exifpath = os.path.join(sys._MEIPASS,"exiftool.exe")
         else: #mac
-            exifpath = os.path.join(".","Contents","MacOS","exiftool")
+            exifpath = '/usr/local/bin/exiftool'
+
         with ExifToolHelper(exifpath) as et:
             for d in et.get_tags(movs, tags=[self.exif_tags_dropdown_name.currentText(),
                                              self.exif_tags_dropdown_dur.currentText(),
@@ -1279,9 +1282,9 @@ class lidarimageWindow(QWidget):
 
                 # Fetch Exif tags for the selected file
                 if os.name == 'nt': #windows
-                    exifpath = os.path.join(".","exiftool.exe")
+                    exifpath = os.path.join(sys._MEIPASS,"exiftool.exe")
                 else: #mac
-                    exifpath = os.path.join(".","Contents","MacOS","exiftool")
+                    exifpath = '/usr/local/bin/exiftool'
                 self.exif_tags = ExifToolHelper(exifpath).get_tags(self.img_list[0],[])
                 exif_tags1 = [x.split(":")[1] if len(x.split(":"))>1 else x for x in list(self.exif_tags[0].keys()) ]
                 # run update exiftag drop down
@@ -1316,9 +1319,10 @@ class lidarimageWindow(QWidget):
         dfimages = pd.DataFrame()
         tagnames = []
         if os.name == 'nt': #windows
-            exifpath = os.path.join(".","exiftool.exe")
+            exifpath = os.path.join(sys._MEIPASS,"exiftool.exe")
         else: #mac
-            exifpath = os.path.join(".","Contents","MacOS","exiftool")
+            exifpath = '/usr/local/bin/exiftool'
+            
         with ExifToolHelper(exifpath) as et:
             for d in et.get_tags(self.img_list, tags=[self.exif_tags_dropdown_name.currentText(),
                                                       self.exif_tags_dropdown_date.currentText()]):
