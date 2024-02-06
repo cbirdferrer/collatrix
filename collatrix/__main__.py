@@ -187,7 +187,7 @@ class lidarwranglerWindow(QWidget):
                 df_laser['laser_altitude_cm'] = df_laser['laser_altitude_cm'].replace(dict.fromkeys([13000,15000], np.nan)) #make the error value (130) to nan
                 df_laser['converted'] = [math.cos((x) * math.pi / float(180)) for x in df_laser['tilt_deg']] #calculate conversation factor based on tilt degree (from Dawson paper code)
                 df_laser['Laser_Alt'] = (df_laser['laser_altitude_cm'] * df_laser['converted']) / float(100) #use conversation factor to calculate corrected laser altitude (from Dawson)
-                df_laser['CorrDT'] = [datetime.strptime("{0} {1}".format(x,y),"%Y-%m-%d %H:%M:%S") for x,y in zip(df_laser['#gmt_date'],df_laser['gmt_time'])]
+                df_laser['CorrDT'] = [datetime.strptime("{0} {1}".format(x,y),"%Y/%m/%d %H:%M:%S") for x,y in zip(df_laser['#gmt_date'],df_laser['gmt_time'])]
                 laser_all = pd.concat([laser_all,df_laser])
 
             #maybe only export a subset of columns??
