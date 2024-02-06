@@ -187,7 +187,7 @@ class lidarwranglerWindow(QWidget):
                 df_laser['laser_altitude_cm'] = df_laser['laser_altitude_cm'].replace(dict.fromkeys([13000,15000], np.nan)) #make the error value (130) to nan
                 df_laser['converted'] = [math.cos((x) * math.pi / float(180)) for x in df_laser['tilt_deg']] #calculate conversation factor based on tilt degree (from Dawson paper code)
                 df_laser['Laser_Alt'] = (df_laser['laser_altitude_cm'] * df_laser['converted']) / float(100) #use conversation factor to calculate corrected laser altitude (from Dawson)
-                df_laser['CorrDT'] = [datetime.strptime("{0} {1}".format(x,y),"%Y/%m/%d %H:%M:%S") for x,y in zip(df_laser['#gmt_date'],df_laser['gmt_time'])]
+                df_laser['CorrDT'] = [datetime.strptime("{0} {1}".format(x,y),"%Y-%m-%d %H:%M:%S") for x,y in zip(df_laser['#gmt_date'],df_laser['gmt_time'])]
                 laser_all = pd.concat([laser_all,df_laser])
 
             #maybe only export a subset of columns??
@@ -360,7 +360,7 @@ class lidarvideoWindow(QWidget):
         self.grid_layout.addWidget(QLabel("Enter Example Image Name:"),5,0,1,1)
         self.grid_layout.addWidget(self.example_image_input,5,1,1,1)
 
-        self.grid_layout.addWidget(QLabel("Enter Delimeter:"),6,0,1,1)
+        self.grid_layout.addWidget(QLabel("Enter Delimiter:"),6,0,1,1)
         self.grid_layout.addWidget(self.image_delimiter_input,6,1,1,1)
 
         self.grid_layout.addWidget(QLabel("Select Time Components:"),7,0,1,2)
@@ -390,7 +390,7 @@ class lidarvideoWindow(QWidget):
         self.grid_layout.addWidget(QLabel("Enter Example Video Name:"),8,2,1,1)
         self.grid_layout.addWidget(self.example_video_input,8,3,1,1)
 
-        self.grid_layout.addWidget(QLabel("Enter Delimeter:"),9,2,1,1)
+        self.grid_layout.addWidget(QLabel("Enter Delimiter:"),9,2,1,1)
         self.grid_layout.addWidget(self.video_delimiter_input,9,3,1,1)
 
         self.grid_layout.addWidget(QLabel("Select Flight Prefix Parts:"),10,2,1,2)
@@ -812,7 +812,7 @@ class lidarmatchWindow(QWidget):
         self.grid_layout.addWidget(QLabel("Enter Example Image Name:"),4,0,1,1)
         self.grid_layout.addWidget(self.example_image_input,4,1,1,1)
 
-        self.grid_layout.addWidget(QLabel("Enter Delimeter:"),4,2,1,1)
+        self.grid_layout.addWidget(QLabel("Enter Delimiter:"),4,2,1,1)
         self.grid_layout.addWidget(self.image_delimiter_input,4,3,1,1)
 
         self.grid_layout.addWidget(self.imgtimecheckbox,5,0,1,2)
@@ -990,7 +990,7 @@ class lidarimageWindow(QWidget):
         self.gps_sel_label.setStyleSheet("border: 1px dashed black; padding: 2px; font-style: italic;")
 
         self.gpsflightcheckbox = QCheckBox("Check if flight prefix is in a column (named FlightID)", self)
-        self.gpsflightcheckbox.stateChanged.connect(lambda: self.toggle_delimeter_box(1))
+        self.gpsflightcheckbox.stateChanged.connect(lambda: self.toggle_delimiter_box(1))
 
         self.gpsflight_msg = QLabel("",self)
 
@@ -1021,7 +1021,7 @@ class lidarimageWindow(QWidget):
 
         #prefix set up
         self.imgflightcheckbox = QCheckBox("Check if flight prefix is in a column (named FlightID)", self)
-        self.imgflightcheckbox.stateChanged.connect(lambda: self.toggle_delimeter_box(2))
+        self.imgflightcheckbox.stateChanged.connect(lambda: self.toggle_delimiter_box(2))
 
         self.imgflight_msg = QLabel("",self)
 
@@ -1088,7 +1088,7 @@ class lidarimageWindow(QWidget):
         self.grid_layout.addWidget(QLabel("Enter Example Image Name:"),8,0,1,1)
         self.grid_layout.addWidget(self.example_gps_input,8,1,1,1)
 
-        self.grid_layout.addWidget(QLabel("Enter Delimeter:"),9,0,1,1)
+        self.grid_layout.addWidget(QLabel("Enter Delimiter:"),9,0,1,1)
         self.grid_layout.addWidget(self.gps_delimiter_input,9,1,1,1)
 
         self.grid_layout.addWidget(QLabel("Select Flight Prefix Parts:"),10,0,1,2)
@@ -1122,7 +1122,7 @@ class lidarimageWindow(QWidget):
         self.grid_layout.addWidget(QLabel("Enter Example Image Name:"),12,2,1,1)
         self.grid_layout.addWidget(self.example_img_input,12,3,1,1)
 
-        self.grid_layout.addWidget(QLabel("Enter Delimeter:"),13,2,1,1)
+        self.grid_layout.addWidget(QLabel("Enter Delimiter:"),13,2,1,1)
         self.grid_layout.addWidget(self.img_delimiter_input,13,3,1,1)
 
         self.grid_layout.addWidget(QLabel("Select Flight Prefix Parts:"),14,2,1,2)   
@@ -1171,7 +1171,7 @@ class lidarimageWindow(QWidget):
         #exif viewer is now an instance variable
         self.exif_help_window = ExifViewer()
 
-    def toggle_delimeter_box(self, button_id):
+    def toggle_delimiter_box(self, button_id):
         if button_id == 1:
             self.gps_delimiter_input.setEnabled(not self.gpsflightcheckbox.isChecked())
             if self.gpsflightcheckbox.isChecked():
